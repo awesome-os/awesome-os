@@ -26,3 +26,17 @@ If you need to transpil that to cjs add "use strict" at top of the entry file!
 ```js
 import awesomeOs from 'https://awesome-os.com/dist/awesome-os.js'
 ```
+
+## Next Steps?
+add nativ AI and Multi Agent Capabilitys as also P2P Networking and more.
+
+Use it in 
+- Electron apps
+- NWJS Apps
+- Any Web Application
+- Inject it into your existing browser websites and applications
+- inject it into nodejs and graalvm backend services.
+- Make more intelegent automated tests.
+- Invent the next generation of Applications and the Whole web.
+
+
