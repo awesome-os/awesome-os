@@ -4,7 +4,7 @@ AwesomeOS started in 2015 as own linux distribution to experiment with Operating
 ## The AwesomeOS Fundamentals
 
 ```js
-const awesomeOs = {
+const AwesomeOS = {
   prompt,
   exec,
   io: {
@@ -24,7 +24,7 @@ File Access requires always users attention
 It is always minified it is always a es6+ module thats by design and should always be the case to be sure that scoping is correct.
 If you need to transpil that to cjs add "use strict" at top of the entry file!
 ```js
-import awesomeOs from 'https://awesome-os.com/dist/awesome-os.js'
+import AwesomeOS from 'https://awesome-os.com/dist/awesome-os.js'
 ```
 
 ## Next Steps?
