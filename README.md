@@ -6,12 +6,12 @@ AwesomeOS started in 2015 as own linux distribution to experiment with Operating
 ```js
 const awesomeOs = {
   prompt,
-  exec
+  exec,
   io: {
-   file
-   dir
-   net
-   custommProtocols
+   file.
+   dir,
+   net,
+   ...custommProtocols,
   }
 }
 ```
