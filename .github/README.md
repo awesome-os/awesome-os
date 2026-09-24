@@ -97,7 +97,6 @@ The system intercepts the code inside *The Crucible*, evaluates the semantic con
 
 > Visualization of the commutator divergence $[A, B] = A \cdot B - B \cdot A$ and the resulting conflict zone triggering indeterminate states.
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 260" width="100%" height="auto">
   <defs>
     <pattern id="hatch-conflict" width="12" height="12" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
@@ -135,7 +134,6 @@ The system intercepts the code inside *The Crucible*, evaluates the semantic con
   <line x1="680" y1="30" x2="680" y2="230" stroke="#b91c1c" stroke-width="2" stroke-dasharray="4,4" />
   <text x="705" y="135" font-family="monospace, sans-serif" font-size="14" font-weight="600" fill="#334155">&#916; = DIVERGENCE</text>
 </svg>
-```
 
 ---
 
