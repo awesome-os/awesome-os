@@ -11,7 +11,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { auditNinjaLongCommands, executeDag } from './dag-executor.mts';
-import { buildSectiumMinimalDag, type SectiumTargetTriple } from './sectium-minimal-dag.mts';
+import {
+  buildSectiumMinimalDag,
+  type SectiumLinkMode,
+  type SectiumPgoMode,
+  type SectiumTargetTriple,
+} from './sectium-minimal-dag.mts';
 
 function parseArgs(argv: string[]): Record<string, string | boolean> {
   const out: Record<string, string | boolean> = { _: argv[0] || 'sectium-plan' };
@@ -41,7 +46,9 @@ async function main(): Promise<void> {
     const src = String(args.src || 'E:\\b8g-chromium-real\\src');
     const outDir = String(args.out || path.join(process.cwd(), '.b8g-cas', 'sectium-minimal-out'));
     const targetTriple = (String(args.target || 'x86_64-windows-msvc')) as SectiumTargetTriple;
-    const plan = buildSectiumMinimalDag({ chromiumSrcDir: src, outDir, targetTriple });
+    const linkMode = (String(args['link-mode'] || 'late-link')) as SectiumLinkMode;
+    const pgoMode = (String(args['pgo-mode'] || 'cached-profdata')) as SectiumPgoMode;
+    const plan = buildSectiumMinimalDag({ chromiumSrcDir: src, outDir, targetTriple, linkMode, pgoMode });
 
     if (cmd === 'sectium-plan') {
       console.log(
@@ -50,6 +57,9 @@ async function main(): Promise<void> {
             profile: plan.profile,
             targetTriple: plan.targetTriple,
             compiler: plan.compiler,
+            linkMode: plan.linkMode,
+            pgoMode: plan.pgoMode,
+            astFreePreLookup: plan.astFreePreLookup,
             zeroGnRequired: plan.zeroGnRequired,
             zeroNinjaRequired: plan.zeroNinjaRequired,
             retainedSubtrees: plan.retainedSubtrees,

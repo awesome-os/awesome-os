@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {
+  astFreeIncludePreScan,
   auditNinjaLongCommands,
   executeDag,
   parseNinjaFile,
@@ -97,17 +98,43 @@ test('executeDag retries transient 0xC0000005 crashes and caches hits on second 
   }
 });
 
-test('buildSectiumMinimalDag emits zero-GN, zero-Ninja 7-subtree Sectium core DAG with 0 Chrome bloat', () => {
+test('buildSectiumMinimalDag emits zero-GN, zero-Ninja 7-subtree Sectium core DAG with late-link, cached PGO & 0 Chrome bloat', () => {
   const plan = buildSectiumMinimalDag({
     chromiumSrcDir: 'E:\\b8g-chromium-real\\src',
     outDir: 'E:\\awesome-os\\.b8g-cas\\sectium-minimal-out',
     targetTriple: 'x86_64-linux-gnu',
+    linkMode: 'late-link',
+    pgoMode: 'cached-profdata',
   });
   assert.equal(plan.zeroGnRequired, true);
   assert.equal(plan.zeroNinjaRequired, true);
+  assert.equal(plan.astFreePreLookup, true);
+  assert.equal(plan.linkMode, 'late-link');
+  assert.equal(plan.pgoMode, 'cached-profdata');
   assert.equal(plan.retainedSubtrees, 7);
   assert.equal(plan.droppedBloatSubsystems, 12);
   assert.equal(plan.compiler, 'zig-cc');
   assert.equal(plan.graph.nodes.length, 8); // 7 subtrees + final link
-  assert.ok(plan.graph.nodes.some((n) => n.id === 'sectium-core-link'));
+  const v8Node = plan.graph.nodes.find((n) => n.id === 'v8');
+  assert.ok(v8Node?.command.includes('-fprofile-use='), 'Cached PGO profile flag must be wired');
+  assert.ok(v8Node?.command.includes('--b8g-abi-v3-reloc'), 'Late-link ABI v3 relocatable flag must be wired');
+  const linkNode = plan.graph.nodes.find((n) => n.id === 'sectium-core-link');
+  assert.ok(linkNode?.command.includes('--late-link'), 'Final link node must use late-link mode');
+});
+
+test('astFreeIncludePreScan extracts transitive C/C++ #include headers without spawning a compiler', () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'b8g-prescan-'));
+  try {
+    fs.writeFileSync(path.join(tmpDir, 'leaf.h'), '#pragma once\nint x = 1;\n', 'utf8');
+    fs.writeFileSync(path.join(tmpDir, 'mid.h'), '#include "leaf.h"\n', 'utf8');
+    const mainCc = path.join(tmpDir, 'main.cc');
+    fs.writeFileSync(mainCc, '#include "mid.h"\nint main() { return x; }\n', 'utf8');
+
+    const deps = astFreeIncludePreScan(mainCc, 3);
+    assert.equal(deps.length, 2);
+    assert.ok(deps.some((p) => p.endsWith('mid.h')));
+    assert.ok(deps.some((p) => p.endsWith('leaf.h')));
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
 });

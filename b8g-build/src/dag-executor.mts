@@ -52,10 +52,48 @@ export interface DagExecutionSummary {
   readonly total: number;
   readonly executed: number;
   readonly cached: number;
+  readonly preLookupSkips: number;
   readonly retried: number;
   readonly failed: number;
   readonly wrappedLongCommands: number;
   readonly durationMs: number;
+}
+
+/**
+ * Sub-millisecond AST-free pre-lookup scanner for C/C++ `#include "..."` and
+ * JS/TS `import ... from '...'` dependencies — avoids spawning clang-cl/tsc
+ * on unchanged transitive headers.
+ */
+export function astFreeIncludePreScan(filePath: string, maxDepth = 3): string[] {
+  const visited = new Set<string>();
+  const stack: Array<{ p: string; depth: number }> = [{ p: path.resolve(filePath), depth: 0 }];
+  const found: string[] = [];
+
+  while (stack.length > 0) {
+    const cur = stack.pop()!;
+    if (visited.has(cur.p) || cur.depth > maxDepth) continue;
+    visited.add(cur.p);
+    if (!fs.existsSync(cur.p)) continue;
+    const st = fs.statSync(cur.p);
+    if (!st.isFile() || st.size > 2 * 1024 * 1024) continue;
+
+    const text = fs.readFileSync(cur.p, 'utf8');
+    const dir = path.dirname(cur.p);
+    const re = /^\s*(?:#include\s+"([^"]+)"|import\s+(?:[\s\S]*?\s+from\s+)?['"]([^'"]+)['"])/gm;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text)) !== null) {
+      const rel = m[1] || m[2];
+      if (!rel || (!rel.startsWith('.') && !m[1])) continue;
+      const target = path.resolve(dir, rel);
+      if (fs.existsSync(target) && fs.statSync(target).isFile()) {
+        found.push(target);
+        if (cur.depth + 1 <= maxDepth) {
+          stack.push({ p: target, depth: cur.depth + 1 });
+        }
+      }
+    }
+  }
+  return found.sort();
 }
 
 export function wrapLongCommandForWindows(
@@ -190,17 +228,23 @@ function computeNodeDigest(node: DagNode, workDir: string): string {
   h.update(node.id);
   h.update('\0');
   h.update(node.command);
+  const hashFileMeta = (absPath: string): void => {
+    if (!fs.existsSync(absPath)) return;
+    const st = fs.statSync(absPath);
+    if (st.isFile()) {
+      h.update('\0');
+      h.update(absPath);
+      h.update(':');
+      h.update(String(st.size));
+      h.update(':');
+      h.update(String(Math.floor(st.mtimeMs)));
+    }
+  };
   for (const inp of node.inputs) {
-    h.update('\0');
-    h.update(inp);
     const abs = path.resolve(workDir, inp);
-    if (fs.existsSync(abs)) {
-      const st = fs.statSync(abs);
-      if (st.isFile()) {
-        h.update(String(st.size));
-        h.update(':');
-        h.update(String(Math.floor(st.mtimeMs)));
-      }
+    hashFileMeta(abs);
+    for (const depFile of astFreeIncludePreScan(abs, 2)) {
+      hashFileMeta(depFile);
     }
   }
   return h.digest('hex');
@@ -355,6 +399,7 @@ export async function executeDag(graph: DagGraph, opts: DagExecutionOptions): Pr
     total: graph.nodes.length,
     executed,
     cached,
+    preLookupSkips: cached,
     retried,
     failed,
     wrappedLongCommands,
