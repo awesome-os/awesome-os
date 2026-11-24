@@ -6,15 +6,14 @@
 
 ---
 
-## 0. Architectural DNA — Software-Defined Analog & Neuromorphic Computing
+## 0. Architectural DNA — Section–Intersection Algebra × Software-Defined Analog Computing
 
-> **Treating neuromorphic and wave-based systems in software as mathematically precise *analog computing* lets us break past classical von-Neumann bottlenecks.**
+> **Awesome-OS unifies two mathematical foundations into one execution model:**
+> 1. **Section–Intersection Algebraic Computing** (`STEALIFYLANG-SPEC.md`) — defines *where* and *under what effects* subsystems may compose: disjoint **Sections** ($\mathcal{S}_i \wedge \mathcal{S}_j = \emptyset$), governed by the **7-tuple Context Algebra** $\mathcal{C}_{\text{cloud}} = (\text{boundary}, \text{display}, \text{lifetime}, \text{transport}, \text{capability}, \text{locality}, \text{persona})$ and **Algebraic Effects** (`EffectBit` + handler discharge), meeting only at admissible **Intersections** ($\mathcal{I} = \mathcal{S}_a \cap \mathcal{S}_b$).
+> 2. **Software-Defined Analog & Neuromorphic Computing (Spin-Wave / Magnonics)** — defines *how* an admissible Intersection computes without von-Neumann bottlenecks: continuous complex phasor dynamics ($z = A e^{i\phi}$) on lock-free 64-byte cache-line cells (`B8G_ARENA_V1` `SharedArrayBuffer` / C11 SIMD), natural exponential backpressure via Gilbert damping / Damped Gravity ($e^{-\gamma t}$), and deterministic projection back to the digital boundary (`Majority Gate`, `Top-K`, `v11/files/00..ff/<sha512>` CAS, `B8G_ABI_MAGIC_V3`).
 
-Traditional software decomposes everything into discrete events, mutexes, queues, callbacks, and syscall loops — creating kernel context-switch storms, lock contention, and GC pressure. **Awesome-OS flips that model:**
-
-- **Continuous Dynamics Inside (`B8G_ARENA_V1` Spin-Wave Bus):** Sections interact as complex phasors ($z = A e^{i\phi}$) across lock-free 64-byte cache-line cells (`SharedArrayBuffer` / C11 SIMD). Computation emerges from **constructive/destructive interference** (`0.83 ns/op` — **`1.21 billion` intersections/sec** in a `5.78 KB` `.so` / `2.74 KB` WASI `.wasm` with **zero syscalls and zero heap allocations**).
-- **Natural Backpressure via Gilbert Damping / Damped Gravity:** Unexcited waves decay exponentially ($e^{-\gamma t}$), eliminating manual GC storms, polling loops, and wakeup floods — giving the host OS room to breathe.
-- **Analog Continuity + Deterministic Digital Boundaries:** Continuous unit-circle phase dynamics deliver smooth, fault-tolerant routing (**`82.6M tok/s`** 64-expert MoE routing / **`606.6×`** vs JS baseline, **`95.8%`** held-out accuracy with **`0.0%` INT8 quantization drop** in a **`10.68 KB`** `.b8p` model), while every boundary projects deterministically into **unified `v11/files/00..ff/<sha512>` CAS**, **`B8G_ABI_MAGIC_V3` (`0x33564742`)**, and **`holo-compiler-lockfile.json`** (`555`-node DAG ingested in **`1.51 ms`**).
+- **Verified Analog-in-Intersection Speed:** **`0.83 ns/op`** (**`1.21 billion` intersections/sec**) in a `5.78 KB` `.so` / `2.74 KB` WASI `.wasm` with **zero syscalls and zero heap allocations**.
+- **Verified Neuromorphic Routing & DAG:** **`82.6M tok/s`** 64-expert MoE routing (**`606.6×`** vs JS baseline), **`95.8%`** held-out accuracy with **`0.0%` INT8 quantization drop** in a **`10.68 KB`** `.b8p` model, and **`1.51 ms`** ingestion of our `555`-node `holo-compiler-lockfile.json` DAG.
 
 ---
 
