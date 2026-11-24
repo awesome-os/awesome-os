@@ -6,11 +6,12 @@
 
 ---
 
-## 0. Architectural DNA — Section–Intersection Algebra × Software-Defined Analog Computing
+## 0. Architectural DNA — Section–Intersection Algebra × Software-Defined Analog Computing × CAS Q-Self
 
-> **Awesome-OS unifies two mathematical foundations into one execution model:**
+> **Awesome-OS unifies three mathematical foundations into one self-closed execution model:**
 > 1. **Section–Intersection Algebraic Computing** (`STEALIFYLANG-SPEC.md`) — defines *where* and *under what effects* subsystems may compose: disjoint **Sections** ($\mathcal{S}_i \wedge \mathcal{S}_j = \emptyset$), governed by the **7-tuple Context Algebra** $\mathcal{C}_{\text{cloud}} = (\text{boundary}, \text{display}, \text{lifetime}, \text{transport}, \text{capability}, \text{locality}, \text{persona})$ and **Algebraic Effects** (`EffectBit` + handler discharge), meeting only at admissible **Intersections** ($\mathcal{I} = \mathcal{S}_a \cap \mathcal{S}_b$).
-> 2. **Software-Defined Analog & Neuromorphic Computing (Spin-Wave / Magnonics)** — defines *how* an admissible Intersection computes without von-Neumann bottlenecks: continuous complex phasor dynamics ($z = A e^{i\phi}$) on lock-free 64-byte cache-line cells (`B8G_ARENA_V1` `SharedArrayBuffer` / C11 SIMD), natural exponential backpressure via Gilbert damping / Damped Gravity ($e^{-\gamma t}$), and deterministic projection back to the digital boundary (`Majority Gate`, `Top-K`, `v11/files/00..ff/<sha512>` CAS, `B8G_ABI_MAGIC_V3`).
+> 2. **Software-Defined Analog & Neuromorphic Computing (Spin-Wave / Magnonics)** — defines *how* an admissible Intersection computes without von-Neumann bottlenecks: continuous complex phasor dynamics ($z = A e^{i\phi}$) on lock-free 64-byte cache-line cells (`B8G_ARENA_V1` `SharedArrayBuffer` / C11 SIMD), natural exponential backpressure via Gilbert damping / Damped Gravity ($e^{-\gamma t}$), and deterministic projection back to the digital boundary (`Majority Gate`, `Top-K`, `B8G_ABI_MAGIC_V3`).
+> 3. **Self-Content-Addressed CAS Closure (`CAS Q-Self`)** — defines *how the system verifies, reproduces, and updates itself*: every compiler, package manager, WASI host, model, and lockfile (`holo-compiler`, `holo-pm`, `holo-wasi-host-b8g`, `SpinWaveMoEModel`, `holo-compiler-lockfile.json`) is itself an immutable `v11/files/00..ff/<sha512>` CAS artifact — reaching a self-hosting fixed point ($Q(\text{self}) = \text{self}$) with zero hidden host state.
 
 - **Verified Analog-in-Intersection Speed:** **`0.83 ns/op`** (**`1.21 billion` intersections/sec**) in a `5.78 KB` `.so` / `2.74 KB` WASI `.wasm` with **zero syscalls and zero heap allocations**.
 - **Verified Neuromorphic Routing & DAG:** **`82.6M tok/s`** 64-expert MoE routing (**`606.6×`** vs JS baseline), **`95.8%`** held-out accuracy with **`0.0%` INT8 quantization drop** in a **`10.68 KB`** `.b8p` model, and **`1.51 ms`** ingestion of our `555`-node `holo-compiler-lockfile.json` DAG.
