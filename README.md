@@ -103,3 +103,13 @@ Every repository below is live, CI-verified, and hydrated from **one canonical $
 ## 6. Credits & Upstream Foundations
 
 Awesome-OS builds openly on **Chromium / Blink / Skia / Dawn** (BSD-3), **Electron** (MIT), **Code - OSS / VS Code** (MIT), **Eclipse Theia** (EPL-2.0), **Godot** (MIT), **Brave / `adblock-rust`** (MPL-2.0), **Blender** (GPL-3.0), **OBS Studio** (GPL-2.0), **Qt 6** (LGPL-3.0), **TypeScript** (Apache-2.0), **.NET & PowerShell** (MIT), **Node.js** (MIT), **Zig**, **LLVM**, **T2 SDE**, **Omarchy** (MIT), and **WASI / WebAssembly**.
+
+## Quick Install & Run (Windows / Linux / macOS)
+
+```sh
+# Install globally via awesome-os/pnpm (all platforms)
+pnpm add -g github:awesome-os/awesome-os
+
+# Run directly (all platforms)
+awesome-os --help
+```
