@@ -1,8 +1,22 @@
 # Awesome-OS & Sectium
 
-> **A sovereign, content-addressed operating system, runtime, and browser/IDE ecosystem — built natively with `holo-compiler`, zero duplicated monoliths, and one canonical $O(1)$ Ghost CAS (`awesome-os/b8g-ghost @ cas-v1`).**
+> **A sovereign, content-addressed operating system, runtime, model, and browser/IDE ecosystem — built natively with `holo-compiler` (`v0.6.0`), zero duplicated monoliths, and one unified `v11` CAS (`632` verified assets / `572` unique `sha512` blobs across `68` repos) + `b8g-ghost`.**
 
-**Real measured result on Windows 11:** **`Awesome-OS Code - OSS 1.147.0`** (`477 MB`) + **`Sectium Browser`** (`110 MB`) running side by side in **`587 MB` total RAM** — **`7.7×` less RAM than a single VS Code window (`4.5 GB`)**, both launched from **`~118 KB`** native Lumi Hydration Splash `.exe` binaries sharing ONE `b8g-ghost` CAS runtime (`0 B` duplicated Electron).
+**Real measured result on Windows 11:** **`Awesome-OS Code - OSS 1.147.0`** (`v0.3.0`, `477 MB`) + **`Sectium Browser`** (`v0.7.2`, `110 MB`) running side by side in **`587 MB` total RAM** — **`7.7×` less RAM than a single VS Code window (`4.5 GB`)**, both launched from **`~118 KB`** native Lumi Hydration Splash `.exe` binaries sharing ONE `v11` / `b8g-ghost` CAS runtime (`0 B` duplicated Electron).
+
+---
+
+## Quick Install & Run (Windows / Linux / macOS)
+
+```powershell
+# Windows (PowerShell — zero BOM, zero installer bloat, v11 hardlink-first)
+irm https://awesome-os.com/install.ps1 | iex
+```
+
+```bash
+# Linux / macOS
+curl -fsSL https://awesome-os.com/install.sh | sh
+```
 
 ---
 
@@ -14,38 +28,48 @@
 > 3. **Self-Content-Addressed CAS Closure (`CAS Q-Self`)** — defines *how the system verifies, reproduces, and updates itself*: every compiler, package manager, WASI host, model, and lockfile (`holo-compiler`, `holo-pm`, `holo-wasi-host-b8g`, `SpinWaveMoEModel`, `holo-compiler-lockfile.json`) is itself an immutable `v11/files/00..ff/<sha512>` CAS artifact — reaching a self-hosting fixed point ($Q(\text{self}) = \text{self}$) with zero hidden host state.
 
 - **Verified Analog-in-Intersection Speed:** **`0.83 ns/op`** (**`1.21 billion` intersections/sec**) in a `5.78 KB` `.so` / `2.74 KB` WASI `.wasm` with **zero syscalls and zero heap allocations**.
-- **Verified Neuromorphic Routing & DAG:** **`82.6M tok/s`** 64-expert MoE routing (**`606.6×`** vs JS baseline), **`95.8%`** held-out accuracy with **`0.0%` INT8 quantization drop** in a **`10.68 KB`** `.b8p` model, and **`1.51 ms`** ingestion of our `555`-node `holo-compiler-lockfile.json` DAG.
+- **Verified Neuromorphic Routing & DAG:** **`82.6M tok/s`** 64-expert MoE routing (**`606.6×`** vs JS baseline), **`95.8%`** held-out accuracy with **`0.0%` INT8 quantization drop** in a **`10.68 KB`** `.b8p` model, and **`1.54 ms`** ingestion of our **`632`-node** `holo-compiler-lockfile.json` DAG (`572` unique `v11` blobs, `0` missing).
 
 ---
 
 ## 1. Collapsed 4-Layer Architecture
 
 ```text
-  1. Sectium & Appliances       -> ~118 KB native Lumi Hydration Splash launchers (sectium-browser, code-oss, brave, blender, obs, godot, theia, pinokio) + pure-art Sectium Canvas
+  1. Sectium & Appliances       -> ~118 KB native Lumi Hydration Splash launchers (sectium-browser v0.7.2, code-oss v0.3.0, brave/blender/obs/godot v0.2.0, theia, pinokio) + pure-art Sectium Canvas
   2. Sectium Cloud Control Plane-> 5.0 KB C11 B8G_ABI_MAGIC_V3 central discovery initramfs, 1-way WoL warm-RAM resume, Keep-Last-5 RollingReleaseManifest
-  3. Host Device & b8g-ghost CAS-> Dual command/display NDJSON pipe (\\.\pipe\sectium-dev), B8G_ARENA_V1 64-byte zero-copy IPC, 156+ verified cas-v1 blobs
-  4. Polyglot & T2 OS Family    -> holo-compiler (zero-WSL 5-OS builds), Shared V8 (dup_v8=0 B), sectium-es/jvm, Wave 2 TypeScript 6.0.3, bootable T2Linux / T2XNU / T2Desktop
+  3. Host Device & v11 CAS      -> Dual command/display NDJSON pipe (\\.\pipe\sectium-dev), B8G_ARENA_V1 64-byte zero-copy IPC, 632 verified v11 CAS assets across 68 repos (572 unique blobs)
+  4. Polyglot, Models & T2 OS   -> holo-compiler v0.6.0 (6.9 ns/fn native codegen, Sub-TU 112.8x), awesome-os/models (SpinWaveMoE / lumiBERT / Xenon-1B), Shared V8 (dup_v8=0 B), T2Linux / T2XNU
 ```
 
 ---
 
 ## 2. Live Sovereign Ecosystem (`github.com/awesome-os`)
 
-Every repository below is live, CI-verified, and hydrated from **one canonical $O(1)$ Ghost CAS (`awesome-os/b8g-ghost @ cas-v1`, Rolling-Latest + Keep-Last-5)**:
+Every repository below is live, CI-verified, and hydrated from **one unified `v11` CAS (`v11/files/00..ff/<sha512>`) + `awesome-os/b8g-ghost` (Rolling-Latest + Keep-Last-5)**:
 
-### Desktop Appliances (`~118 KB` Lumi Splash Launchers, Zero Duplication)
+### Desktop Appliances (`~118 KB` Lumi Splash Launchers with Embedded Win32 PE Icons, Zero Duplication)
 
-| Repository | What It Ships | Highlight |
+| Repository | Release & What It Ships | Highlight |
 | :--- | :--- | :--- |
-| **[`awesome-os/sectium-browser`](https://github.com/awesome-os/sectium-browser)** | Sovereign Chromium 158+ / V8 15.8 browser + 8 Win32 Lumi GUI shells | `118 KB` self-hydrating launcher, `110 MB` RAM live, 5-OS `libsectium_display` |
-| **[`awesome-os/code-oss`](https://github.com/awesome-os/code-oss)** | Telemetry-free MIT **Awesome-OS Code - OSS `1.147.0`** (Open VSX) | `118 KB` `code-oss.exe` + Lumi Splash, `-73.5%` vs VSCodium, `477 MB` RAM, bundled Wave 2 TS `6.0.3` + 5 Awesome-OS extensions |
+| **[`awesome-os/sectium-browser`](https://github.com/awesome-os/sectium-browser)** | **`v0.7.2`** — Sovereign Chromium 158+ / V8 15.8 browser + 8 Win32 Lumi GUI shells | `118 KB` self-hydrating launcher, `110 MB` RAM live, 5-OS `libsectium_display`, BOM-free `irm \| iex` installer |
+| **[`awesome-os/code-oss`](https://github.com/awesome-os/code-oss)** | **`v0.3.0`** — Telemetry-free MIT **Awesome-OS Code - OSS `1.147.0`** (Open VSX) | `118 KB` `code-oss.exe` + PE icon + Lumi Splash, `-73.5%` vs VSCodium, `477 MB` RAM, bundled Wave 2 TS `6.0.3` + 5 extensions |
 | **[`awesome-os/theia`](https://github.com/awesome-os/theia)** | **Eclipse Theia** adapter over Sectium Browser / shared Electron CAS | Shares `~/.b8g/cas/extensions/` (`.vsix`), Wave 2 TS `6.0.3`, and all 5 Awesome-OS extensions with `code-oss` |
-| **[`awesome-os/brave`](https://github.com/awesome-os/brave)** | Debloated Shields-only **Brave `v1.102.32`** (zero crypto/Rewards/updater) | `116 KB` `brave.exe` + Lumi Splash, `-18%` to `-20%` smaller, `zstd -9` |
-| **[`awesome-os/blender`](https://github.com/awesome-os/blender)** | Debloated rolling-latest **Blender `5.3.0`** (zero installer) | `116.5 KB` `blender.exe` + Lumi Splash, `-17.2%` Win64 savings |
-| **[`awesome-os/obs`](https://github.com/awesome-os/obs)** | Debloated rolling-latest portable **OBS Studio `33.0.3`** (zero installer) | `~118 KB` 4-OS Lumi Hydration Splash launcher, Keep-Last-5 `cas-v1` |
-| **[`awesome-os/godot`](https://github.com/awesome-os/godot)** | Rolling-latest MIT **Godot `4.7.2`** (5-target launcher + `cas-v1`) | `116.5 KB` `godot.exe`, `36.9 KB` Linux x64, `43.0 KB` Linux ARM64, `50.6 KB` macOS ARM64, `27.2 KB` `wasm32-wasi` |
+| **[`awesome-os/brave`](https://github.com/awesome-os/brave)** | **`v0.2.0`** — Debloated Shields-only **Brave `v1.102.32`** (zero crypto/Rewards/updater) | `116 KB` `brave.exe` + PE icon + Lumi Splash, `-18%` to `-20%` smaller, `zstd -9` |
+| **[`awesome-os/blender`](https://github.com/awesome-os/blender)** | **`v0.2.0`** — Debloated rolling-latest **Blender `5.3.0`** (zero installer) | `116.5 KB` `blender.exe` + PE icon + Lumi Splash, `-17.2%` Win64 savings |
+| **[`awesome-os/obs`](https://github.com/awesome-os/obs)** | **`v0.2.0`** — Debloated rolling-latest portable **OBS Studio `33.0.3`** (zero installer) | `~118 KB` 4-OS Lumi Hydration Splash launcher + PE icon, Keep-Last-5 CAS |
+| **[`awesome-os/godot`](https://github.com/awesome-os/godot)** | **`v0.2.0`** — Rolling-latest MIT **Godot `4.7.2`** (5-target launcher) | `116.5 KB` `godot.exe` + PE icon, `36.9 KB` Linux x64, `43.0 KB` Linux ARM64, `50.6 KB` macOS ARM64, `27.2 KB` `wasm32-wasi` |
 | **[`awesome-os/pinokio`](https://github.com/awesome-os/pinokio)** | **Pinokio Virtual PC** recipe runner on `b8g-ghost` CAS + Sectium Display | Runs original Pinokio recipes on shared debloated Python LLM stack (zero 10 GB conda/Electron bloat) |
 | **[`awesome-os/sectium-electron`](https://github.com/awesome-os/sectium-electron)** · **[`electron`](https://github.com/awesome-os/electron)** | Drop-in Electron API over Sectium Display + rolling **Electron `v47` Nightly** | 1 shared copy per machine in `~/.b8g/cas/`, hybrid `--sectium` / `--upstream` |
+
+### Compiler, Models, Package Managers & Universal WASI Substrate
+
+| Repository | Release & What It Ships | Highlight |
+| :--- | :--- | :--- |
+| **[`awesome-os/holo-compiler`](https://github.com/awesome-os/holo-compiler)** | **`v0.6.0`** — Unified 5-toolchain (`cxx`/`rust`/`zig`/`wasi`/`ts`) compiler + `libholo_codegen` | `6.9 ns/fn` native x86-64/WASI emitter, Sub-TU function splicing (`112.8×`), resident pipe daemon (`0.23 ms`), Bun-style Ghost/Standalone executables |
+| **[`awesome-os/models`](https://github.com/awesome-os/models)** | Unified **Awesome-OS Models Hub** (`awesome-os-models-manifest-v1`, `v11` CAS) | `SpinWaveMoEModel` (`10.68 KB` INT8 `.b8p`), `b8g-micro-moe`, `lumiBERT` (`2.8 ms`), `b8g-app-dedup` Path MLP (`42.2 KB`), Xenon-1B/Kalaschnikow + AtlasKV, Inkling-2, Sub-1-Bit |
+| **[`awesome-os/holo-pm`](https://github.com/awesome-os/holo-pm)** · **[`pnpm`](https://github.com/awesome-os/pnpm)** · **[`cargo`](https://github.com/awesome-os/cargo)** · **[`uv`](https://github.com/awesome-os/uv)** | **`holo-pm v0.1.0`** · **`pnpm v12.23.0-cas.1`** · **`cargo v0.1.0`** · **`uv v0.1.0`** | Unified `v11` CAS package-manager triad + `libholo-pm` / `libpnpm` / `libcargo` / `libuvpy` (`B8G_ABI_MAGIC_V3` `0x33564742`) |
+| **[`awesome-os/wasi-host`](https://github.com/awesome-os/wasi-host)** · **[`libuv`](https://github.com/awesome-os/libuv)** · **[`installer`](https://github.com/awesome-os/installer)** | **`wasi-host v0.2.0`** · **`libuv v0.1.0`** · **`installer v0.2.3`** | **`2.6 KB` `holo-wasi-host-b8g.wasm`** + 4-OS host, core-scaled `libuv` (`184–219 KiB`) + `B8G_ARENA_V1` slab, `v11` hardlink-first installer (`15` apps) |
+| **[`awesome-os/wry`](https://github.com/awesome-os/wry)** · **[`webui`](https://github.com/awesome-os/webui)** · **[`ory-polis`](https://github.com/awesome-os/ory-polis)** | **`wry v0.1.1`** · **`webui v0.1.0`** · **`ory-polis v26.2.0-awesome-os.1`** | Zero-WebView2 `wry` (`sectium_device`), zero-HTTP `webui` (`3.8 KB` `.so`), and synced `ory-polis` SAML/OIDC/SCIM |
 
 ### Unified IDE Extensions (Code - OSS & Eclipse Theia)
 
@@ -53,28 +77,24 @@ Every repository below is live, CI-verified, and hydrated from **one canonical $
 | :--- | :--- | :--- |
 | **[`awesome-os/stealifylang-vscode`](https://github.com/awesome-os/stealifylang-vscode)** | **StealifyLang & TypeScript `6.0.3`** | `stealify-lint` LSP (`B8G001`–`B8G016`), `.stealify-rules` hot-reload, governance project rules, and Wave 2 TypeScript `6.0.3` (`14.3×` faster Zero-AST CAS) |
 | **[`awesome-os/unreal-vscode`](https://github.com/awesome-os/unreal-vscode)** | **Unreal Engine 5** | Zero-Visual-Studio UBT builds via `b8g-ghost` (`.NET 11` + `ghost-llvm` + `ghost-winsdk`) + `B8G_ARENA_V1` `libunreal` viewport bridge |
-| **[`awesome-os/godot-vscode`](https://github.com/awesome-os/godot-vscode)** | **Godot `4.7.2`** | Instant `cas-v1` Godot + `.NET 11` hydration, GDScript/C# tasks, and live scene runner |
-| **[`awesome-os/blender-vscode`](https://github.com/awesome-os/blender-vscode)** | **Blender `5.3.0`** | Instant `cas-v1` Blender hydration, `bpy` script/addon live reload, and `libsectium_display` viewport bridge |
-| **[`awesome-os/obs-vscode`](https://github.com/awesome-os/obs-vscode)** | **OBS Studio `33.0.3`** | Instant `cas-v1` portable OBS hydration, HTML5 browser-source overlay hot-reload, and scene control |
+| **[`awesome-os/godot-vscode`](https://github.com/awesome-os/godot-vscode)** | **Godot `4.7.2`** | Instant `v11` CAS Godot + `.NET 11` hydration, GDScript/C# tasks, and live scene runner |
+| **[`awesome-os/blender-vscode`](https://github.com/awesome-os/blender-vscode)** | **Blender `5.3.0`** | Instant `v11` CAS Blender hydration, `bpy` script/addon live reload, and `libsectium_display` viewport bridge |
+| **[`awesome-os/obs-vscode`](https://github.com/awesome-os/obs-vscode)** | **OBS Studio `33.0.3`** | Instant `v11` CAS portable OBS hydration, HTML5 browser-source overlay hot-reload, and scene control |
 
 ### Operating Systems, Containers, Runtimes & Graphics Shards
 
 | Repository | What It Ships | Highlight |
 | :--- | :--- | :--- |
-| **[`awesome-os/b8g-ghost`](https://github.com/awesome-os/b8g-ghost)** | Canonical $O(1)$ Ghost CAS (`cas-v1`), `manifests/index.json`, Keep-Last-5 GC | `156+` verified entries, 4-OS zero-`node-gyp` `b8g-ghost-abi.node`, Dual-Tier Wasm/AOT JIT |
+| **[`awesome-os/b8g-ghost`](https://github.com/awesome-os/b8g-ghost)** | Canonical $O(1)$ Ghost CAS (`cas-v1` + `v11`), `manifests/index.json`, Keep-Last-5 GC | `632` verified `v11` assets (`572` unique blobs), 4-OS zero-`node-gyp` `b8g-ghost-abi.node`, Dual-Tier Wasm/AOT JIT |
 | **[`awesome-os/t2linux`](https://github.com/awesome-os/t2linux)** | Bootable hybrid UEFI/BIOS ISO & QEMU QCOW2 (`b8g-ghost` PID 1) | `x86_64` `21.5 MiB` ISO / `18.2 MiB` QCOW2, `aarch64` `26.6 MiB` ISO, `riscv64` `/init`, daily rolling updates |
 | **[`awesome-os/t2xnu`](https://github.com/awesome-os/t2xnu)** | **T2macOS** — ARM64 Linux `7.0+` + `xnulinux` (`fki.ko`/`xnu.ko`) + `B8G_ARENA_V1` | Native zero-hypervisor Darwin/macOS personality, QEMU booted in `1.63s` |
-| **[`awesome-os/t2desktop`](https://github.com/awesome-os/t2desktop)** | **T2Desktop** — Sovereign Omarchy (MIT Hyprland/Wayland) on T2Linux + `b8g-ghost` | Zero `pacman`/`yay` bloat, `Lumi Chromatic` prismatic theme, wallpaper & Limine bootscreen |
 | **[`awesome-os/dockerimages`](https://github.com/awesome-os/dockerimages)** | Multi-arch (`linux/amd64` + `linux/arm64`) `FROM scratch` OCI images on `ghcr.io/awesome-os/*` | **5/5** images (`t2linux`, `ghost-node`, `ghost-py`, `ghost-cpp`, `ghost-jvm`), starting at `2.1 MB` |
 | **[`awesome-os/typescript`](https://github.com/awesome-os/typescript)** | Programmable **TypeScript `6.0.3`** with Wave 1 + Wave 2 V8 optimizations | `129 ms` self-bundle, `14.3×` faster Zero-AST Semantic CAS lookup (`8.7 ms`) |
-| **[`awesome-os/node`](https://github.com/awesome-os/node)** · **[`dotnet`](https://github.com/awesome-os/dotnet)** · **[`powershell`](https://github.com/awesome-os/powershell)** | 5-target zero-installer **Node `v27.0.0-alpha`**, **.NET `11.0.100`**, **PowerShell `v7.7.0`** | Native C11 `GetCommandLineW()` launchers (`35–51 KB`, zero telemetry, zero `cmd.exe` mangling) |
-| **[`awesome-os/skia`](https://github.com/awesome-os/skia)** · **[`dawn`](https://github.com/awesome-os/dawn)** · **[`blink`](https://github.com/awesome-os/blink)** · **[`qt`](https://github.com/awesome-os/qt)** | Modular **Skia** (+ TTY ANSI/Kitty), **Dawn WebGPU**, **Blink**, and **Qt `6.10.3`** (`30.7 MiB`) | Zero-account, zero-duplication shared `cas-v1` graphics & UI shards |
+| **[`awesome-os/node`](https://github.com/awesome-os/node)** · **[`dotnet`](https://github.com/awesome-os/dotnet)** · **[`powershell`](https://github.com/awesome-os/powershell)** | **`node v0.4.0`** (**Node `v27.0.0-alpha`**), **.NET `11.0.100`**, **PowerShell `v7.7.0`** | Native C11 `GetCommandLineW()` launchers (`35–51 KB`, zero telemetry, zero `cmd.exe` mangling) |
+| **[`awesome-os/skia`](https://github.com/awesome-os/skia)** · **[`dawn`](https://github.com/awesome-os/dawn)** · **[`blink`](https://github.com/awesome-os/blink)** · **[`qt`](https://github.com/awesome-os/qt)** | 4-OS **Skia** (+ TTY ANSI/Kitty), **Dawn WebGPU**, **Blink**, and **Qt `6.10.3`** (`30.7 MiB`) | Zero-account, zero-duplication shared `v11` CAS graphics & UI shards |
 | **[`awesome-os/upstream-mirrors`](https://github.com/awesome-os/upstream-mirrors)** | `26` append-only sparse upstream mirrors + `35/35` 5-OS C/Wasm shards | `libbrotli`, `libexpat`, `libsqlite3`, `libwebp`, `liblz4`, `adblock-rust`, `libelectron` C-ABI |
 | **[`awesome-os/ghost-py`](https://github.com/awesome-os/ghost-py)** · **[`ghost-jvm`](https://github.com/awesome-os/ghost-jvm)** · **[`ghost-cpp`](https://github.com/awesome-os/ghost-cpp)** · **[`ghost-100`](https://github.com/awesome-os/ghost-100)** | Zero-`pip` / zero-Maven / zero-CMake native CAS adapters + 100 1-line recipes | Includes 9 debloated Python LLM stack wheels (`numpy`, `pillow`, `tokenizers`, `safetensors`, `tiktoken`, etc.) |
-| **[`awesome-os/libv8_monolith`](https://github.com/awesome-os/libv8_monolith)** · **[`lo`](https://github.com/awesome-os/lo)** · **[`just-js`](https://github.com/awesome-os/just-js)** | Dynamic Ghost V8 hydrator & zero-bloat V8 JS runtimes | Replaces `250 MB` static `libv8_monolith.a` with shared `cas-v1` V8 |
-| **[`awesome-os/holo-pm`](https://github.com/awesome-os/holo-pm)** · **[`pnpm`](https://github.com/awesome-os/pnpm)** · **[`cargo`](https://github.com/awesome-os/cargo)** · **[`uv`](https://github.com/awesome-os/uv)** | Unified `v11` CAS package-manager triad + `libholo-pm` / `libpnpm` / `libcargo` / `libuvpy` C-ABIs | `B8G_ABI_MAGIC_V3` (`0x33564742`), shared `v11/files/XX/<sha512>`, GitHub Releases `self-update` |
-| **[`awesome-os/wasi-host`](https://github.com/awesome-os/wasi-host)** · **[`libuv`](https://github.com/awesome-os/libuv)** · **[`installer`](https://github.com/awesome-os/installer)** | Universal 4-OS `holo-wasi-host` + **`2.6 KB` `holo-wasi-host-b8g.wasm`**, optimized `libuv` (`184–219 KiB`), `v11` hardlink-first installer | Core-scaled `libuv` threadpool + 64B `B8G_ARENA_V1` slab; `0`-byte CLI hardlink stamping |
-| **[`awesome-os/wry`](https://github.com/awesome-os/wry)** · **[`webui`](https://github.com/awesome-os/webui)** · **[`ory-polis`](https://github.com/awesome-os/ory-polis)** | Zero-WebView2 `wry` (`sectium_device`), zero-HTTP `webui` (`3.8 KB` `.so`), and synced `ory-polis` (`v26.2.0`) SAML/OIDC/SCIM | Native `\\.\pipe\sectium-dev` dual-channel IPC & enterprise identity federation |
+| **[`awesome-os/libv8_monolith`](https://github.com/awesome-os/libv8_monolith)** · **[`lo`](https://github.com/awesome-os/lo)** · **[`just-js`](https://github.com/awesome-os/just-js)** | Dynamic Ghost V8 hydrator & **`lo v0.2.0`** zero-bloat V8 JS runtimes | Replaces `250 MB` static `libv8_monolith.a` with shared `v11` CAS V8 |
 
 ---
 
@@ -82,7 +102,8 @@ Every repository below is live, CI-verified, and hydrated from **one canonical $
 
 | Component | Entrypoint / Location | What It Does |
 | :--- | :--- | :--- |
-| **`holo-compiler` & `b8g-ghost`** | [`intersections/holo-compiler/README.md`](./intersections/holo-compiler/README.md) · [`sections/b8g-ghost/`](./sections/b8g-ghost/) | Zero-WSL 5-OS C11/WASI/TS cross-compilation, `.b8p` CAS packs, Dual-Tier Wasm-to-V8 JIT, and zero-`node-gyp` `b8g-ghost-abi.node`. |
+| **`holo-compiler` & `b8g-ghost`** | [`intersections/holo-compiler/README.md`](./intersections/holo-compiler/README.md) · [`sections/b8g-ghost/`](./sections/b8g-ghost/) | Zero-WSL 5-OS C11/Rust/Zig/WASI/TS cross-compilation, `v11` CAS packs, `libholo_codegen`, Sub-TU splicing, and zero-`node-gyp` `b8g-ghost-abi.node`. |
+| **Spin-Wave Bus & Models Hub** | [`intersections/spinwave-bus/`](./intersections/spinwave-bus/) · [`models/README.md`](./models/README.md) | `0.83 ns/op` C11 magnonic phasor kernel, `SpinWaveMoEModel` (`10.68 KB` INT8 `.b8p`), `SpinWaveHoloDagEngine`, and unified `models-manifest.json`. |
 | **Sectium Cloud Control Plane** | [`sections/sectium-cloud-control-plane/README.md`](./sections/sectium-cloud-control-plane/README.md) | `5.0 KB` Linux / `5.6 KB` WASI / `20.0 KB` Win64 C11 `B8G_ABI_MAGIC_V3` central discovery `initramfs` and 1-way `WoL` warm-RAM checkpointing. |
 | **Dual-Channel Host Device & TUI** | [`sections/sectium-device/`](./sections/sectium-device/) (`\\.\pipe\sectium-dev`) | Orthogonal `command` (`ttyS0` NDJSON) + `display` channels, `SectiumDevToolsPlane` cross-tab Web Streams, and `kitty-ink-sink.mts` TUI. |
 | **Polyglot Runtimes** | [`sections/b8g-runtime/README.md`](./sections/b8g-runtime/README.md) · [`sections/b8g-es/README.md`](./sections/b8g-es/README.md) · [`sections/b8g-jvm/README.md`](./sections/b8g-jvm/README.md) | `sectium-es` (`94 KB` Win64 / `79.7 KB` Linux) and `sectium-jvm` (`83.5 KB` Win64 / `72.1 KB` Linux / `72.6 KB` WASI, Kotlin + Tier-2 AOT). |
@@ -94,13 +115,13 @@ Every repository below is live, CI-verified, and hydrated from **one canonical $
 
 ```powershell
 # Verify documentation & link integrity (0 diagnostics required)
-.\bin\b8g-web-doc.ps1 README.md AGENTS.md ARCHITECTURE.md
+.\bin\b8g-web-doc.ps1 README.md AGENTS.md ARCHITECTURE.md models/README.md
 
 # Verify 100% atomic (posix, .cmd, .ps1) CLI triplet parity
 .\bin\b8g-bin-parity.ps1 verify
 
-# Run collapsed Control Plane, Dual-Channel Device, and Ghost CAS test suites
-.\bin\node.ps1 --test sections/sectium-cloud-control-plane/sectium-cp.test.mts sections/sectium-device/sectium-device.test.mts sections/b8g-ghost/b8g-ghost-abi.test.mts
+# Run collapsed Control Plane, Dual-Channel Device, Models Hub, and Spin-Wave DAG test suites
+.\bin\node.ps1 --test sections/sectium-cloud-control-plane/sectium-cp.test.mts sections/sectium-device/sectium-device.test.mts models/models.test.mts intersections/spinwave-bus/dag-engine.test.mts
 ```
 
 ---
@@ -108,6 +129,7 @@ Every repository below is live, CI-verified, and hydrated from **one canonical $
 ## 5. Documentation Map
 
 - **Root Architecture & Agent Contract:** [`ARCHITECTURE.md`](./ARCHITECTURE.md) · [`AGENTS.md`](./AGENTS.md)
+- **Spin-Wave Computing & Magnonic Intersections:** [`docs/architecture/SPINWAVE-COMPUTING-AND-MAGNONIC-INTERSECTIONS.md`](./docs/architecture/SPINWAVE-COMPUTING-AND-MAGNONIC-INTERSECTIONS.md) · [`models/README.md`](./models/README.md)
 - **Sectium Control Plane & Device Boundary:** [`docs/architecture/SECTIUM-CLOUD-CONTROL-PLANE.md`](./docs/architecture/SECTIUM-CLOUD-CONTROL-PLANE.md) · [`docs/architecture/SECTIUM-HOST-DEVICE-BOUNDARY.md`](./docs/architecture/SECTIUM-HOST-DEVICE-BOUNDARY.md)
 - **DevOps Build, Distribution & Code Signing:** [`docs/architecture/DEVOPS-BUILD-DISTRIBUTION-AND-SIGNING-GUIDE.md`](./docs/architecture/DEVOPS-BUILD-DISTRIBUTION-AND-SIGNING-GUIDE.md)
 - **Upstream Tracking & `holo-compiler`:** [`docs/architecture/UPSTREAM_TRACKING.md`](./docs/architecture/UPSTREAM_TRACKING.md) · [`intersections/holo-compiler/README.md`](./intersections/holo-compiler/README.md)
@@ -117,14 +139,4 @@ Every repository below is live, CI-verified, and hydrated from **one canonical $
 
 ## 6. Credits & Upstream Foundations
 
-Awesome-OS builds openly on **Chromium / Blink / Skia / Dawn** (BSD-3), **Electron** (MIT), **Code - OSS / VS Code** (MIT), **Eclipse Theia** (EPL-2.0), **Godot** (MIT), **Brave / `adblock-rust`** (MPL-2.0), **Blender** (GPL-3.0), **OBS Studio** (GPL-2.0), **Qt 6** (LGPL-3.0), **TypeScript** (Apache-2.0), **.NET & PowerShell** (MIT), **Node.js** (MIT), **Zig**, **LLVM**, **T2 SDE**, **Omarchy** (MIT), and **WASI / WebAssembly**.
-
-## Quick Install & Run (Windows / Linux / macOS)
-
-```sh
-# Install globally via awesome-os/pnpm (all platforms)
-pnpm add -g github:awesome-os/awesome-os
-
-# Run directly (all platforms)
-awesome-os --help
-```
+Awesome-OS builds openly on **Chromium / Blink / Skia / Dawn** (BSD-3), **Electron** (MIT), **Code - OSS / VS Code** (MIT), **Eclipse Theia** (EPL-2.0), **Godot** (MIT), **Brave / `adblock-rust`** (MPL-2.0), **Blender** (GPL-3.0), **OBS Studio** (GPL-2.0), **Qt 6** (LGPL-3.0), **TypeScript** (Apache-2.0), **.NET & PowerShell** (MIT), **Node.js** (MIT), **pnpm / Cargo / uv / libuv**, **Zig**, **LLVM**, **T2 SDE**, **Ory Polis**, and **WASI / WebAssembly**.
