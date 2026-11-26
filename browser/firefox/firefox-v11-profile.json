@@ -1,0 +1,348 @@
+{
+  "schema": "awesome-os.firefox-v11-profile.v1",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "runtime": {
+    "id": "firefox",
+    "name": "Firefox (Gecko / SpiderMonkey)",
+    "totalLibs": 24,
+    "coveredInV11": 24,
+    "coveragePercent": 100
+  },
+  "sharedLibraries": [
+    {
+      "id": "zlib",
+      "version": "1.4",
+      "sharedLib": "libz.so",
+      "mozconfigFlag": "--with-system-zlib",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 22
+    },
+    {
+      "id": "zstd",
+      "version": "1.6.0",
+      "sharedLib": "libzstd.so",
+      "mozconfigFlag": "pkg-config:libzstd",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 20
+    },
+    {
+      "id": "sqlite",
+      "version": "3.54.1",
+      "sharedLib": "libsqlite3.so",
+      "mozconfigFlag": "--enable-system-sqlite",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 18
+    },
+    {
+      "id": "vulkan-loader",
+      "version": "1.4.369",
+      "sharedLib": "libvulkan.so",
+      "mozconfigFlag": "pkg-config:vulkan",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 16
+    },
+    {
+      "id": "libjpeg-turbo",
+      "version": "3.2.1",
+      "sharedLib": "libjpeg.so",
+      "mozconfigFlag": "--with-system-jpeg",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 14
+    },
+    {
+      "id": "libpng",
+      "version": "1.6.59",
+      "sharedLib": "libpng16.so",
+      "mozconfigFlag": "--with-system-png",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 14
+    },
+    {
+      "id": "brotli",
+      "version": "1.2.1",
+      "sharedLib": "libbrotlidec.so",
+      "mozconfigFlag": "pkg-config:libbrotlidec",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 13
+    },
+    {
+      "id": "icu4c",
+      "version": "79.1",
+      "sharedLib": "libicuuc.so",
+      "mozconfigFlag": "--with-system-icu",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 13
+    },
+    {
+      "id": "libwebp",
+      "version": "1.6.0",
+      "sharedLib": "libwebp.so",
+      "mozconfigFlag": "--with-system-webp",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 12
+    },
+    {
+      "id": "ffmpeg",
+      "version": "9.1",
+      "sharedLib": "libavcodec.so",
+      "mozconfigFlag": "pkg-config:libavcodec",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 9
+    },
+    {
+      "id": "harfbuzz",
+      "version": "15.2.0",
+      "sharedLib": "libharfbuzz.so",
+      "mozconfigFlag": "--with-system-harfbuzz",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 9
+    },
+    {
+      "id": "libffi",
+      "version": "3.8.2",
+      "sharedLib": "libffi.so",
+      "mozconfigFlag": "--with-system-ffi",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 9
+    },
+    {
+      "id": "dav1d",
+      "version": "1.5.5",
+      "sharedLib": "libdav1d.so",
+      "mozconfigFlag": "--with-system-dav1d",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 6
+    },
+    {
+      "id": "freetype",
+      "version": "2.13.3",
+      "sharedLib": "libfreetype.so",
+      "mozconfigFlag": "pkg-config:freetype2",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 6
+    },
+    {
+      "id": "expat",
+      "version": "2.11.0",
+      "sharedLib": "libexpat.so",
+      "mozconfigFlag": "pkg-config:expat",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 4
+    },
+    {
+      "id": "fontconfig",
+      "version": "2.17.1",
+      "sharedLib": "libfontconfig.so",
+      "mozconfigFlag": "pkg-config:fontconfig",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 4
+    },
+    {
+      "id": "aom",
+      "version": "3.15.2",
+      "sharedLib": "libaom.so",
+      "mozconfigFlag": "--with-system-aom",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 3
+    },
+    {
+      "id": "libopus",
+      "version": "1.6.1",
+      "sharedLib": "libopus.so",
+      "mozconfigFlag": "--with-system-libopus",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 3
+    },
+    {
+      "id": "libvpx",
+      "version": "1.17.0",
+      "sharedLib": "libvpx.so",
+      "mozconfigFlag": "--with-system-libvpx",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 3
+    },
+    {
+      "id": "cairo",
+      "version": "1.18.4",
+      "sharedLib": "libcairo.so",
+      "mozconfigFlag": "--with-system-cairo",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 2
+    },
+    {
+      "id": "libevent",
+      "version": "2.1.13",
+      "sharedLib": "libevent.so",
+      "mozconfigFlag": "--with-system-libevent",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 2
+    },
+    {
+      "id": "nspr",
+      "version": "4.41",
+      "sharedLib": "libnspr4.so",
+      "mozconfigFlag": "--with-system-nspr",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 2
+    },
+    {
+      "id": "nss",
+      "version": "3.131.1",
+      "sharedLib": "libnss3.so",
+      "mozconfigFlag": "--with-system-nss",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 2
+    },
+    {
+      "id": "pixman",
+      "version": "0.46.0",
+      "sharedLib": "libpixman-1.so",
+      "mozconfigFlag": "--with-system-pixman",
+      "casTier": "v11",
+      "status": "v11-shared",
+      "sharedByCount": 2
+    }
+  ],
+  "policies": {
+    "DisableTelemetry": true,
+    "DisableFirefoxStudies": true,
+    "DisablePocket": true,
+    "DisableAppUpdate": true,
+    "DisableSystemAddonUpdate": true,
+    "DisableFirefoxAccounts": true,
+    "DisableFeedbackCommands": true,
+    "DontCheckDefaultBrowser": true,
+    "OfferToSaveLogins": false,
+    "UserMessaging": {
+      "WhatsNew": false,
+      "ExtensionRecommendations": false,
+      "FeatureRecommendations": false,
+      "UrlbarInterventions": false,
+      "SkipOnboarding": true,
+      "MoreFromMozilla": false
+    },
+    "FirefoxHome": {
+      "Search": true,
+      "TopSites": false,
+      "SponsoredTopSites": false,
+      "Highlights": false,
+      "Pocket": false,
+      "SponsoredPocket": false,
+      "Snippets": false,
+      "Locked": true
+    },
+    "FirefoxSuggest": {
+      "WebSuggestions": false,
+      "SponsoredSuggestions": false,
+      "ImproveSuggest": false,
+      "Locked": true
+    },
+    "Preferences": {
+      "datareporting.healthreport.uploadEnabled": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "datareporting.policy.dataSubmissionEnabled": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "toolkit.telemetry.enabled": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "toolkit.telemetry.unified": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "extensions.pocket.enabled": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "app.update.auto": {
+        "Value": false,
+        "Status": "locked"
+      },
+      "gfx.webrender.all": {
+        "Value": true,
+        "Status": "locked"
+      },
+      "fission.autostart": {
+        "Value": true,
+        "Status": "locked"
+      },
+      "dom.webgpu.enabled": {
+        "Value": true,
+        "Status": "default"
+      },
+      "javascript.options.wasm_simd": {
+        "Value": true,
+        "Status": "locked"
+      },
+      "security.sandbox.content.level": {
+        "Value": 8,
+        "Status": "locked"
+      }
+    }
+  },
+  "engineFlags": {
+    "gecko": {
+      "wayland": true,
+      "waylandEnv": "MOZ_ENABLE_WAYLAND=1",
+      "webgpu": true,
+      "wasmSimd": true
+    },
+    "stylo": {
+      "parallelCssEngine": true,
+      "layoutCssContainment": true,
+      "servoStyleThreading": "auto"
+    },
+    "webrender": {
+      "enabled": true,
+      "pref": "gfx.webrender.all",
+      "hardwareCompositing": true,
+      "vulkanBackend": true
+    },
+    "fission": {
+      "autostart": true,
+      "siteIsolation": true,
+      "pref": "fission.autostart",
+      "contentSandboxLevel": 8
+    },
+    "rlbox": {
+      "enabled": true,
+      "wasmSandboxing": true,
+      "mozconfigFlag": "--enable-rlbox-wasm-sandboxing",
+      "sandboxedModules": [
+        "expat",
+        "graphite",
+        "hunspell",
+        "ogg",
+        "woff2"
+      ]
+    }
+  }
+}

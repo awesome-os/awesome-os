@@ -63,6 +63,7 @@ ChromeOS proved the cleanest operating-system design of the modern era — **Ver
    - **Sectium ([`awesome-os/sectium-browser`](https://github.com/awesome-os/sectium-browser)):** Sovereign BSD-3 Chromium `160` Canary compositor (`~110 MB` RAM, `< 5 ms` local AtlasKV omnibox, built-in **Sectium IDE** MV3 DevTools panel).
    - **Chromium Baseline ([`awesome-os/chromium-baseline`](https://github.com/awesome-os/chromium-baseline)):** Shared dynamic V8 monolith (`components/libv8_monolith`), `just-js`/`lo` (`components/just-js/{lo,just-js}`), and `components/angrybird` substrates (`dup_v8 = 0 B`).
    - **Ladybird ([`browser/ladybird/`](browser/ladybird/) & [`awesome-os/ladybird`](https://github.com/awesome-os/ladybird)):** Clean-room BSD-2 engine upgraded to **`18 / 18` Chrome parity probes**, `LibJS` `HoloHotLoopJIT`, `LibWasm` `SIMD128`, RFC 9460 DNS `HTTPS` (`TYPE 65`), and native `uBlock` MV3 content blocking.
+   - **Firefox ([`browser/firefox/README.md`](browser/firefox/README.md)):** Zero-telemetry Gecko / Stylo / WebRender / Fission / RLBox `mozconfig.holo-v11`, `24/24` shared `v11` CAS profile, and native C11 `B8G_ABI_MAGIC_V3` launcher.
 3. **`Holo` (`v11` CAS, Compiler & Zero-Copy FFI):**
    - **`holo-compiler` & `holo-pm` ([`compiler/`](compiler/)):** Sub-second (`< 1 s`, zero WSL) C11/C++23/Zig/WASI/TypeScript compiler and 0-byte hardlink package projector (`holo-ffi`) backed by [`registry/`](registry/).
 4. **`Sovereign AI` ([`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform)):**
@@ -97,6 +98,7 @@ awesome-os/
 │   ├── rootfs/                # Synthesized pure Holo v11 /etc/os-release.* & /etc/awesome-os/system.json
 │   └── shell/                 # ChromeOS-style AwesomeOS Desktop Shell (Shelf, Omnibox, Crostini, Powerwash)
 ├── browser/
+│   ├── firefox/               # Zero-telemetry Gecko/RLBox mozconfig.holo-v11, 24/24 v11 profile & C11 launcher
 │   └── ladybird/              # Ladybird 18/18 Chrome parity C11/C++23 bridges & live upstream issue radar
 ├── runtime/                   # 4-Layer C11/WASI/Kotlin substrates (sectium-cp 5.7KB, b8g-runtime, sectium-es, sectium-jvm)
 ├── compiler/                  # holo-compiler (Tier-A <1s), holo-pm, and holo-ffi (0-byte hardlink projector)
