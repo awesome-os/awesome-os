@@ -15,12 +15,15 @@
 #ifndef B8G_LADYBIRD_BRIDGES_H
 #define B8G_LADYBIRD_BRIDGES_H
 
-#include <stdalign.h>
 #include <stddef.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
+#    define B8G_ALIGN64 alignas(64)
 extern "C" {
+#else
+#    include <stdalign.h>
+#    define B8G_ALIGN64 _Alignas(64)
 #endif
 
 #define B8G_ABI_MAGIC_V3 0x33564742U /* "BGV3" */
@@ -63,7 +66,7 @@ typedef struct B8gWebGpuCmd {
 } B8gWebGpuCmd;
 
 typedef struct B8gWebGpuRing {
-    _Alignas(64) uint32_t magic;
+    B8G_ALIGN64 uint32_t magic;
     uint32_t version;
     uint32_t capacity;
     uint32_t head;
@@ -82,7 +85,7 @@ size_t b8g_webgpu_drain(B8gWebGpuRing *ring, B8gWebGpuCmd *out_cmds, size_t max)
  * ========================================================================= */
 
 typedef struct B8gOpfsCasHandle {
-    _Alignas(64) uint32_t magic;
+    B8G_ALIGN64 uint32_t magic;
     uint32_t flags;
     uint64_t size_bytes;
     char digest_hex[B8G_OPFS_DIGEST_HEX_MAX];
@@ -115,7 +118,7 @@ typedef enum B8gHwAccelBackend {
 } B8gHwAccelBackend;
 
 typedef struct B8gWebCodecsSession {
-    _Alignas(64) uint32_t magic;
+    B8G_ALIGN64 uint32_t magic;
     uint32_t flags;
     B8gCodecId codec_id;
     B8gHwAccelBackend backend;
@@ -136,7 +139,7 @@ int b8g_webcodecs_session_init(B8gWebCodecsSession *session, B8gCodecId codec_id
 #define B8G_DNS_ALPN_MAX 16U
 
 typedef struct B8gDnsHttpsRecord {
-    _Alignas(64) uint32_t magic;
+    B8G_ALIGN64 uint32_t magic;
     uint16_t priority;
     uint16_t port;       /* 0 if default 443 */
     uint8_t supports_h3; /* 1 if "h3" advertised in SvcParam key 1 (alpn) */
@@ -155,7 +158,7 @@ int b8g_dns_parse_https_rdata(const uint8_t *rdata, size_t rdata_len, B8gDnsHttp
 #define B8G_BLOCKER_PATTERN_MAX 128U
 
 typedef struct B8gContentBlocker {
-    _Alignas(64) uint32_t magic;
+    B8G_ALIGN64 uint32_t magic;
     uint32_t rule_count;
     uint64_t blocked_hits;
     char domain_rules[B8G_BLOCKER_MAX_RULES][B8G_BLOCKER_PATTERN_MAX];
@@ -170,7 +173,7 @@ int b8g_content_blocker_should_block(B8gContentBlocker *cb, const char *request_
  * ========================================================================= */
 
 typedef struct B8gQuicTransportRing {
-    _Alignas(64) uint32_t magic;
+    B8G_ALIGN64 uint32_t magic;
     uint32_t head;
     uint32_t tail;
     uint32_t max_datagram_size;

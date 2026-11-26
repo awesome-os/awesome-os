@@ -26,6 +26,8 @@ jobs:
             os/bootloader/bootloader.test.mts \
             compiler/holo-ffi/holo-ffi.test.mts \
             sections/sectium-device/universal-compiler-debug.test.mts \
+            sections/sectium-device/vsock-crostini.test.mts \
+            os/crostini/cas-v11-block-and-sysroot.test.mts \
             installer/test/installer.test.mts \
             deployment/virtual-domain-manager.test.mts
 
