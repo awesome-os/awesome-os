@@ -5,6 +5,7 @@
   "tests": [
     "node --test os/bootstrap/holo-upgrade.test.mts",
     "node --test os/bootstrap/holo-distro-bootstrap.test.mts",
+    "node --test os/crostini/apt-dpkg-projector.test.mts",
     "node --test browser/firefox/firefox-cas.test.mts"
   ],
   "docs": [
