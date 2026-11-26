@@ -7,6 +7,8 @@
 [![Pure CAS v11 Release](https://img.shields.io/badge/Release-CAS_v11_(Ed25519)-3FB950?style=for-the-badge)](https://github.com/awesome-os/awesome-os/releases/tag/cas-v11-latest)
 [![Host Manager MDM](https://img.shields.io/badge/Fleet-Host_Manager-BC8CFF?style=for-the-badge)](https://b8g.dev/awesome-os/apps/host-manager.html)
 [![Live Oversight](https://img.shields.io/badge/Telemetry-26_Runners_Live-D29922?style=for-the-badge)](https://b8g.dev/awesome-os/apps/oversight.html)
+[![Sovereign Agent Platform](https://img.shields.io/badge/Agent_Platform-Model_Research_%26_Studio-F778BA?style=for-the-badge)](https://github.com/awesome-os/agent-platform)
+[![Agent Platform Hub](https://img.shields.io/badge/Live-Agent_Platform_App-2EA043?style=for-the-badge)](https://b8g.dev/awesome-os/apps/agent-platform.html)
 
 ---
 
@@ -50,7 +52,7 @@ curl -fsSL https://awesome-os.com/cas/v11/manifest.json | head -n 25
 
 ChromeOS proved the cleanest operating-system design of the modern era — **Verified Boot + Immutable Read-Only Root + Browser-as-Shell + Sandboxed Crostini Linux + 1-Click Powerwash + Fleet MDM** — yet locked it to proprietary hardware and closed cloud services.
 
-**AwesomeOS** delivers that architecture openly on **any x86_64, ARM64, or RISC-V machine, VM, Proxmox blade, or browser** using **3 clean pillars**:
+**AwesomeOS** delivers that architecture openly on **any x86_64, ARM64, or RISC-V machine, VM, Proxmox blade, or browser** using **4 clean pillars**:
 
 1. **`AwesomeOS` (OS, Kernel, Boot & Fleet):**
    - **Verified Boot & Zero-Flicker Splash ([`os/bootloader/`](os/bootloader/)):** Limine `v11/v12`, `systemd-boot`, and stateless HTTPS `iPXE` with dual A/B slots (`Slot A` / `Slot B` $O(1)$ rollback), Ed25519 + SHA-512 root verification ([`security/verified-boot.mts`](security/verified-boot.mts)), and a freestanding C11 UEFI GOP / `SimpleDRM` framebuffer splash blitter.
@@ -62,6 +64,8 @@ ChromeOS proved the cleanest operating-system design of the modern era — **Ver
    - **Ladybird ([`browser/ladybird/`](browser/ladybird/) & [`awesome-os/ladybird`](https://github.com/awesome-os/ladybird)):** Clean-room BSD-2 engine upgraded to **`18 / 18` Chrome parity probes**, `LibJS` `HoloHotLoopJIT`, `LibWasm` `SIMD128`, RFC 9460 DNS `HTTPS` (`TYPE 65`), and native `uBlock` MV3 content blocking.
 3. **`Holo` (`v11` CAS, Compiler & Zero-Copy FFI):**
    - **`holo-compiler` & `holo-pm` ([`compiler/`](compiler/)):** Sub-second (`< 1 s`, zero WSL) C11/C++23/Zig/WASI/TypeScript compiler and 0-byte hardlink package projector (`holo-ffi`) backed by [`registry/`](registry/).
+4. **`Sovereign AI` ([`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform)):**
+   - **Unified Agent Platform & Model Research ([`agent-platform.html`](https://b8g.dev/awesome-os/apps/agent-platform.html) · [`llm-studio.html`](https://b8g.dev/awesome-os/apps/llm-studio.html) · [`agent-host.html`](https://b8g.dev/awesome-os/apps/agent-host.html)):** Canonical home for **LLM & LoRA Studio**, the **Model Garden** (**Inkling 2 Mini**, **B8G Xenon 1B**, **LittleBit**, **Micro-MoE**, **SpinWave**), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** agentic protocols, bridged natively into OS runtimes via [`ai/`](ai/).
 
 ---
 
@@ -100,10 +104,12 @@ awesome-os/
 ├── fleet/                     # Host Manager (A/B slots, Powerwash, Hardware-Fit MoE, 11-tool stdio MCP)
 ├── installer/                 # Declarative .mts stamper + Browser OPFS / showDirectoryPicker OOBE
 ├── deployment/                # Multi-domain production deployer + C++20 Virtual Domain Manager
-├── ai/                        # Sovereign AI Triad bridges (Colibri LumiBERT 2.8ms, llama.cpp, vLLM)
+├── ai/                        # Sovereign AI Triad bridges (Colibri LumiBERT 2.8ms, llama.cpp, vLLM) → unified in awesome-os/agent-platform
 ├── sections/                  # Device boundary, AF_VSOCK zero-TCP Crostini transport & Universal Compiler Debug
 └── docs/                      # Mintlify documentation, security invariants, and LLM stack guides
 ```
+
+> **Sovereign AI Companion Repo — [`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform):** Unified home for **LLM & LoRA Studio**, the **Model Garden** (`Inkling 2 Mini`, `B8G Xenon 1B`, `LittleBit`, `Micro-MoE`, `SpinWave`), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** ([Live App](https://b8g.dev/awesome-os/apps/agent-platform.html)).
 
 ---
 
