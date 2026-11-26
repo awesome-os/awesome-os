@@ -38,6 +38,7 @@
 #define FIREFOX_LAUNCHER_VERSION "0.1.0"
 #define FIREFOX_V11_LIB_COUNT 24U
 #define MAX_PATH_BUF 1024
+#define MAX_OUT_PATH_BUF 2048
 #define SHA512_HEX_LEN 128U
 
 typedef struct B8gFirefoxArenaHeader {
@@ -175,10 +176,10 @@ static int find_cli_mts(char *out, size_t cap) {
   }
   char exe_dir[MAX_PATH_BUF];
   if (get_exe_dir(exe_dir, sizeof(exe_dir)) == 0) {
-    snprintf(out, cap, "%s%ccli.mts", exe_dir, PATH_SEP);
-    if (file_exists(out)) return 0;
-    snprintf(out, cap, "%s%cbrowser%cfirefox%ccli.mts", exe_dir, PATH_SEP, PATH_SEP, PATH_SEP);
-    if (file_exists(out)) return 0;
+    int n1 = snprintf(out, cap, "%s%ccli.mts", exe_dir, PATH_SEP);
+    if (n1 > 0 && (size_t)n1 < cap && file_exists(out)) return 0;
+    int n2 = snprintf(out, cap, "%s%cbrowser%cfirefox%ccli.mts", exe_dir, PATH_SEP, PATH_SEP, PATH_SEP);
+    if (n2 > 0 && (size_t)n2 < cap && file_exists(out)) return 0;
   }
   snprintf(out, cap, "browser%cfirefox%ccli.mts", PATH_SEP, PATH_SEP);
   if (file_exists(out)) return 0;
@@ -261,7 +262,7 @@ static int print_dry_run_receipt(void) {
   if (get_cas_dir(cas_dir, sizeof(cas_dir)) != 0) {
     snprintf(cas_dir, sizeof(cas_dir), ".b8g-cas");
   }
-  char cli_path[MAX_PATH_BUF];
+  char cli_path[MAX_OUT_PATH_BUF];
   if (find_cli_mts(cli_path, sizeof(cli_path)) != 0) {
     snprintf(cli_path, sizeof(cli_path), "browser/firefox/cli.mts");
   }
@@ -269,7 +270,7 @@ static int print_dry_run_receipt(void) {
   char sample_sha[SHA512_HEX_LEN + 1];
   memset(sample_sha, '0', SHA512_HEX_LEN);
   sample_sha[SHA512_HEX_LEN] = '\0';
-  char sample_v11_path[MAX_PATH_BUF];
+  char sample_v11_path[MAX_OUT_PATH_BUF];
   if (resolve_v11_cas_blob_path(cas_dir, sample_sha, sample_v11_path, sizeof(sample_v11_path)) != 0) {
     snprintf(sample_v11_path, sizeof(sample_v11_path), "unresolved");
   }
@@ -324,10 +325,10 @@ int main(int argc, char **argv) {
     set_env_var("B8G_CAS_DIR", cas_dir);
     const char *pinned = getenv("FIREFOX_HOLO_SHA512");
     if (pinned && strlen(pinned) == SHA512_HEX_LEN) {
-      char bin_path[MAX_PATH_BUF];
-      snprintf(bin_path, sizeof(bin_path), "%s%cfirefox%c%s%c%s",
-               cas_dir, PATH_SEP, PATH_SEP, pinned, PATH_SEP, OS_FIREFOX_BIN);
-      if (file_exists(bin_path)) {
+      char bin_path[MAX_OUT_PATH_BUF];
+      int n = snprintf(bin_path, sizeof(bin_path), "%s%cfirefox%c%s%c%s",
+                       cas_dir, PATH_SEP, PATH_SEP, pinned, PATH_SEP, OS_FIREFOX_BIN);
+      if (n > 0 && (size_t)n < sizeof(bin_path) && file_exists(bin_path)) {
 #if defined(_WIN32)
         return (int)_spawnl(_P_NOWAIT, bin_path, bin_path, "-no-remote", NULL) == -1 ? 127 : 0;
 #else
@@ -338,7 +339,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  char cli_path[MAX_PATH_BUF];
+  char cli_path[MAX_OUT_PATH_BUF];
   if (find_cli_mts(cli_path, sizeof(cli_path)) != 0) {
     fprintf(stderr, "firefox_launcher: could not locate browser/firefox/cli.mts (set FIREFOX_CLI_PATH).\n");
     return 1;
