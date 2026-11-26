@@ -32,6 +32,7 @@ export interface BootstrapRunOptions {
   readonly stageFilter?: string;
   readonly offline?: boolean;
   readonly writeLocalCas?: boolean;
+  readonly quiet?: boolean;
 }
 
 export interface StageExecutionReport {
@@ -67,10 +68,10 @@ function copyEnsureDir(src: string, dst: string): void {
   copyFileSync(src, dst);
 }
 
-function runNodeScript(scriptPath: string, args: readonly string[] = [], cwd?: string): void {
+function runNodeScript(scriptPath: string, args: readonly string[] = [], cwd?: string, quiet = false): void {
   execFileSync(process.execPath, [scriptPath, ...args], {
     cwd: cwd ?? dirname(scriptPath),
-    stdio: 'inherit',
+    stdio: quiet ? 'ignore' : 'inherit',
     env: process.env,
   });
 }
@@ -100,6 +101,10 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
   const stageFilter = options.stageFilter ?? 'all';
   const offline = Boolean(options.offline);
   const writeLocalCas = Boolean(options.writeLocalCas);
+  const quiet = Boolean(options.quiet);
+  const log = (...args: unknown[]): void => {
+    if (!quiet) console.log(...args);
+  };
 
   const t2Dir = join(mirrorRoot, 't2linux-baseline');
   const holoV11Dir = join(mirrorRoot, 'holo-v11');
@@ -127,13 +132,13 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
     const t0 = Date.now();
     const written: string[] = [];
     const notes: string[] = [];
-    console.log(`\n[BOOTSTRAP STAGE ${def.number}/6] ${def.title} (${def.id})`);
+    log(`\n[BOOTSTRAP STAGE ${def.number}/6] ${def.title} (${def.id})`);
 
     if (def.id === 'bump-upstreams') {
       if (!offline && existsSync(join(t2Dir, 'scripts', 'track-live-upstreams.mts'))) {
-        runNodeScript(join(t2Dir, 'scripts', 'track-live-upstreams.mts'), [], t2Dir);
-        runNodeScript(join(t2Dir, 'scripts', 'bump-all-max-pins.mts'), [], t2Dir);
-        runNodeScript(join(t2Dir, 'scripts', 'generate-max-version-lock.mts'), [], t2Dir);
+        runNodeScript(join(t2Dir, 'scripts', 'track-live-upstreams.mts'), [], t2Dir, quiet);
+        runNodeScript(join(t2Dir, 'scripts', 'bump-all-max-pins.mts'), [], t2Dir, quiet);
+        runNodeScript(join(t2Dir, 'scripts', 'generate-max-version-lock.mts'), [], t2Dir, quiet);
         written.push('t2linux-baseline/catalog/live-upstream-tracker.json');
         written.push('t2linux-baseline/catalog/v11-package-universe.json');
         written.push('t2linux-baseline/catalog/max-version-lock.json');
@@ -142,8 +147,8 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
       }
 
       if (!offline && existsSync(join(holoV11Dir, 'scripts', 'sync-ecosystem-reports.mts'))) {
-        runNodeScript(join(holoV11Dir, 'scripts', 'sync-ecosystem-reports.mts'), ['--local'], holoV11Dir);
-        runNodeScript(join(holoV11Dir, 'scripts', 'collect-oversight-telemetry.mts'), [], holoV11Dir);
+        runNodeScript(join(holoV11Dir, 'scripts', 'sync-ecosystem-reports.mts'), ['--local'], holoV11Dir, quiet);
+        runNodeScript(join(holoV11Dir, 'scripts', 'collect-oversight-telemetry.mts'), [], holoV11Dir, quiet);
         written.push('holo-v11/reports/ECOSYSTEM-SCOREBOARD.md');
         written.push('holo-v11/reports/oversight-telemetry.json');
       }
@@ -164,7 +169,7 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
       }
     } else if (def.id === 'stamp-boot-substrate') {
       const splashGen = join(monorepoRoot, 'os', 'bootloader', 'assets', 'generate-splash.mts');
-      runNodeScript(splashGen, [], monorepoRoot);
+      runNodeScript(splashGen, [], monorepoRoot, quiet);
       written.push('os/bootloader/assets/splash/awesome-os-1920x1080.bmp');
 
       const limineConf = renderDualSlotLimineConf(manifest);
@@ -249,12 +254,13 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
           join(monorepoRoot, 'security', 'verified-boot.test.mts'),
         ],
         monorepoRoot,
+        quiet,
       );
       notes.push('Verified bootloader, holo-kbuild 7.3.6, and Ed25519 verified-boot gates');
     } else if (def.id === 'warm-planetary-cas') {
       if (!offline && existsSync(join(holoV11Dir, 'scripts', 'warm-global-cas.mts'))) {
         const warmArgs = writeLocalCas ? ['--write-local-cas'] : [];
-        runNodeScript(join(holoV11Dir, 'scripts', 'warm-global-cas.mts'), warmArgs, holoV11Dir);
+        runNodeScript(join(holoV11Dir, 'scripts', 'warm-global-cas.mts'), warmArgs, holoV11Dir, quiet);
         written.push('holo-v11/index/cas-v11-global-manifest.json', 'holo-v11/index/holo-compiler-lockfile.json');
       } else {
         notes.push(offline ? 'Offline mode: verifying existing CAS manifest' : 'holo-v11 mirror not present');
@@ -334,7 +340,7 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
       written.push('registry/index/hot-cdn-shards.json');
     } else if (def.id === 'rollout-channels') {
       if (existsSync(join(installerDir, 'scripts', 'build-web-bundle.mts'))) {
-        runNodeScript(join(installerDir, 'scripts', 'build-web-bundle.mts'), [], installerDir);
+        runNodeScript(join(installerDir, 'scripts', 'build-web-bundle.mts'), [], installerDir, quiet);
         copyEnsureDir(
           join(installerDir, 'web', 'v11-bundle.json'),
           join(monorepoRoot, 'installer', 'web', 'v11-bundle.json'),
@@ -393,7 +399,7 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
       }
 
       if (!offline && existsSync(join(holoV11Dir, 'scripts', 'collect-oversight-telemetry.mts'))) {
-        runNodeScript(join(holoV11Dir, 'scripts', 'collect-oversight-telemetry.mts'), [], holoV11Dir);
+        runNodeScript(join(holoV11Dir, 'scripts', 'collect-oversight-telemetry.mts'), [], holoV11Dir, quiet);
         copyEnsureDir(
           join(holoV11Dir, 'reports', 'oversight-telemetry.json'),
           join(monorepoRoot, 'registry', 'reports', 'oversight-telemetry.json'),
@@ -429,13 +435,13 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
   const receiptPath = join(bootstrapDir, 'last-bootstrap-receipt.json');
   writeTextEnsureDir(receiptPath, `${JSON.stringify(signedReceipt, null, 2)}\n`);
 
-  console.log('\n====================================================================');
-  console.log(`  Holo Distro Bootstrap Complete: ${manifest.name} ${manifest.version} (${manifest.releaseTag})`);
-  console.log(`  Receipt: ${receiptPath} (key=${signedReceipt.signature.keyId})`);
+  log('\n====================================================================');
+  log(`  Holo Distro Bootstrap Complete: ${manifest.name} ${manifest.version} (${manifest.releaseTag})`);
+  log(`  Receipt: ${receiptPath} (key=${signedReceipt.signature.keyId})`);
   for (const r of reports) {
-    console.log(`  [Stage ${r.number}] ${r.status.toUpperCase().padEnd(7)} ${r.id.padEnd(24)} (${r.durationMs} ms)`);
+    log(`  [Stage ${r.number}] ${r.status.toUpperCase().padEnd(7)} ${r.id.padEnd(24)} (${r.durationMs} ms)`);
   }
-  console.log('====================================================================');
+  log('====================================================================');
 
   return { manifest, reports, receiptPath };
 }

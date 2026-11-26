@@ -61,6 +61,7 @@ ChromeOS proved the cleanest operating-system design of the modern era — **Ver
    - **Enterprise Host Manager ([`fleet/`](fleet/)):** 4-column Light/Dark admin console, Zero-Touch Enrollment, Hardware-Fit MoE calculator, `workspaces://` protocol, 1-Click Powerwash, and an 11-tool stdio MCP server.
 2. **`Sectium` + `Ladybird` (Browser-IS-The-Shell):**
    - **Sectium ([`awesome-os/sectium-browser`](https://github.com/awesome-os/sectium-browser)):** Sovereign BSD-3 Chromium `160` Canary compositor (`~110 MB` RAM, `< 5 ms` local AtlasKV omnibox, built-in **Sectium IDE** MV3 DevTools panel).
+   - **Chromium Baseline ([`awesome-os/chromium-baseline`](https://github.com/awesome-os/chromium-baseline)):** Shared dynamic V8 monolith (`components/libv8_monolith`), `just-js`/`lo` (`components/just-js/{lo,just-js}`), and `components/angrybird` substrates (`dup_v8 = 0 B`).
    - **Ladybird ([`browser/ladybird/`](browser/ladybird/) & [`awesome-os/ladybird`](https://github.com/awesome-os/ladybird)):** Clean-room BSD-2 engine upgraded to **`18 / 18` Chrome parity probes**, `LibJS` `HoloHotLoopJIT`, `LibWasm` `SIMD128`, RFC 9460 DNS `HTTPS` (`TYPE 65`), and native `uBlock` MV3 content blocking.
 3. **`Holo` (`v11` CAS, Compiler & Zero-Copy FFI):**
    - **`holo-compiler` & `holo-pm` ([`compiler/`](compiler/)):** Sub-second (`< 1 s`, zero WSL) C11/C++23/Zig/WASI/TypeScript compiler and 0-byte hardlink package projector (`holo-ffi`) backed by [`registry/`](registry/).
@@ -88,7 +89,7 @@ Instead of every browser, AI server, desktop shell, and language toolchain shipp
 ```text
 awesome-os/
 ├── os/
-│   ├── bootstrap/             # Reusable 6-Stage Holo v11 Distro Bootstrap Engine (holo.distro-bootstrap.v1)
+│   ├── bootstrap/             # Reusable 6-Stage Holo v11 Distro Bootstrap Engine & .\bin\holo-upgrade CLI (os/bootstrap/holo-upgrade.mts)
 │   ├── bootloader/            # Limine v11/v12, systemd-boot, iPXE + C11 UEFI GOP 24-bit BMP splash blitter
 │   ├── kernel/                # Holo-Linux 7.3.6 kconfig, b8g_abi.ko (/dev/b8g-arena), scx_holo BPF, AGENTS.md
 │   ├── holo-microkernel-zig/  # 14.17 KB freestanding RISC-V 64 OpenSBI time-sharing microkernel in Zig
@@ -110,6 +111,8 @@ awesome-os/
 ```
 
 > **Sovereign AI Companion Repo — [`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform):** Unified home for **LLM & LoRA Studio**, the **Model Garden** (`Inkling 2 Mini`, `B8G Xenon 1B`, `LittleBit`, `Micro-MoE`, `SpinWave`), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** ([Live App](https://b8g.dev/awesome-os/apps/agent-platform.html)).
+>
+> **Chromium & V8 Substrate Repo — [`awesome-os/chromium-baseline`](https://github.com/awesome-os/chromium-baseline):** Unified shared dynamic `libv8` (`components/libv8_monolith`), `just-js`/`lo` (`components/just-js/{lo,just-js}`), and `components/angrybird` substrates (`dup_v8 = 0 B`).
 
 ---
 
@@ -119,19 +122,24 @@ awesome-os/
 - **Install to Any Local Folder or OPFS:** [https://awesome-os.com/install/](https://awesome-os.com/install/) *(drops `LAUNCH-AWESOMEOS.html` — boots on any clean laptop with zero Node.js required)*
 - **Boot Live AwesomeOS Desktop Shell:** [https://awesome-os.com/shell/](https://awesome-os.com/shell/)
 
-### 2. One-Line CLI Bootstrap
+### 2. One-Line CLI Bootstrap & One-Command Upgrade
 ```powershell
 # Windows 11 PowerShell
 irm https://awesome-os.com/install.ps1 | iex
+
+# One-command Ecosystem Upgrader (os/bootstrap/holo-upgrade.mts)
+.\bin\holo-upgrade --offline --json
 ```
 ```sh
 # Linux (x64 / ARM64 / RISC-V) & macOS (Apple Silicon)
 curl -fsSL https://awesome-os.com/install.sh | sh
 ```
+See [`os/bootstrap/holo-upgrade.mts`](os/bootstrap/holo-upgrade.mts) for all 4 canonical upgrade phases (`bump-pins`, `align-monorepos`, `telemetry-and-dedup`, `rollout`).
 
-### 3. Run All 10 Hermetic Monorepo Test Suites (`< 400 ms`)
+### 3. Run All 11 Hermetic Monorepo Test Suites (`< 400 ms`)
 ```bash
 node --test \
+  os/bootstrap/holo-upgrade.test.mts \
   os/bootstrap/holo-distro-bootstrap.test.mts \
   security/verified-boot.test.mts \
   os/kernel/holo-kbuild.test.mts \

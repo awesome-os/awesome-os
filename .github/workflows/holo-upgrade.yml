@@ -1,0 +1,30 @@
+name: Holo Upgrade — Continuous Ecosystem Pinning, Dedup & Telemetry Check
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  holo-upgrade-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run holo-upgrade --offline --json & Unit Suite
+        run: |
+          node os/bootstrap/holo-upgrade.mts --offline --json > /tmp/holo-upgrade-receipt.json
+          node --test os/bootstrap/holo-upgrade.test.mts
+          {
+            echo "### Holo Upgrade Continuous Receipt"
+            echo '```json'
+            cat /tmp/holo-upgrade-receipt.json
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

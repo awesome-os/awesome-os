@@ -7,20 +7,17 @@
   "abiMagic": "0x33564742",
   "casLayout": "v11",
   "offlineMode": true,
-  "completedAt": "2026-11-26T17:54:00.287Z",
+  "completedAt": "2026-11-26T19:07:56.499Z",
   "stages": [
     {
       "number": 1,
       "id": "bump-upstreams",
       "title": "Automated Upstream Max-Bump & Catalog Lock",
-      "status": "done",
-      "durationMs": 2,
-      "artifactsWritten": [
-        "registry/dashboard/oversight.html",
-        "registry/reports/ECOSYSTEM-SCOREBOARD.md"
-      ],
+      "status": "skipped",
+      "durationMs": 0,
+      "artifactsWritten": [],
       "notes": [
-        "Offline mode: retained locked upstream catalog"
+        "Skipped by --stage filter"
       ]
     },
     {
@@ -28,7 +25,7 @@
       "id": "stamp-boot-substrate",
       "title": "Kernel, Zero-Flicker GOP Splash & Dual-Slot Bootloader Stamp",
       "status": "done",
-      "durationMs": 190,
+      "durationMs": 198,
       "artifactsWritten": [
         "os/bootloader/assets/splash/awesome-os-1920x1080.bmp",
         "os/bootloader/limine/limine.conf",
@@ -64,29 +61,22 @@
       "number": 4,
       "id": "build-and-gate-images",
       "title": "Multi-Arch Image Build & Headless QEMU Verification Gates",
-      "status": "done",
-      "durationMs": 540,
-      "artifactsWritten": [
-        "os/holo-microkernel-zig/zig-out/bin/holo-microkernel-riscv64.elf"
-      ],
+      "status": "skipped",
+      "durationMs": 0,
+      "artifactsWritten": [],
       "notes": [
-        "Verified bootloader, holo-kbuild 7.3.6, and Ed25519 verified-boot gates"
+        "Skipped by --stage filter"
       ]
     },
     {
       "number": 5,
       "id": "warm-planetary-cas",
       "title": "Planetary v11 CAS Pre-Warm, Ed25519 Signing & CDN Shard Sync",
-      "status": "done",
-      "durationMs": 19,
-      "artifactsWritten": [
-        "registry/index/cas-v11-global-manifest.json",
-        "registry/index/holo-compiler-lockfile.json",
-        "registry/index/hot-cdn-shards.json"
-      ],
+      "status": "skipped",
+      "durationMs": 0,
+      "artifactsWritten": [],
       "notes": [
-        "Offline mode: verifying existing CAS manifest",
-        "Verified Ed25519 signature on cas-v11-global-manifest.json (key=awesomeos-root-v11)"
+        "Skipped by --stage filter"
       ]
     },
     {
@@ -94,7 +84,7 @@
       "id": "rollout-channels",
       "title": "Unified 4-Channel User Rollout (Web OOBE, Netboot, Omaha Fleet, Edge)",
       "status": "done",
-      "durationMs": 100,
+      "durationMs": 126,
       "artifactsWritten": [
         "installer/web/v11-bundle.json",
         "fleet/channels/stable.json",
@@ -107,8 +97,8 @@
     "scheme": "ed25519-sha512-v1",
     "keyId": "awesomeos-root-v11",
     "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
-    "payloadSha512": "7523277d3a0c4b87bf99133766bff789d223b05b49f8067931665771320e005fec5a8a1d69b62fdcd2a21a340d4ec9f153741736a067208b8331ee91d45464d2",
-    "signatureHex": "7fd77f10d9444f1af55892199c745e3a92aa1c3c63de771fe0cdbae4709c5665e15a9572db09c65480aaa671f1f30348398d4f77633ae0369556e54cdb8a4400",
-    "signedAt": "2026-11-26T17:54:00.287Z"
+    "payloadSha512": "83dfb781d98c1c22a5622d0446b73da722a72858d92fb63390147b936f05eea62f64798763c5696422fedecddd709a3b7a24663a4c15776bd25e86efaec83813",
+    "signatureHex": "dcfa975374e578d55ae1da41ec1417b0012a06ab1fc9833f20893bce88ff88d4f9a2b832bad52fba9aa16bf318072428a1863a0dd79d13cd1b03bcde9328dc0e",
+    "signedAt": "2026-11-26T19:07:56.500Z"
   }
 }

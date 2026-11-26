@@ -1,12 +1,12 @@
 {
   "schema": "awesome-os.oversight-telemetry.v1",
-  "generatedAt": "2026-11-26T17:53:17.372Z",
+  "generatedAt": "2026-11-26T18:06:06.101Z",
   "abiMagic": "0x33564742",
   "casLayout": "v11",
   "summary": {
     "totalReposMonitored": 26,
-    "passingRuns": 26,
-    "activeRuns": 0,
+    "passingRuns": 25,
+    "activeRuns": 1,
     "failingRuns": 0,
     "upstreamLibsTracked": 56,
     "bigBoysCount": 22,
@@ -29,12 +29,12 @@
   "runners": [
     {
       "repo": "awesome-os/awesome-os",
-      "workflowName": "CI — AwesomeOS Monorepo (Verified Boot, Holo-Linux 7.3.6, UEFI Splash & Holo-FFI)",
+      "workflowName": "Bootstrap Distro — Reusable 6-Stage Holo v11 OS Release Pipeline",
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T17:25:23Z",
-      "url": "https://github.com/awesome-os/awesome-os/actions/runs/45867575603"
+      "updatedAt": "2026-11-26T18:05:03Z",
+      "url": "https://github.com/awesome-os/awesome-os/actions/runs/45872923377"
     },
     {
       "repo": "awesome-os/bootloader",
@@ -42,8 +42,8 @@
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T10:29:03Z",
-      "url": "https://github.com/awesome-os/bootloader/actions/runs/45801717328"
+      "updatedAt": "2026-11-26T17:56:04Z",
+      "url": "https://github.com/awesome-os/bootloader/actions/runs/45871824936"
     },
     {
       "repo": "awesome-os/sectium-browser",
@@ -56,12 +56,12 @@
     },
     {
       "repo": "awesome-os/libv8_monolith",
-      "workflowName": "CI — Holo v11 Dynamic libv8_monolith Verification (V8 16+ Zero Static Bloat)",
+      "workflowName": "Release Tarball",
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T15:50:15Z",
-      "url": "https://github.com/awesome-os/libv8_monolith/actions/runs/45852955769"
+      "updatedAt": "2026-11-26T17:56:47Z",
+      "url": "https://github.com/awesome-os/libv8_monolith/actions/runs/45871908479"
     },
     {
       "repo": "awesome-os/lo",
@@ -95,18 +95,18 @@
       "workflowName": "holo-compiler CI",
       "status": "completed",
       "conclusion": "success",
-      "branch": "v0.7.0",
-      "updatedAt": "2026-11-25T09:13:36Z",
-      "url": "https://github.com/awesome-os/holo-compiler/actions/runs/45583355527"
+      "branch": "main",
+      "updatedAt": "2026-11-26T17:56:12Z",
+      "url": "https://github.com/awesome-os/holo-compiler/actions/runs/45871833268"
     },
     {
       "repo": "awesome-os/holo-pm",
-      "workflowName": "Warm Global v11 CAS CDN",
+      "workflowName": "Release Awesome-OS holo-pm + libholo-pm",
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T06:38:53Z",
-      "url": "https://github.com/awesome-os/holo-pm/actions/runs/45769564993"
+      "updatedAt": "2026-11-26T17:56:49Z",
+      "url": "https://github.com/awesome-os/holo-pm/actions/runs/45871841108"
     },
     {
       "repo": "awesome-os/holo-ffi",
@@ -119,12 +119,12 @@
     },
     {
       "repo": "awesome-os/desktop",
-      "workflowName": "Build and Boot Awesome-OS Desktop (Multi-Arch UEFI ISO & Netboot)",
+      "workflowName": "Build and Boot AwesomeOS v1.0 (Multi-Arch Dual-Slot ISO, QCOW2 & Netboot)",
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T06:16:25Z",
-      "url": "https://github.com/awesome-os/desktop/actions/runs/45766960387"
+      "updatedAt": "2026-11-26T18:05:24Z",
+      "url": "https://github.com/awesome-os/desktop/actions/runs/45872933871"
     },
     {
       "repo": "awesome-os/posix",
@@ -137,12 +137,12 @@
     },
     {
       "repo": "awesome-os/t2linux-baseline",
-      "workflowName": "Build & Boot T2Linux Baseline (Original T2 SDE + v11 CAS)",
-      "status": "completed",
-      "conclusion": "success",
+      "workflowName": "Release — Compile & QEMU-Boot Real Holo-Linux 7.3 Kernel + b8g_abi.ko",
+      "status": "in_progress",
+      "conclusion": "running",
       "branch": "main",
-      "updatedAt": "2026-11-26T17:22:53Z",
-      "url": "https://github.com/awesome-os/t2linux-baseline/actions/runs/45867127246"
+      "updatedAt": "2026-11-26T17:56:35Z",
+      "url": "https://github.com/awesome-os/t2linux-baseline/actions/runs/45871902363"
     },
     {
       "repo": "awesome-os/installer",
@@ -150,8 +150,8 @@
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T15:49:48Z",
-      "url": "https://github.com/awesome-os/installer/actions/runs/45852912257"
+      "updatedAt": "2026-11-26T17:56:27Z",
+      "url": "https://github.com/awesome-os/installer/actions/runs/45871869858"
     },
     {
       "repo": "awesome-os/deployment",
@@ -159,8 +159,8 @@
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T15:50:13Z",
-      "url": "https://github.com/awesome-os/deployment/actions/runs/45852937654"
+      "updatedAt": "2026-11-26T17:56:48Z",
+      "url": "https://github.com/awesome-os/deployment/actions/runs/45871885140"
     },
     {
       "repo": "awesome-os/host-manager",
@@ -168,8 +168,8 @@
       "status": "completed",
       "conclusion": "success",
       "branch": "main",
-      "updatedAt": "2026-11-26T08:56:29Z",
-      "url": "https://github.com/awesome-os/host-manager/actions/runs/45787415182"
+      "updatedAt": "2026-11-26T17:56:30Z",
+      "url": "https://github.com/awesome-os/host-manager/actions/runs/45871877474"
     },
     {
       "repo": "awesome-os/ladybird",

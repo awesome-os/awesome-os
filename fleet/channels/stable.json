@@ -10,7 +10,7 @@
   "kernelRelease": "7.3.6",
   "targetSlotPolicy": "stage-standby-flip-atomic",
   "casManifestUrl": "https://awesome-os.com/cas/v11/manifest.json",
-  "publishedAt": "2026-11-26T17:54:00.285Z",
+  "publishedAt": "2026-11-26T19:07:56.498Z",
   "artifacts": [
     {
       "arch": "x86_64",
@@ -53,8 +53,8 @@
     "scheme": "ed25519-sha512-v1",
     "keyId": "awesomeos-root-v11",
     "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
-    "payloadSha512": "8fe640c3949dcf4538073c1aefc3905dda5cc2c45f1fb5f0bb59ba17db5ccbb31597a7f352125cb2548321190494583231dee63813a306ca935ffcc5521b82c2",
-    "signatureHex": "e9df427a93dbf4bd5f2114ec0ae876bb0169e7d86ee82a257dc88d078564e1ad85b29332204dcf20b3fbfae0524a5d38d4b39c1bb8a0180fcecf45ec1a3bce06",
-    "signedAt": "2026-11-26T17:54:00.286Z"
+    "payloadSha512": "892856af1cfd8e5e6936883eec1c29564b33cf9b87342334905d06c15173d5aa7e5e7d2e35e554f095467bc8673cb210c89d23891b93dec1c9584095a5f95a7f",
+    "signatureHex": "a10366c7e8441099c5b7ea7146b4281a97d3563a2e7197867fed21acf0b198bc99e6f725ff6fbfac94dda997fcb17fc39d6f82b8dcee687be8a0d055decbf202",
+    "signedAt": "2026-11-26T19:07:56.499Z"
   }
 }

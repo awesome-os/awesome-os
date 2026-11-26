@@ -1,0 +1,76 @@
+{
+  "schema": "awesome-os.holo-upgrade-receipt.v1",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "mode": "offline",
+  "monoreposDetected": [
+    "awesome-os",
+    "t2linux-baseline",
+    "holo-v11",
+    "agent-platform",
+    "chromium-baseline",
+    "deployment"
+  ],
+  "zeroLegacyGhostVerified": true,
+  "dedupSummary": {
+    "totalRepos": 61,
+    "totalAssets": 409,
+    "uniqueSha512Blobs": 399,
+    "dedupRatioPct": 2.76,
+    "dupV8Bytes": 0
+  },
+  "phases": [
+    {
+      "number": 1,
+      "id": "bump-pins",
+      "title": "Bump Live Upstream Versions & Max-Version Lock",
+      "status": "done",
+      "durationMs": 0,
+      "notes": [
+        "Offline mode: retained locked upstream pins"
+      ]
+    },
+    {
+      "number": 2,
+      "id": "align-monorepos",
+      "title": "Align All 4 Sovereign Monorepos (Zero b8g-ghost Drift)",
+      "status": "done",
+      "durationMs": 459,
+      "notes": [
+        "Aligned distro substrates via holo-distro-bootstrap (3 stages synthesized)",
+        "Rebuilt awesome-os/agent-platform dashboards",
+        "Verified awesome-os/chromium-baseline alignment invariants",
+        "Verified 0 legacy b8g-ghost/cas-v1 references across active lockfiles"
+      ]
+    },
+    {
+      "number": 3,
+      "id": "telemetry-and-dedup",
+      "title": "Compute Gravity Damper Runner & SHA-512 Dedup Telemetry",
+      "status": "done",
+      "durationMs": 1,
+      "notes": [
+        "Offline mode: aggregated cached CAS & Gravity telemetry summary"
+      ]
+    },
+    {
+      "number": 4,
+      "id": "rollout",
+      "title": "Push Mirrors, Dispatch Gravity Runners, Deploy Live & Sign Receipt",
+      "status": "done",
+      "durationMs": 0,
+      "notes": [
+        "Live push/deploy skipped unless --push / --deploy passed (hermetic mode)"
+      ]
+    }
+  ],
+  "completedAt": "2026-11-26T19:07:56.014Z",
+  "signature": {
+    "scheme": "ed25519-sha512-v1",
+    "keyId": "awesomeos-root-v11",
+    "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
+    "payloadSha512": "4643fd77b095d5faa570202ba3d04dfd87a3309e169ae3c27ae55dd565ff8701a017158e05ff60b80634734eb575e25ba19ff16a84a98b907e7b5ea4862854e3",
+    "signatureHex": "0b17066db89f2b4fa8b018014000a4a071b9bb02f0865d5bcda5d778425370c9c93a9dcd32b4acd27d9404105c5841176348ca5959ea8f55524f37f6b1fd6e02",
+    "signedAt": "2026-11-26T19:07:56.014Z"
+  }
+}
