@@ -24,12 +24,13 @@ curl -fsSL https://awesome-os.com/install.sh | sh
 curl -fsSL https://github.com/awesome-os/holo-pm/releases/latest/download/install.sh | sh
 ```
 
-### Unified 2-Protocol Model (`repository://` × `project://`)
+### Unified 3-Protocol Model (`repository://` × `project://` × `system://`)
 
-Every package, desktop appliance, runtime, and repository in Awesome-OS operates across two orthogonal protocols:
+Every package, desktop appliance, bare-metal host, driver set, and runtime in Awesome-OS operates across three orthogonal protocols:
 
 1. **`repository://` (Source of Truth):** Immutable Git repositories, Git-versioned lockfiles (`index/holo-compiler-lockfile.json`), and `v11/files/00..ff/<sha512>` CAS blobs.
 2. **`project://` (0-Byte Virtual Worktree / Install):** Content-addressed hardlink projections into local `./bin/` by default (`holo-pm install repository://github.com/awesome-os/<repo>@main`), or collision-guarded global installs (`-g` with `--as <alias>` / `--force-default`) with `0 B` duplicated storage.
+3. **`system://` (Local & Remote Device, Profile & Driver Boundary):** Addresses `local` and `remote` `terminal` / `desktop` surfaces (`system://<host>/terminal/ttyS0`, `system://<host>/desktop/omarchy-hyprland`), reusable system presets (`system://profile/*`), and auditable, version-pinned driver tracks (`system://driver-set/<name>@open-foss|proprietary|driver-dev|pinned-v1`).
 
 ---
 
@@ -64,7 +65,9 @@ Every repository below is live, CI-verified, and hydrated from **one unified `v1
 
 | Repository | Release & What It Ships | Highlight |
 | :--- | :--- | :--- |
-| **[`awesome-os/awesome-os-desktop`](https://github.com/awesome-os/awesome-os-desktop)** | **Install-on-Launch Desktop & Greeter Chooser** + 6 `holo-display-*` backends | `26 KB` native Win32 Desktop & Greeter Chooser, 0-byte `project://` hydration on launch, unified 6-backend `holo-display-*` switcher |
+| **[`awesome-os/desktop`](https://github.com/awesome-os/desktop)** | **`v0.3.0`** — Unified Cross-Platform OS & Desktop Foundation (UEFI ISO, iPXE Netboot, `/dev/fb0` Lumi Bootscreen, Wayland/WebGPU, `modalias` Driver Hydrator) | Boots in `< 0.2s` into live **Omarchy Hyprland / Noctalia / ChonkStep / Sectium**, dual `tty0`+`ttyS0`, zero `t2` leftovers |
+| **[`awesome-os/posix`](https://github.com/awesome-os/posix)** | **`v0.1.0`** — Ultra-Minimal Headless POSIX Terminal & Container OS Substrate | `37.9 KB` static musl PID 1, dual `tty0`+`ttyS0`, `awesome-os/coreutils`, stateless `v11` CAS netboot, zero GUI |
+| **[`awesome-os/host-manager`](https://github.com/awesome-os/host-manager)** | ChromeOS / Fuchsia / Landscape-grade Fleet & Device Control Plane ([Live Console](https://awesome-os.com/apps/host-manager.html)) | Zero-Touch Enrollment, A/B Verified Immutable Slots + $O(1)$ rollback, 1-Click Powerwash, `system://profile/*`, auditable `system://driver-set/*` tracks (`open-foss` / `proprietary` / `driver-dev` / `pinned-v1`) |
 | **[`awesome-os/sectium-browser`](https://github.com/awesome-os/sectium-browser)** | **`v0.7.2`** — Sovereign Chromium 158+ / V8 15.8 browser + 8 Win32 Lumi GUI shells | `118 KB` self-hydrating launcher, `110 MB` RAM live, 5-OS `libsectium_display`, BOM-free `irm \| iex` installer |
 | **[`awesome-os/code-oss`](https://github.com/awesome-os/code-oss)** | **`v0.3.0`** — Telemetry-free MIT **Awesome-OS Code - OSS `1.147.0`** (Open VSX) | `118 KB` `code-oss.exe` + PE icon + Lumi Splash, `-73.5%` vs VSCodium, `477 MB` RAM, bundled Wave 2 TS `6.0.3` + 5 extensions |
 | **[`awesome-os/theia`](https://github.com/awesome-os/theia)** | **Eclipse Theia** adapter over Sectium Browser / shared Electron CAS | Shares `~/.b8g/cas/extensions/` (`.vsix`), Wave 2 TS `6.0.3`, and all 5 Awesome-OS extensions with `code-oss` |
