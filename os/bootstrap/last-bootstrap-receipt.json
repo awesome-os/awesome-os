@@ -1,0 +1,114 @@
+{
+  "schema": "holo.distro-bootstrap-receipt.v1",
+  "distroId": "awesome-os",
+  "distroName": "AwesomeOS",
+  "version": "1.0-v11",
+  "releaseTag": "v1.0.0",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "offlineMode": true,
+  "completedAt": "2026-11-26T17:54:00.287Z",
+  "stages": [
+    {
+      "number": 1,
+      "id": "bump-upstreams",
+      "title": "Automated Upstream Max-Bump & Catalog Lock",
+      "status": "done",
+      "durationMs": 2,
+      "artifactsWritten": [
+        "registry/dashboard/oversight.html",
+        "registry/reports/ECOSYSTEM-SCOREBOARD.md"
+      ],
+      "notes": [
+        "Offline mode: retained locked upstream catalog"
+      ]
+    },
+    {
+      "number": 2,
+      "id": "stamp-boot-substrate",
+      "title": "Kernel, Zero-Flicker GOP Splash & Dual-Slot Bootloader Stamp",
+      "status": "done",
+      "durationMs": 190,
+      "artifactsWritten": [
+        "os/bootloader/assets/splash/awesome-os-1920x1080.bmp",
+        "os/bootloader/limine/limine.conf",
+        "os/bootloader/ipxe/boot.ipxe",
+        "bootloader/limine/limine.conf",
+        "bootloader/ipxe/boot.ipxe",
+        "desktop/boot/config/limine.conf",
+        "desktop/boot/netboot/boot.ipxe",
+        "desktop/boot/splash/awesome-os-1920x1080.bmp"
+      ],
+      "notes": []
+    },
+    {
+      "number": 3,
+      "id": "assemble-v11-rootfs",
+      "title": "Pure Holo v11 Rootfs, /etc/os-release & System Definition Synthesis",
+      "status": "done",
+      "durationMs": 2,
+      "artifactsWritten": [
+        "os/rootfs/etc/awesome-os/system.json",
+        "os/rootfs/etc/os-release.x86_64",
+        "os/rootfs/etc/os-release.aarch64",
+        "os/rootfs/etc/os-release.riscv64",
+        "os/rootfs/etc/os-release.wasm32-wasi",
+        "os/rootfs/etc/os-release",
+        "desktop/boot/config/system.json",
+        "desktop/boot/config/os-release.x86_64",
+        "desktop/boot/config/os-release.aarch64"
+      ],
+      "notes": []
+    },
+    {
+      "number": 4,
+      "id": "build-and-gate-images",
+      "title": "Multi-Arch Image Build & Headless QEMU Verification Gates",
+      "status": "done",
+      "durationMs": 540,
+      "artifactsWritten": [
+        "os/holo-microkernel-zig/zig-out/bin/holo-microkernel-riscv64.elf"
+      ],
+      "notes": [
+        "Verified bootloader, holo-kbuild 7.3.6, and Ed25519 verified-boot gates"
+      ]
+    },
+    {
+      "number": 5,
+      "id": "warm-planetary-cas",
+      "title": "Planetary v11 CAS Pre-Warm, Ed25519 Signing & CDN Shard Sync",
+      "status": "done",
+      "durationMs": 19,
+      "artifactsWritten": [
+        "registry/index/cas-v11-global-manifest.json",
+        "registry/index/holo-compiler-lockfile.json",
+        "registry/index/hot-cdn-shards.json"
+      ],
+      "notes": [
+        "Offline mode: verifying existing CAS manifest",
+        "Verified Ed25519 signature on cas-v11-global-manifest.json (key=awesomeos-root-v11)"
+      ]
+    },
+    {
+      "number": 6,
+      "id": "rollout-channels",
+      "title": "Unified 4-Channel User Rollout (Web OOBE, Netboot, Omaha Fleet, Edge)",
+      "status": "done",
+      "durationMs": 100,
+      "artifactsWritten": [
+        "installer/web/v11-bundle.json",
+        "fleet/channels/stable.json",
+        "host-manager/channels/stable.json"
+      ],
+      "notes": []
+    }
+  ],
+  "signature": {
+    "scheme": "ed25519-sha512-v1",
+    "keyId": "awesomeos-root-v11",
+    "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
+    "payloadSha512": "7523277d3a0c4b87bf99133766bff789d223b05b49f8067931665771320e005fec5a8a1d69b62fdcd2a21a340d4ec9f153741736a067208b8331ee91d45464d2",
+    "signatureHex": "7fd77f10d9444f1af55892199c745e3a92aa1c3c63de771fe0cdbae4709c5665e15a9572db09c65480aaa671f1f30348398d4f77633ae0369556e54cdb8a4400",
+    "signedAt": "2026-11-26T17:54:00.287Z"
+  }
+}

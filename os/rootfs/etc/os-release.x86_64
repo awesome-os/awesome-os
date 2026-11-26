@@ -1,0 +1,13 @@
+NAME="AwesomeOS"
+VERSION="1.0-v11 (Planetary v11)"
+ID=awesome-os
+VERSION_ID="1.0-v11"
+PRETTY_NAME="AwesomeOS 1.0-v11 (x86_64 · Holo-Linux 7.3.6 · Pure Holo v11 CAS)"
+ARCH=x86_64
+HOLO_KERNEL="7.3.6"
+HOLO_CAS_LAYOUT="v11"
+HOLO_CAS_DIR="/var/lib/b8g/cas"
+B8G_CAS_DIR="/var/lib/b8g/cas"
+HOLO_CAS_MANIFEST="https://awesome-os.com/cas/v11/manifest.json"
+B8G_ABI_MAGIC_V3=0x33564742
+HOME_URL="https://awesome-os.com/install/"

@@ -63,9 +63,9 @@ describe('Holo Projections Registry', () => {
 
   it('resolves legacy ghost-* / b8g-* / wasi-host aliases to canonical HoloProjectionDefs', () => {
     const aliasExpectations: ReadonlyArray<readonly [string, string]> = [
-      ['ghost-py', 'holo-py'],
-      ['ghostFFI', 'holo-ffi'],
-      ['ghost-ffi', 'holo-ffi'],
+      ['holo-py', 'holo-py'],
+      ['holoFFI', 'holo-ffi'],
+      ['holo-ffi', 'holo-ffi'],
       ['ghost-node', 'holo-node'],
       ['b8g-build', 'holo-compiler'],
       ['b8g-pm', 'holo-pm'],

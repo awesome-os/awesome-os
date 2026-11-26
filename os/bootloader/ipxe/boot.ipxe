@@ -1,14 +1,25 @@
 #!ipxe
-# Awesome-OS Holo-Linux 7.3.6 — Stateless HTTPS Netboot (UEFI/PXE/Proxmox/Hyper-V)
+# AwesomeOS 1.0-v11 (v1.0.0) — Unified Stateless HTTPS Netboot
+# Chainload from any bare-metal UEFI/PXE/Proxmox/Hyper-V host:
+#   chain https://awesome-os.com/netboot/boot.ipxe
+
 echo ====================================================================
-echo   Awesome-OS Holo-Linux 7.3.6 — Stateless Netboot (B8G_ABI_MAGIC_V3)
-echo   Bootloader: iPXE -> SimpleDRM Splash -> v11 CAS tmpfs
+echo   AwesomeOS 1.0-v11 — Stateless Netboot (B8G_ABI_MAGIC_V3)
+echo   Kernel : Holo-Linux 7.3.6 | CAS: Pure Holo v11 tmpfs
+echo   Devices: local & remote => terminal | desktop (Sectium + Ladybird)
 echo ====================================================================
 
-set base https://github.com/awesome-os/t2linux-baseline/releases/latest/download
+set primary https://github.com/awesome-os/desktop/releases/latest/download
+set fallback https://github.com/awesome-os/t2linux-baseline/releases/latest/download
 
-kernel ${base}/vmlinuz-7.3.6-x86_64 initrd=initramfs-x86_64.cpio.zst quiet splash vt.global_cursor_default=0 console=tty0 console=ttyS0,115200 b8g.abi=v3 scx_holo=1 awesome.netboot=1 || goto failed
-initrd ${base}/initramfs-x86_64.cpio.zst || goto failed
+kernel ${primary}/vmlinuz-x86_64 initrd=initramfs-x86_64.cpio.zst quiet splash vt.global_cursor_default=0 console=tty0 console=ttyS0,115200 b8g.abi=v3 scx_holo=1 awesome.netboot=1 || goto try_fallback
+initrd ${primary}/initramfs-x86_64.cpio.zst || goto try_fallback
+boot || goto try_fallback
+
+:try_fallback
+echo [AWESOME-OS] Primary release mirror busy — trying Holo-Linux 7.3.6 substrate...
+kernel ${fallback}/vmlinuz-7.3.6-x86_64 initrd=initramfs-x86_64.cpio.zst quiet splash vt.global_cursor_default=0 console=tty0 console=ttyS0,115200 b8g.abi=v3 scx_holo=1 awesome.netboot=1 || goto failed
+initrd ${primary}/initramfs-x86_64.cpio.zst || goto failed
 boot || goto failed
 
 :failed

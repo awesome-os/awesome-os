@@ -1,0 +1,34 @@
+{
+  "schema": "awesome-os.hot-cdn-shards.v1",
+  "generatedAt": "2026-11-26T17:54:00.187Z",
+  "shards": [
+    {
+      "label": "sectium_cp.wasm",
+      "sha512": "72c02bd267a08323929493c372d9e89e7f56cbe58cc7d0773cb4648a573fc1510168fb086d372565c1eb26365ee74e16a958dd245c6d4705f686f5c80ea0c657",
+      "bytes": 5695,
+      "cdnRelPath": "v11/files/72/72c02bd267a08323929493c372d9e89e7f56cbe58cc7d0773cb4648a573fc1510168fb086d372565c1eb26365ee74e16a958dd245c6d4705f686f5c80ea0c657-exec",
+      "url": "https://awesome-os.com/cas/v11/files/72/72c02bd267a08323929493c372d9e89e7f56cbe58cc7d0773cb4648a573fc1510168fb086d372565c1eb26365ee74e16a958dd245c6d4705f686f5c80ea0c657-exec"
+    },
+    {
+      "label": "holo-microkernel-riscv64.elf",
+      "sha512": "637ba2f7dadbaad3742c7817dc9f746c27cd77611427873dc1bc9e332a1ce8a8ab0a6579929e55f6b847fa9060c5d97feacd6d91605ec7ce38484d1c0f5ef084",
+      "bytes": 738352,
+      "cdnRelPath": "v11/files/63/637ba2f7dadbaad3742c7817dc9f746c27cd77611427873dc1bc9e332a1ce8a8ab0a6579929e55f6b847fa9060c5d97feacd6d91605ec7ce38484d1c0f5ef084-exec",
+      "url": "https://awesome-os.com/cas/v11/files/63/637ba2f7dadbaad3742c7817dc9f746c27cd77611427873dc1bc9e332a1ce8a8ab0a6579929e55f6b847fa9060c5d97feacd6d91605ec7ce38484d1c0f5ef084-exec"
+    },
+    {
+      "label": "awesomeos-shell.html",
+      "sha512": "2e84f4dd1a6ed40cf91b41a189956c17e5f88e7088ccc96dc22466cad9ffdb62eff50ad775c026be3ca3a6077a5251e3c890a8ff13017bc9e1796181ef4148e4",
+      "bytes": 29688,
+      "cdnRelPath": "v11/files/2e/2e84f4dd1a6ed40cf91b41a189956c17e5f88e7088ccc96dc22466cad9ffdb62eff50ad775c026be3ca3a6077a5251e3c890a8ff13017bc9e1796181ef4148e4",
+      "url": "https://awesome-os.com/cas/v11/files/2e/2e84f4dd1a6ed40cf91b41a189956c17e5f88e7088ccc96dc22466cad9ffdb62eff50ad775c026be3ca3a6077a5251e3c890a8ff13017bc9e1796181ef4148e4"
+    },
+    {
+      "label": "awesome-os-1920x1080.bmp",
+      "sha512": "7fb4692bdcdd88a7dd58dcbb3268ac9b853453bea4d18e604b0fbdfd58d5c8f16bbf5c26f9798b7d9ac2aa7542a75a2c4fa322715966698137242a1411c02afe",
+      "bytes": 6220854,
+      "cdnRelPath": "v11/files/7f/7fb4692bdcdd88a7dd58dcbb3268ac9b853453bea4d18e604b0fbdfd58d5c8f16bbf5c26f9798b7d9ac2aa7542a75a2c4fa322715966698137242a1411c02afe",
+      "url": "https://awesome-os.com/cas/v11/files/7f/7fb4692bdcdd88a7dd58dcbb3268ac9b853453bea4d18e604b0fbdfd58d5c8f16bbf5c26f9798b7d9ac2aa7542a75a2c4fa322715966698137242a1411c02afe"
+    }
+  ]
+}

@@ -18,7 +18,7 @@ describe('overlap-collapse-scanner (fine-grained nested dependency collapse)', (
       ...parseGoMod('require google.golang.org/grpc v1.70.0\n', 'gitlab-runner', 'go.mod'),
       ...parsePackageJson('{"dependencies":{"typescript":"6.0.3"}}', 'code-oss', 'package.json'),
       ...parsePackageJson('{"devDependencies":{"typescript":"5.9.0"}}', 'theia', 'package.json'),
-      ...parseRequirementsTxt('numpy==2.1.0\n', 'ghost-py', 'requirements.txt'),
+      ...parseRequirementsTxt('numpy==2.1.0\n', 'holo-py', 'requirements.txt'),
       ...parsePubspecYaml('dependencies:\n  path: ^1.9.0\n', 'dart', 'pkg/foo/pubspec.yaml'),
     ];
 

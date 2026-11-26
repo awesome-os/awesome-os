@@ -1,0 +1,113 @@
+name: Bootstrap Distro — Reusable 6-Stage Holo v11 OS Release Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      manifest_path:
+        description: 'Path to DistroBootstrapManifest JSON'
+        required: false
+        type: string
+        default: 'os/bootstrap/awesomeos-v1.0.manifest.json'
+      release_tag:
+        description: 'GitHub Release tag to publish'
+        required: false
+        type: string
+        default: 'v1.0.0'
+  workflow_dispatch:
+    inputs:
+      manifest_path:
+        description: 'Path to DistroBootstrapManifest JSON'
+        required: false
+        default: 'os/bootstrap/awesomeos-v1.0.manifest.json'
+      release_tag:
+        description: 'GitHub Release tag to publish'
+        required: false
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap-and-verify:
+    name: Execute 6-Stage Holo v11 Distro Bootstrap & Native Gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.14.0
+
+      - name: Run Unified 6-Stage holo-distro-bootstrap (Hermetic Synthesis & Gates)
+        run: |
+          node os/bootstrap/holo-distro-bootstrap.mts \
+            --manifest "${{ inputs.manifest_path || 'os/bootstrap/awesomeos-v1.0.manifest.json' }}" \
+            --offline
+          node --test os/bootstrap/holo-distro-bootstrap.test.mts
+
+      - name: Compile Multi-Arch Substrates (RISC-V 64 Zig Microkernel + C11/C++20 Gates)
+        run: |
+          mkdir -p dist/distro-v11
+          zig test os/holo-microkernel-zig/kernel.zig
+          zig build-exe os/holo-microkernel-zig/kernel.zig \
+            -target riscv64-freestanding-none -mcmodel=medium -O ReleaseSmall -fno-strip \
+            --script os/holo-microkernel-zig/linker.ld \
+            -femit-bin=dist/distro-v11/holo-microkernel-riscv64.elf
+
+          cc -std=c11 -O3 -Wall -Wextra -Werror os/kernel/b8g_abi/b8g_abi_selftest.c -o dist/distro-v11/b8g_abi_selftest-linux-x64
+          ./dist/distro-v11/b8g_abi_selftest-linux-x64
+
+          cc -std=c11 -O3 -Wall -Wextra -Werror os/bootloader/uefi-gop-splash/holo_splash.c os/bootloader/uefi-gop-splash/holo_splash_test.c -o dist/distro-v11/holo_splash_test-linux-x64
+          ./dist/distro-v11/holo_splash_test-linux-x64
+
+          g++ -std=c++20 -O3 -Wall -Wextra -Werror deployment/local-cpp/vdm_local.cpp -o dist/distro-v11/vdm-local-linux-x64
+
+          cp os/bootloader/assets/splash/awesome-os-1920x1080.bmp dist/distro-v11/
+          cp os/bootloader/assets/splash/awesome-os-splash.svg dist/distro-v11/
+          cp os/bootloader/limine/limine.conf dist/distro-v11/
+          cp os/bootloader/ipxe/boot.ipxe dist/distro-v11/
+          cp os/rootfs/etc/os-release dist/distro-v11/os-release
+          cp os/shell/awesomeos-shell.html dist/distro-v11/
+          cp fleet/channels/stable.json dist/distro-v11/omaha-stable-channel.json
+          cp os/bootstrap/last-bootstrap-receipt.json dist/distro-v11/
+
+      - name: Sign Release Bundle (Ed25519 + SHA-512) & Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node --input-type=module -e "
+            import { createHash } from 'node:crypto';
+            import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+            import { join } from 'node:path';
+            import { signManifestEd25519 } from './security/verified-boot.mts';
+
+            const dir = 'dist/distro-v11';
+            const entries = readdirSync(dir).sort().map((name) => {
+              const buf = readFileSync(join(dir, name));
+              const sha512 = createHash('sha512').update(buf).digest('hex');
+              return { name, bytes: buf.byteLength, sha512, casPath: 'v11/files/' + sha512.slice(0, 2) + '/' + sha512 };
+            });
+            const signed = signManifestEd25519({
+              schema: 'awesomeos.cas-v11-release.v1',
+              distroVersion: '1.0-v11',
+              abiMagic: '0x33564742',
+              casLayout: 'v11',
+              generatedAt: new Date().toISOString(),
+              entries,
+            });
+            writeFileSync(join(dir, 'cas-v11-release-manifest.json'), JSON.stringify(signed, null, 2) + '\n');
+          "
+          (cd dist/distro-v11 && sha512sum * > SHA512SUMS.txt)
+
+          TAG="${{ inputs.release_tag || 'v1.0.0' }}"
+          if gh release view "$TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/distro-v11/* --clobber -R "${{ github.repository }}"
+          else
+            gh release create "$TAG" dist/distro-v11/* -R "${{ github.repository }}" \
+              --title "AwesomeOS ${TAG} (Planetary Holo v11 Distro Release)" \
+              --notes "Unified 6-stage holo-distro-bootstrap release: Holo-Linux 7.3.6 ABI substrate, 24-bit GOP splash, dual-slot Limine + HTTPS iPXE netboot, 14.17 KB RISC-V 64 Zig microkernel, Sectium 160 + Ladybird 18/18, and Ed25519-signed Omaha stable channel."
+          fi

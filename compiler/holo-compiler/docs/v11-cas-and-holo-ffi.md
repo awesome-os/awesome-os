@@ -16,7 +16,7 @@ The unified `v11` store (`HOLO_CAS_DIR/v11`) is a **SHA-512 Universal Git Object
 
 ## 2. `holo-ffi` (Zero-Hash Native & WASM FFI)
 
-`holo-ffi` upgrades `ghostFFI` to load `.dll` / `.so` / `.dylib` / `.wasm` directly out of `v11`:
+`holo-ffi` upgrades `holoFFI` to load `.dll` / `.so` / `.dylib` / `.wasm` directly out of `v11`:
 
 1. Resolves `repository://github.com/awesome-os/<repo>@<tag>` from `holo-compiler-lockfile.json` (no manual hash copy-pasting).
 2. Projects a **0-byte hardlink** into `v11/links/<sha512[:16]>-<name>.{dll,so,dylib,wasm}` so Windows `LoadLibraryW` and macOS `dlopen` see the expected file extension.

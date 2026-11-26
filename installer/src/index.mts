@@ -314,7 +314,7 @@ export function renderSplashLayoutHeader(def: ReleaseMatrixDef): string {
   const sp = def.splash ?? {
     enabled: false,
     title: def.displayName,
-    subtitle: 'Awesome-OS b8g-ghost CAS',
+    subtitle: 'AwesomeOS Holo v11 CAS',
     iconAsset: 'lumi-white-dragon.ico',
     iconSizePx: 64,
     widthPx: 460,

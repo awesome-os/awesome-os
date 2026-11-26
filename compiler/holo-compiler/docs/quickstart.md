@@ -14,7 +14,7 @@ curl -fsSL https://awesome-os.com/install.sh | sh
 
 ## 2. Configure the Unified `v11` CAS Root (Optional)
 
-By default, every `holo-*` tool shares one deduplicated `v11` store (`~/.b8g/cas/v11`). Override it anywhere with `HOLO_CAS_DIR` (legacy `B8G_GHOST_CACHE_DIR` is automatically respected as fallback):
+By default, every `holo-*` tool shares one deduplicated `v11` store (`~/.b8g/cas/v11`). Override it anywhere with `HOLO_CAS_DIR` (legacy `B8G_CAS_DIR` is automatically respected as fallback):
 
 ```powershell
 $env:HOLO_CAS_DIR = "D:\holo-cas"

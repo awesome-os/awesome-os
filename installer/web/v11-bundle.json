@@ -2,7 +2,7 @@
   "schema": "awesome-os.web-v11-bundle.v1",
   "abiMagic": "0x33564742",
   "casLayout": "v11",
-  "generatedAt": "2026-11-26T10:47:00.534Z",
+  "generatedAt": "2026-11-26T17:54:00.273Z",
   "artifacts": [
     {
       "id": "sectium-control-plane-wasi",
@@ -17,12 +17,12 @@
     {
       "id": "awesomeos-chromeos-shell",
       "path": "shell/awesomeos-shell.html",
-      "size": 29662,
+      "size": 29688,
       "url": "./blobs/awesomeos-shell.html",
       "installPath": "shell/awesomeos-shell.html",
       "description": "Zero-server ChromeOS-grade AwesomeOS Desktop Shell (Sectium + Crostini + Powerwash)",
-      "bytes": 29662,
-      "sha512": "7fa1198a7c5b9fdc15383fdb7aae787ad5609959d34bc2a9f5089d884d17245b253c1a03c564eb5e48f75dd913a0982df90d668eee87996426158b6d0ff99145"
+      "bytes": 29688,
+      "sha512": "2e84f4dd1a6ed40cf91b41a189956c17e5f88e7088ccc96dc22466cad9ffdb62eff50ad775c026be3ca3a6077a5251e3c890a8ff13017bc9e1796181ef4148e4"
     },
     {
       "id": "max-version-lock",
@@ -32,25 +32,25 @@
       "installPath": "manifest/max-version-lock.json",
       "description": "Unified V8 16+ & ahead-of-Chrome dependency version lockfile",
       "bytes": 13041,
-      "sha512": "e82c1cddd43ae7fad1fe151748f06e72dddaba774ecee8e5efadf1e3bba31ed2c51e1088bb3797ac2f92823fb44e608c458930113f91c819f7e5286124905f84"
+      "sha512": "be70fa9bc6f4220abbf87b8527501dc0f31abdf9cc3b2c4f4c421d57fb3134efff41737719ec289964dbb2e719644e68079fe46752bcd1059d23440e6f08ce7f"
     },
     {
       "id": "ecosystem-scoreboard",
       "path": "docs/ECOSYSTEM-SCOREBOARD.md",
-      "size": 2834,
+      "size": 2927,
       "url": "./blobs/ECOSYSTEM-SCOREBOARD.md",
       "installPath": "docs/ECOSYSTEM-SCOREBOARD.md",
       "description": "Live Big Boys v11 CAS overlap & version scoreboard",
-      "bytes": 2834,
-      "sha512": "ceda52e759760e4bfb7b3ed686aded96685fde0717a10404cd890737ef6034bbc58237e86622238cd6ba29701abded05dda45ffe8190c7298b98063d769502b2"
+      "bytes": 2927,
+      "sha512": "6e380c21b6e06e02a9e505dd51333f18b2bb2588391329d40b7a416706b1102dd478b081643c7cf722012bb980b56c3faf34e6a9b1cd29d7ae49d23873d3b433"
     }
   ],
   "signature": {
     "scheme": "ed25519-sha512-v1",
     "keyId": "awesomeos-root-v11",
     "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
-    "payloadSha512": "1626b229e36995dec7302d504bf97f70dce849a1263443d3784d3d10486e61b18ab51df0363552f9ef508b1383bc7f2e139f06c00254cc1bd98535040e67ff4c",
-    "signatureHex": "8d1a6fe12d9990d33fb314910b796950849d1307d9e1b9ee963777e4195eebf5cfea36dba0a6d2bbec660ad76b931cd4958f5128c6b836cb8a0f4882ee059e02",
-    "signedAt": "2026-11-26T10:47:00.535Z"
+    "payloadSha512": "60c48fe28cb84616e52106f409b8c5c48b484b2bb362faef6f11677deca753cfff2c427a78c1f97fefb9aabf580f6ffea88262c4950f90db180ffb74cd2409f8",
+    "signatureHex": "9ee0f910c1e8ec36b9288b3bff860cca9d36d2d162feb19ebae76d820f5bb2355b78c1b2e92e6c326f22d7565b2b3f38576485024aeb2fcb9bcd52dc704f9307",
+    "signedAt": "2026-11-26T17:54:00.275Z"
   }
 }

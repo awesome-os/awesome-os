@@ -133,9 +133,9 @@ export function resolveV11CasLayout(explicitCasRoot?: string): V11CasLayout {
   const rawBase =
     explicitCasRoot && explicitCasRoot.trim().length > 0
       ? explicitCasRoot.trim()
-      : process.env.B8G_GHOST_CACHE_DIR && process.env.B8G_GHOST_CACHE_DIR.trim().length > 0
-        ? process.env.B8G_GHOST_CACHE_DIR.trim()
-        : join(homedir(), '.b8g-ghost-cache');
+      : process.env.B8G_CAS_DIR && process.env.B8G_CAS_DIR.trim().length > 0
+        ? process.env.B8G_CAS_DIR.trim()
+        : join(homedir(), '.b8g/cas');
 
   const resolved = resolve(rawBase);
   const endsWithV11 = basename(resolved).toLowerCase() === 'v11';
@@ -323,7 +323,7 @@ function printHelp(): void {
       'Options:',
       '  --persona <consumer|devops>   Persona plane for compile/emit-v11 (default: devops)',
       '  --cas-v11                     Emit compiled artifacts directly into the v11 CAS layout',
-      '  --cas-root <dir>              Override CAS root (default: $B8G_GHOST_CACHE_DIR -> <root>/v11)',
+      '  --cas-root <dir>              Override CAS root (default: $B8G_CAS_DIR -> <root>/v11)',
       '  --json                        Emit machine-readable JSON output',
       '  --help, -h                    Show this help message',
     ].join('\n'),

@@ -3,7 +3,7 @@
  * @description Universal pnpm-v12-compatible `v11` Content-Addressed Store (CAS).
  *
  * Unifies artifact storage across `holo-compiler`, `pnpm`, `cargo`, `b8g-rust`,
- * and `b8g-ghost` under one canonical directory layout:
+ * and `holo-ffi` under one canonical directory layout:
  *
  *   <storeRoot>/
  *     files/00..ff/<sha512>[-exec]   # exact pnpm v12 store-dir parity
@@ -144,7 +144,7 @@ function appendV11WithoutDoubling(baseDir: string): string {
 /**
  * Resolves the canonical unified CAS `v11` store root directory:
  *   1. `HOLO_CAS_DIR`        -> `<HOLO_CAS_DIR>/v11`
- *   2. `B8G_GHOST_CACHE_DIR` -> `<B8G_GHOST_CACHE_DIR>/v11`
+ *   2. `B8G_CAS_DIR` -> `<B8G_CAS_DIR>/v11`
  *   3. `PNPM_HOME`           -> `<PNPM_HOME>/store/v11`
  *   4. Fallback              -> `~/.b8g/cas/v11`
  *
@@ -158,7 +158,7 @@ export function resolveUnifiedCasRoot(
     return appendV11WithoutDoubling(holoCasDir);
   }
 
-  const ghostCacheDir = env.B8G_GHOST_CACHE_DIR?.trim();
+  const ghostCacheDir = env.B8G_CAS_DIR?.trim();
   if (ghostCacheDir) {
     return appendV11WithoutDoubling(ghostCacheDir);
   }

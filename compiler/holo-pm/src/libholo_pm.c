@@ -57,7 +57,7 @@ B8G_HOLO_PM_API int32_t b8g_holo_pm_resolve_v11_root(char* out, size_t cap) {
         return write_path(out, cap, env_v11, NULL);
     }
 
-    const char* env_ghost = getenv("B8G_GHOST_CACHE_DIR");
+    const char* env_ghost = getenv("B8G_CAS_DIR");
     if (env_ghost != NULL && env_ghost[0] != '\0') {
 #if defined(_WIN32)
         return write_path(out, cap, env_ghost, "\\v11");

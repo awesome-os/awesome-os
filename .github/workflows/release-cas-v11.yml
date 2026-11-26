@@ -77,5 +77,5 @@ jobs:
           else
             gh release create "$TAG" dist/cas-v11/* -R "${{ github.repository }}" \
               --title "AwesomeOS Pure CAS v11 Release (${TAG})" \
-              --notes "Pure SHA-512 + Ed25519 signed CAS v11 release built directly from the AwesomeOS ChromeOS-model monorepo (zero legacy cas-v1 / b8g-ghost)."
+              --notes "Pure SHA-512 + Ed25519 signed CAS v11 release built directly from the AwesomeOS ChromeOS-model monorepo (pure Holo Stack + holo-ffi)."
           fi

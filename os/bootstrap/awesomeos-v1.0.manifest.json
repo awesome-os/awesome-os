@@ -1,0 +1,54 @@
+{
+  "schema": "holo.distro-bootstrap.v1",
+  "id": "awesome-os",
+  "name": "AwesomeOS",
+  "version": "1.0-v11",
+  "releaseTag": "v1.0.0",
+  "codename": "Planetary v11",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "casMountLabel": "AWESOME_V11",
+  "casMountPath": "/var/lib/b8g/cas",
+  "kernelRelease": "7.3.6",
+  "browserEngines": [
+    "Sectium 160 (Chromium Canary + shared libv8_monolith)",
+    "Ladybird 18/18 (Independent C++23 + HoloHotLoopJIT + Wasm SIMD128)"
+  ],
+  "desktopAdapters": [
+    "sectium-desktop",
+    "omarchy-hyprland",
+    "noctalia-shell",
+    "chonkstep-wayland",
+    "kitty-ink-tui"
+  ],
+  "architectures": [
+    "x86_64",
+    "aarch64",
+    "riscv64",
+    "wasm32-wasi"
+  ],
+  "bootloader": {
+    "engine": "limine",
+    "version": "12.11.1",
+    "dualSlot": true,
+    "splashResolutions": [
+      "640x480",
+      "1024x768",
+      "1920x1080"
+    ],
+    "defaultSplash": "1920x1080"
+  },
+  "githubOrg": "awesome-os",
+  "canonicalRepo": "awesome-os",
+  "desktopImageRepo": "desktop",
+  "kernelRepo": "t2linux-baseline",
+  "channels": {
+    "webOobeUrl": "https://awesome-os.com/install/",
+    "netbootIpxeUrl": "https://awesome-os.com/netboot/boot.ipxe",
+    "netbootPrimaryBaseUrl": "https://github.com/awesome-os/desktop/releases/latest/download",
+    "netbootFallbackBaseUrl": "https://github.com/awesome-os/t2linux-baseline/releases/latest/download",
+    "casGlobalManifestUrl": "https://awesome-os.com/cas/v11/manifest.json",
+    "casCdnFilesBaseUrl": "https://awesome-os.com/cas/v11/files",
+    "omahaStableChannelUrl": "https://awesome-os.com/cas/v11/channels/stable.json"
+  }
+}

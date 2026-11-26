@@ -28,5 +28,5 @@ repository://<host>/<org>/<repo>@<commit-sha|tag|branch>[#<subpath>][?hook=<name
 project://<runtime>/<entry>[?from=repository://...&mode=ephemeral|persistent&target=<5os>]
 ```
 
-- `<runtime>` accepts shorthand (`node`, `go`, `py`, `dart`, `rust`, `cpp`, `jvm`, `deno`, `ffi`), canonical `holo-*` names (`holo-go`, `holo-node`), or legacy aliases (`ghost-py`, `ghostFFI`).
+- `<runtime>` accepts shorthand (`node`, `go`, `py`, `dart`, `rust`, `cpp`, `jvm`, `deno`, `ffi`), canonical `holo-*` names (`holo-go`, `holo-node`), or legacy aliases (`holo-py`, `holoFFI`).
 - `holo-project` hardlinks the requested `v11` blobs in **`< 1 ms`**, executes the runtime entrypoint, and purges ephemeral directories cleanly on exit.

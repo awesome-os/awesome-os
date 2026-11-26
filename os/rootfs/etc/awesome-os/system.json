@@ -1,0 +1,85 @@
+{
+  "schema": "awesome-os.system-definition.v1",
+  "distroVersion": "1.0-v11",
+  "releaseTag": "v1.0.0",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "systemUri": "system://local/appliance/awesome-os",
+  "casRoot": "/var/lib/b8g/cas",
+  "casManifestUrl": "https://awesome-os.com/cas/v11/manifest.json",
+  "v11Registry": "repository://github.com/awesome-os/holo-v11@main",
+  "kernelRelease": "7.3.6",
+  "browserEngines": [
+    "Sectium 160 (Chromium Canary + shared libv8_monolith)",
+    "Ladybird 18/18 (Independent C++23 + HoloHotLoopJIT + Wasm SIMD128)"
+  ],
+  "devices": {
+    "local": [
+      "terminal",
+      "desktop"
+    ],
+    "remote": [
+      "terminal",
+      "desktop"
+    ]
+  },
+  "resources": [
+    {
+      "uri": "system://local/terminal/coreutils",
+      "from": "repository://github.com/awesome-os/coreutils@main",
+      "tags": [
+        "terminal-app",
+        "local"
+      ]
+    },
+    {
+      "uri": "system://local/desktop/sectium",
+      "from": "repository://github.com/awesome-os/sectium-browser@main",
+      "tags": [
+        "device",
+        "browser-shell",
+        "monitor",
+        "keyboard",
+        "local"
+      ]
+    },
+    {
+      "uri": "system://local/desktop/ladybird",
+      "from": "repository://github.com/awesome-os/ladybird@main",
+      "tags": [
+        "device",
+        "browser-engine",
+        "webgpu",
+        "local"
+      ]
+    },
+    {
+      "uri": "system://local/desktop/wayland",
+      "from": "repository://github.com/awesome-os/desktop@v1.0.0",
+      "tags": [
+        "device",
+        "monitor",
+        "keyboard",
+        "local"
+      ]
+    },
+    {
+      "uri": "system://local/desktop/omarchy?kvm=2",
+      "from": "repository://github.com/awesome-os/desktop-omarchy@main",
+      "tags": [
+        "monitor",
+        "keyboard",
+        "local"
+      ]
+    },
+    {
+      "uri": "system://local/desktop/noctalia?kvm=3",
+      "from": "repository://github.com/awesome-os/noctalia@main",
+      "tags": [
+        "monitor",
+        "keyboard",
+        "local"
+      ]
+    }
+  ]
+}

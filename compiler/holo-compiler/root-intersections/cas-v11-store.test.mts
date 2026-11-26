@@ -45,25 +45,25 @@ describe('Unified CAS v11 Store', () => {
     assert.equal(casBlobPath(storeRoot, digest.toUpperCase()), regularPath);
   });
 
-  it('resolves unified CAS root from B8G_GHOST_CACHE_DIR, PNPM_HOME, and fallback without doubling /v11', () => {
+  it('resolves unified CAS root from B8G_CAS_DIR, PNPM_HOME, and fallback without doubling /v11', () => {
     const ghostBase = path.join('D:', 'ghost-cache');
     assert.equal(
-      resolveUnifiedCasRoot({ B8G_GHOST_CACHE_DIR: ghostBase }),
+      resolveUnifiedCasRoot({ B8G_CAS_DIR: ghostBase }),
       path.join(ghostBase, 'v11'),
     );
 
-    // Must not double /v11 when B8G_GHOST_CACHE_DIR already ends in v11
+    // Must not double /v11 when B8G_CAS_DIR already ends in v11
     const ghostWithV11 = path.join('D:', 'ghost-cache', 'v11');
     assert.equal(
-      resolveUnifiedCasRoot({ B8G_GHOST_CACHE_DIR: ghostWithV11 }),
+      resolveUnifiedCasRoot({ B8G_CAS_DIR: ghostWithV11 }),
       ghostWithV11,
     );
     assert.equal(
-      resolveUnifiedCasRoot({ B8G_GHOST_CACHE_DIR: `${ghostWithV11}${path.sep}` }),
+      resolveUnifiedCasRoot({ B8G_CAS_DIR: `${ghostWithV11}${path.sep}` }),
       ghostWithV11,
     );
 
-    // PNPM_HOME precedence when B8G_GHOST_CACHE_DIR is unset
+    // PNPM_HOME precedence when B8G_CAS_DIR is unset
     const pnpmHome = path.join('D:', 'pnpm-home');
     assert.equal(
       resolveUnifiedCasRoot({ PNPM_HOME: pnpmHome }),
@@ -86,16 +86,16 @@ describe('Unified CAS v11 Store', () => {
     );
   });
 
-  it('prioritizes HOLO_CAS_DIR over B8G_GHOST_CACHE_DIR and PNPM_HOME without doubling /v11', () => {
+  it('prioritizes HOLO_CAS_DIR over B8G_CAS_DIR and PNPM_HOME without doubling /v11', () => {
     const holoBase = path.join('D:', 'holo-cas');
     const ghostBase = path.join('D:', 'ghost-cache');
     const pnpmHome = path.join('D:', 'pnpm-home');
 
-    // HOLO_CAS_DIR takes precedence over B8G_GHOST_CACHE_DIR and PNPM_HOME
+    // HOLO_CAS_DIR takes precedence over B8G_CAS_DIR and PNPM_HOME
     assert.equal(
       resolveUnifiedCasRoot({
         HOLO_CAS_DIR: holoBase,
-        B8G_GHOST_CACHE_DIR: ghostBase,
+        B8G_CAS_DIR: ghostBase,
         PNPM_HOME: pnpmHome,
       }),
       path.join(holoBase, 'v11'),
@@ -106,23 +106,23 @@ describe('Unified CAS v11 Store', () => {
     assert.equal(
       resolveUnifiedCasRoot({
         HOLO_CAS_DIR: holoWithV11,
-        B8G_GHOST_CACHE_DIR: ghostBase,
+        B8G_CAS_DIR: ghostBase,
       }),
       holoWithV11,
     );
     assert.equal(
       resolveUnifiedCasRoot({
         HOLO_CAS_DIR: `${holoWithV11}${path.sep}`,
-        B8G_GHOST_CACHE_DIR: ghostBase,
+        B8G_CAS_DIR: ghostBase,
       }),
       holoWithV11,
     );
 
-    // Legacy B8G_GHOST_CACHE_DIR fallback works identically when HOLO_CAS_DIR is unset or blank
+    // Legacy B8G_CAS_DIR fallback works identically when HOLO_CAS_DIR is unset or blank
     assert.equal(
       resolveUnifiedCasRoot({
         HOLO_CAS_DIR: undefined,
-        B8G_GHOST_CACHE_DIR: ghostBase,
+        B8G_CAS_DIR: ghostBase,
         PNPM_HOME: pnpmHome,
       }),
       path.join(ghostBase, 'v11'),
@@ -130,7 +130,7 @@ describe('Unified CAS v11 Store', () => {
     assert.equal(
       resolveUnifiedCasRoot({
         HOLO_CAS_DIR: '   ',
-        B8G_GHOST_CACHE_DIR: ghostBase,
+        B8G_CAS_DIR: ghostBase,
         PNPM_HOME: pnpmHome,
       }),
       path.join(ghostBase, 'v11'),

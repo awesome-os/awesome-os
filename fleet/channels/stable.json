@@ -1,0 +1,60 @@
+{
+  "schema": "awesome-os.omaha-channel.v1",
+  "channel": "stable",
+  "distroId": "awesome-os",
+  "distroName": "AwesomeOS",
+  "version": "1.0-v11",
+  "releaseTag": "v1.0.0",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "kernelRelease": "7.3.6",
+  "targetSlotPolicy": "stage-standby-flip-atomic",
+  "casManifestUrl": "https://awesome-os.com/cas/v11/manifest.json",
+  "publishedAt": "2026-11-26T17:54:00.285Z",
+  "artifacts": [
+    {
+      "arch": "x86_64",
+      "format": "iso",
+      "filename": "awesomeos-v1.0.0-x86_64.iso",
+      "downloadUrl": "https://github.com/awesome-os/desktop/releases/download/v1.0.0/awesomeos-v1.0.0-x86_64.iso"
+    },
+    {
+      "arch": "x86_64",
+      "format": "qcow2",
+      "filename": "awesomeos-v1.0.0-x86_64.qcow2",
+      "downloadUrl": "https://github.com/awesome-os/desktop/releases/download/v1.0.0/awesomeos-v1.0.0-x86_64.qcow2"
+    },
+    {
+      "arch": "aarch64",
+      "format": "iso",
+      "filename": "awesomeos-v1.0.0-aarch64.iso",
+      "downloadUrl": "https://github.com/awesome-os/desktop/releases/download/v1.0.0/awesomeos-v1.0.0-aarch64.iso"
+    },
+    {
+      "arch": "aarch64",
+      "format": "qcow2",
+      "filename": "awesomeos-v1.0.0-aarch64.qcow2",
+      "downloadUrl": "https://github.com/awesome-os/desktop/releases/download/v1.0.0/awesomeos-v1.0.0-aarch64.qcow2"
+    },
+    {
+      "arch": "riscv64",
+      "format": "elf",
+      "filename": "holo-microkernel-riscv64.elf",
+      "downloadUrl": "https://github.com/awesome-os/awesome-os/releases/download/v1.0.0/holo-microkernel-riscv64.elf"
+    },
+    {
+      "arch": "wasm32-wasi",
+      "format": "html",
+      "filename": "awesomeos-shell.html",
+      "downloadUrl": "https://awesome-os.com/shell/"
+    }
+  ],
+  "signature": {
+    "scheme": "ed25519-sha512-v1",
+    "keyId": "awesomeos-root-v11",
+    "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
+    "payloadSha512": "8fe640c3949dcf4538073c1aefc3905dda5cc2c45f1fb5f0bb59ba17db5ccbb31597a7f352125cb2548321190494583231dee63813a306ca935ffcc5521b82c2",
+    "signatureHex": "e9df427a93dbf4bd5f2114ec0ae876bb0169e7d86ee82a257dc88d078564e1ad85b29332204dcf20b3fbfae0524a5d38d4b39c1bb8a0180fcecf45ec1a3bce06",
+    "signedAt": "2026-11-26T17:54:00.286Z"
+  }
+}

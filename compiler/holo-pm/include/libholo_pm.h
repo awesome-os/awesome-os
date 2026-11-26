@@ -38,7 +38,7 @@ B8G_HOLO_PM_API const char* b8g_holo_pm_version(void);
  *
  * Precedence:
  *   1. B8G_CAS_V11_ROOT
- *   2. B8G_GHOST_CACHE_DIR/v11
+ *   2. B8G_CAS_DIR/v11
  *   3. XDG_DATA_HOME/awesome-os/cas/v11
  *   4. OS default (%LOCALAPPDATA%\awesome-os\cas\v11 on Windows,
  *      $HOME/.local/share/awesome-os/cas/v11 on POSIX)

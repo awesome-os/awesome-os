@@ -196,12 +196,12 @@ describe('holo-compiler CLI direct v11 CAS emitter', () => {
     assertValidV11DiskBlobs(second, casRoot);
   });
 
-  it('compile --cas-v11 honors B8G_GHOST_CACHE_DIR and deduplicates production blobs across consumer -> devops', () => {
+  it('compile --cas-v11 honors B8G_CAS_DIR and deduplicates production blobs across consumer -> devops', () => {
     const ghostCacheDir = makeTempCasDir('ghost-env');
 
     const consumerRun = invokeCliJson(
       ['compile', '--cas-v11', '--persona=consumer'],
-      { B8G_GHOST_CACHE_DIR: ghostCacheDir },
+      { B8G_CAS_DIR: ghostCacheDir },
     );
     assert.equal(consumerRun.v11Blobs.length, 2);
     assert.ok(consumerRun.v11Blobs.every((b) => b.kind === 'production' && !b.deduplicated));
@@ -209,7 +209,7 @@ describe('holo-compiler CLI direct v11 CAS emitter', () => {
 
     const devopsRun = invokeCliJson(
       ['compile', '--cas-v11', '--persona=devops'],
-      { B8G_GHOST_CACHE_DIR: ghostCacheDir },
+      { B8G_CAS_DIR: ghostCacheDir },
     );
     assert.equal(devopsRun.v11Blobs.length, 4);
     assert.equal(devopsRun.consumerDebugBytes, 0);

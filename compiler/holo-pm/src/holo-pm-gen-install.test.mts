@@ -44,7 +44,7 @@ test('renderHoloInstallPs1 is BOM-free, zero top-level param(, and uses v11 CAS 
   assert.doesNotMatch(ps1, /param\s*\(/i, 'install.ps1 must avoid param( for irm|iex safety');
 
   assert.match(ps1, /\$env:HOLO_CAS_DIR/);
-  assert.match(ps1, /\$env:B8G_GHOST_CACHE_DIR/);
+  assert.match(ps1, /\$env:B8G_CAS_DIR/);
   assert.match(ps1, /v11\/files/);
   assert.match(ps1, /Get-FileHash\b.*-Algorithm\s+SHA512/);
   assert.match(ps1, /New-Item\s+-ItemType\s+HardLink/);
@@ -56,7 +56,7 @@ test('renderHoloInstallSh uses HOLO_CAS_DIR, v11/files, sha512sum / shasum -a 51
 
   assert.ok(sh.startsWith('#!/bin/sh\n'), 'install.sh must start with POSIX #!/bin/sh');
   assert.match(sh, /HOLO_CAS_DIR/);
-  assert.match(sh, /B8G_GHOST_CACHE_DIR/);
+  assert.match(sh, /B8G_CAS_DIR/);
   assert.match(sh, /v11\/files/);
   assert.match(sh, /sha512sum/);
   assert.match(sh, /shasum -a 512/);

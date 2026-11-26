@@ -122,7 +122,7 @@ export interface SurfaceAttachment {
   readonly command: string;
 }
 
-export const DEFAULT_RELEASE = 'awesome-os/desktop@v0.3.0';
+export const DEFAULT_RELEASE = 'awesome-os/awesome-os@v1.0.0';
 export const DEFAULT_CAS_HASH = 'v11-verified-0x33564742-baseline';
 
 export function defaultPolicy(overrides?: Partial<HostPolicy>): HostPolicy {

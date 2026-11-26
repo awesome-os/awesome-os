@@ -22,7 +22,7 @@
 | `npm install` / `pnpm install` / `b8g-pm install` | `holo-pm resolve repository://github.com/awesome-os/<repo>@main` |
 | `b8g-build <target>` / `zig cc ...` | `holo-compiler build <target>` |
 | `node <entry>` / `ghost-node <entry>` | `holo-project run project://holo-node/<entry>` |
-| `python <entry>` / `ghost-py <entry>` | `holo-project run project://holo-py/<entry>` |
+| `python <entry>` / `holo-py <entry>` | `holo-project run project://holo-py/<entry>` |
 | `go build ./...` | `holo-project run project://holo-go/go -- build ./...` |
 | `cargo build` / `ghost-rust build` | `holo-project run project://holo-rust/cargo -- build` |
 | `dart compile exe <entry>` | `holo-project run project://holo-dart/dart -- compile exe <entry>` |

@@ -22,7 +22,7 @@ describe('project:// protocol & universal holo-project runner', () => {
     assert.equal(nodeProj.projection.id, 'holo-node');
     assert.equal(nodeProj.mode, 'persistent');
 
-    const legacyPy = parseProjectUri('project://ghost-py/train.py');
+    const legacyPy = parseProjectUri('project://holo-py/train.py');
     assert.equal(legacyPy.projection.id, 'holo-py');
   });
 
