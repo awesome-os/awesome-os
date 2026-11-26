@@ -1,12 +1,12 @@
 # AwesomeOS (`awesome-os/awesome-os`)
 
-> **The Sovereign, ChromeOS-Grade Operating System Monorepo** — collapsing **`5,070` OS packages** and **`22` major runtime/desktop/AI ecosystems (`13,987 MB` standalone)** into **ONE SHA-512 + Ed25519 verified `v11` Content-Addressable Store**, powered by **Holo-Linux `7.3.6`**, **A/B Atomic Rollback**, **1-Click Powerwash**, and **Sectium + Ladybird** dual sovereign browser engines.
+> **The Sovereign, ChromeOS-Grade Operating System Monorepo** — collapsing **`5,075` OS packages** and **`22` major runtime/desktop/AI ecosystems (`13,987 MB` standalone)** into **ONE SHA-512 + Ed25519 verified `v11` Content-Addressable Store**, powered by **Holo-Linux `7.3.6`**, **A/B Atomic Rollback**, **1-Click Powerwash**, and **Sectium + Ladybird + Firefox** sovereign browser engines.
 
 [![Install AwesomeOS OOBE](https://img.shields.io/badge/Install-Web_OOBE_Installer-39C5CF?style=for-the-badge)](https://awesome-os.com/install/)
 [![Boot Live Shell](https://img.shields.io/badge/Boot_Live-AwesomeOS_Shell-58A6FF?style=for-the-badge)](https://awesome-os.com/shell/)
 [![Pure CAS v11 Release](https://img.shields.io/badge/Release-CAS_v11_(Ed25519)-3FB950?style=for-the-badge)](https://github.com/awesome-os/awesome-os/releases/tag/cas-v11-latest)
 [![Host Manager MDM](https://img.shields.io/badge/Fleet-Host_Manager-BC8CFF?style=for-the-badge)](https://b8g.dev/awesome-os/apps/host-manager.html)
-[![Live Oversight](https://img.shields.io/badge/Telemetry-26_Runners_Live-D29922?style=for-the-badge)](https://b8g.dev/awesome-os/apps/oversight.html)
+[![Live Oversight](https://img.shields.io/badge/Telemetry-60%2F60_Upstream_Libs-D29922?style=for-the-badge)](https://b8g.dev/awesome-os/apps/oversight.html)
 [![Sovereign Agent Platform](https://img.shields.io/badge/Agent_Platform-Model_Research_%26_Studio-F778BA?style=for-the-badge)](https://github.com/awesome-os/agent-platform)
 [![Agent Platform Hub](https://img.shields.io/badge/Live-Agent_Platform_App-2EA043?style=for-the-badge)](https://b8g.dev/awesome-os/apps/agent-platform.html)
 
@@ -16,12 +16,12 @@
 
 | Metric | Verified Measurement | How It Works |
 | :--- | ---: | :--- |
-| **Deduplicated `v11` Package Universe** | **`5,070` packages** | `0` duplicate vendor `.tar.*` tarballs — every package resolves through `cas://v11/` & `repository://` hardlinks |
-| **22 "Big Boys" Ecosystems Collapsed** | **`13,987 MB` → `1` CAS layer** | **15 / 22 at `100%` shared-lib coverage** (`dup_v8 = 0 B` across Chromium, Electron, Node, Deno, Bun, `lo`) |
-| **Physical SHA-512 Blobs Indexed** | **`409` assets (`399` unique blobs · `1.22 GB`)** | Ed25519-signed across `61` active repos in [`awesome-os/holo-v11`](https://github.com/awesome-os/holo-v11) (unified Holo `v11` CAS, verified via [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows)) + `8,311` local hardlinks |
-| **Live Upstream Libraries Tracked** | **`56` core C/C++/GPU libs** | Auto-tracked at ahead-of-Chrome max (`openssl 4.1.0`, `harfbuzz 15.2.0`, `zstd 1.6.0`, `mimalloc 3.7.1`, `vulkan 1.4.369`, `ROCm 7.14.0`) |
+| **Deduplicated `v11` Package Universe** | **`5,075` packages** | `0` duplicate vendor `.tar.*` tarballs — every package resolves through `cas://v11/` & `repository://` hardlinks |
+| **22 "Big Boys" Ecosystems Collapsed** | **`13,987 MB` → `1` CAS layer** | **19 / 22 at `100%` shared-lib coverage** (`dup_v8 = 0 B` across Chromium, Electron, Node, Deno, Bun, `lo`) |
+| **Physical SHA-512 Blobs Indexed** | **`413` assets (`402` unique blobs · `1,454 MB` raw)** | Ed25519-signed across `60` repos in [`awesome-os/holo-v11`](https://github.com/awesome-os/holo-v11) (Planetary Warm `v11` CAS, verified via [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows) across `23` active repos) + `8,311` local hardlinks |
+| **Live Upstream Libraries Tracked** | **`60/60` core C/C++/GPU libs (`0` drifted)** | Auto-tracked at ahead-of-Chrome max (`openssl 4.1.0`, `harfbuzz 15.2.0`, `zstd 1.6.0`, `mimalloc 3.7.1`, `vulkan 1.4.369`, `ROCm 7.14.0`) |
 | **Dual Ring-0 Kernel Backends** | **`Holo-Linux 7.3.6` + `14.17 KB` Zig** | Full hardware Linux `7.3.6` (`b8g_abi.ko` + `scx_holo` BPF) **+** `14,512 B` freestanding RISC-V 64 Zig microkernel |
-| **Dual Sovereign Browser Engines** | **`Sectium` + `Ladybird (18/18)`** | **Sectium** (Chromium `160` Canary BSD-3, `0` closed DLLs) **+** **Ladybird** (`18/18` Chrome parity probes, `HoloHotLoopJIT`, `Wasm SIMD128`, `uBlock MV3`) |
+| **Sovereign Browser Engines** | **`Sectium` + `Ladybird (18/18)` + `Firefox (24/24)`** | **Sectium** (Chromium `160` Canary BSD-3, `27/27` **100%**, `0` closed DLLs) **+** **Ladybird** (`18/18` Chrome parity probes, `HoloHotLoopJIT`, `Wasm SIMD128`, `uBlock MV3`) **+** **Firefox** (`24/24` **100%** shared `v11` CAS) |
 | **Legacy X11 / Xorg Bloat Shipped** | **`0` bytes (`-549` pkgs)** | Pure UEFI GOP 24-bit BMP splash → `SimpleDRM` → Wayland / WebGPU (with rootless `Xwayland` on demand) |
 
 ---
@@ -29,7 +29,7 @@
 ## Live Rolling Upstream Telemetry & Planetary Warm `v11` CAS
 
 > **Continuous Maintenance Proof — Live Dashboard:** [**`https://b8g.dev/awesome-os/apps/oversight.html`**](https://b8g.dev/awesome-os/apps/oversight.html)  
-> Automated GitHub Actions runners continuously poll **`56` upstream C/C++/Rust/GPU repositories**, Chromium Canary (`160.0.8184.0`), and **`26` core AwesomeOS CI pipelines**, bumping `max-version-lock.json` and pre-warming the planetary SHA-512 `v11` CAS index with **zero stale tarballs**.
+> Automated GitHub Actions runners continuously poll **`60/60` upstream C/C++/Rust/GPU repositories (`0` drifted)**, Chromium Canary (`160.0.8184.0`), and **`23` active [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows) repositories** (with 7-ecosystem `holo-ci lock-compat`: `npm`, `cargo`, `uv`, `go`, `vcpkg`, `winget`, `apt`), bumping `max-version-lock.json` and pre-warming the planetary SHA-512 `v11` CAS index with **zero stale tarballs**.
 
 | Upstream Subsystem | Live `v11` Pin | Upstream Source | Advantage Over Stock Distros / Browsers |
 | :--- | :--- | :--- | :--- |
@@ -75,13 +75,13 @@ ChromeOS proved the cleanest operating-system design of the modern era — **Ver
 
 Instead of every browser, AI server, desktop shell, and language toolchain shipping duplicate copies of `libv8`, `icu`, `skia`, `openssl`, `harfbuzz`, `zlib-ng`, `zstd`, `sqlite3`, `ffmpeg`, and `vulkan`, **AwesomeOS deduplicates all 22 ecosystems into `~/.b8g/cas/v11/files/<aa>/<sha512>`**:
 
-| Ecosystem Group | Covered Stacks (`15 / 22` at `100%`) | `v11` Shared-Lib Coverage |
+| Ecosystem Group | Covered Stacks (`19 / 22` at `100%`) | `v11` Shared-Lib Coverage |
 | :--- | :--- | ---: |
-| **Browsers & Web Shells (`5`)** | Electron (`20/20` **100%**), NW.js (`18/18` **100%**), Ladybird (`23/23` **100%**), Sectium / Chromium `160` (`26/27` **96.3%**), Firefox (`22/24` **91.7%**) | **91.7% – 100%** |
-| **JS / Systems Runtimes (`4`)** | Deno (`10/10` **100%**), Bun (`12/12` **100%**), `just-js/lo` (`19/19` **100%**), Node.js (`15/16` **93.8%**) — all sharing `libv8 16.0.88+` (`dup_v8 = 0 B`) | **93.8% – 100%** |
+| **Browsers & Web Shells (`5`)** | Electron (`20/20` **100%**), NW.js (`18/18` **100%**), Ladybird (`23/23` **100%**), Sectium / Chromium `160` (`27/27` **100%**), Firefox (`24/24` **100%**) | **100%** |
+| **JS / Systems Runtimes (`4`)** | Deno (`10/10` **100%**), Bun (`12/12` **100%**), `just-js/lo` (`19/19` **100%**), Node.js (`16/16` **100%**) — all sharing `libv8 16.0.88+` (`dup_v8 = 0 B`) | **100%** |
 | **Sovereign AI & GPU Compute (`4`)** | `Colibri` MoE (`11/11` **100%**), `llama.cpp` (`12/12` **100%**), `vLLM` (`16/16` **100%**), GPU Compute — CUDA / NCCL / ROCm `7.14` / Triton / XDNA (`21/21` **100%**) | **100%** |
 | **Wayland Desktops — Zero X11 (`3`)** | GNOME Wayland GTK `4.24` (`16/16` **100%**), KDE Plasma `6.8` / Qt `6.12` (`17/17` **100%**), Omarchy / Hyprland `0.57` (`15/15` **100%**) | **100%** |
-| **Language & Binary Registries (`6`)** | Rust `*-sys` crates (`25/25` **100%**), `.NET 11` (`17/17` **100%**), `npm` Top Native (`31/32` **96.9%**), Linux `7.3.6` + Limine (`14/15` **93.3%**), `PyPI` Wheels (`30/33` **90.9%**), `vcpkg` Top 100 (`89/100` **89%**) | **89% – 100%** |
+| **Language & Binary Registries (`6`)** | Rust `*-sys` crates (`25/25` **100%**), `.NET 11` (`17/17` **100%**), `npm` Top Native (`32/32` **100%**), Linux `7.3.6` + Limine (`14/15` **93.3%**), `PyPI` Wheels (`31/33` **93.9%**), `vcpkg` Top 100 (`94/100` **94%**) | **93.3% – 100%** |
 
 ---
 
@@ -94,7 +94,7 @@ awesome-os/
 │   ├── bootloader/            # Limine v11/v12, systemd-boot, iPXE + C11 UEFI GOP 24-bit BMP splash blitter
 │   ├── kernel/                # Holo-Linux 7.3.6 kconfig, b8g_abi.ko (/dev/b8g-arena), scx_holo BPF, AGENTS.md
 │   ├── holo-microkernel-zig/  # 14.17 KB freestanding RISC-V 64 OpenSBI time-sharing microkernel in Zig
-│   ├── crostini/              # Lazy NBD/ublk v11 CAS virtual block disk + rootless unshare container hydrator
+│   ├── crostini/              # Lazy NBD/ublk v11 CAS virtual block disk, rootless unshare hydrator & apt-dpkg-projector.mts
 │   ├── rootfs/                # Synthesized pure Holo v11 /etc/os-release.* & /etc/awesome-os/system.json
 │   └── shell/                 # ChromeOS-style AwesomeOS Desktop Shell (Shelf, Omnibox, Crostini, Powerwash)
 ├── browser/
@@ -118,7 +118,7 @@ awesome-os/
 >
 > **Unified DevTools Monorepo — [`awesome-os/devtools`](https://github.com/awesome-os/devtools):** Consolidates IDEs (`code-oss`, `theia`, `b8g-ide`), VS Code / Open VSX extensions, Game Engines, native C11 dynamic launchers, and 4DGS / Holonomic Game Engine research over **Holo v11 CAS**.
 >
-> **Zero-Dependency CI & Verification — [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows):** Centralized Node 24/26 erasable-TS verification, guard enforcement, and `holo-ci.receipt.v1` telemetry via [`reusable-holo-ci.yml@v1`](https://github.com/awesome-os/maintenance-workflows/blob/v1/.github/workflows/reusable-holo-ci.yml).
+> **Zero-Dependency CI & Verification — [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows):** Centralized Node 24/26 erasable-TS verification, guard enforcement, 7-ecosystem `holo-ci lock-compat` (`npm`, `cargo`, `uv`, `go`, `vcpkg`, `winget`, `apt`), and `holo-ci.receipt.v1` telemetry via [`reusable-holo-ci.yml@v1`](https://github.com/awesome-os/maintenance-workflows/blob/v1/.github/workflows/reusable-holo-ci.yml) across `23` active repositories.
 
 ---
 
@@ -142,7 +142,7 @@ curl -fsSL https://awesome-os.com/install.sh | sh
 ```
 See [`os/bootstrap/holo-upgrade.mts`](os/bootstrap/holo-upgrade.mts) for all 4 canonical upgrade phases (`bump-pins`, `align-monorepos`, `telemetry-and-dedup`, `rollout`).
 
-### 3. Run All 11 Hermetic Monorepo Test Suites (`< 400 ms`)
+### 3. Run All 13 Hermetic Monorepo Test Suites (`< 400 ms`)
 ```bash
 node --test \
   os/bootstrap/holo-upgrade.test.mts \
@@ -151,6 +151,8 @@ node --test \
   os/kernel/holo-kbuild.test.mts \
   os/bootloader/bootloader.test.mts \
   os/crostini/cas-v11-block-and-sysroot.test.mts \
+  os/crostini/apt-dpkg-projector.test.mts \
+  browser/firefox/firefox-cas.test.mts \
   compiler/holo-ffi/holo-ffi.test.mts \
   sections/sectium-device/universal-compiler-debug.test.mts \
   sections/sectium-device/vsock-crostini.test.mts \
