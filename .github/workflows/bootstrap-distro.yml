@@ -62,7 +62,7 @@ jobs:
           ./dist/distro-v11/b8g_abi_selftest-linux-x64
 
           cc -std=c11 -O3 -Wall -Wextra -Werror os/bootloader/uefi-gop-splash/holo_splash.c os/bootloader/uefi-gop-splash/holo_splash_test.c -o dist/distro-v11/holo_splash_test-linux-x64
-          ./dist/distro-v11/holo_splash_test-linux-x64
+          (cd os/bootloader && ../../dist/distro-v11/holo_splash_test-linux-x64)
 
           g++ -std=c++20 -O3 -Wall -Wextra -Werror deployment/local-cpp/vdm_local.cpp -o dist/distro-v11/vdm-local-linux-x64
 
