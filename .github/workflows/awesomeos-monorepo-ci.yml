@@ -1,0 +1,40 @@
+name: CI — AwesomeOS Monorepo (Verified Boot, Holo-Linux 7.3.6, UEFI Splash & Holo-FFI)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify-monorepo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Generate deterministic 24-bit UEFI GOP splash BMPs
+        run: node os/bootloader/assets/generate-splash.mts
+
+      - name: Run TypeScript verification suites (Ed25519 Verified Boot, Kernel, Bootloader, Holo-FFI)
+        run: |
+          node --test \
+            security/verified-boot.test.mts \
+            os/kernel/holo-kbuild.test.mts \
+            os/bootloader/bootloader.test.mts \
+            compiler/holo-ffi/holo-ffi.test.mts
+
+      - name: Compile & run C11 Holo-Linux B8G_ABI_MAGIC_V3 self-test (-Werror)
+        run: |
+          cc -std=c11 -Wall -Wextra -Werror os/kernel/b8g_abi/b8g_abi_selftest.c -o /tmp/b8g_abi_selftest
+          /tmp/b8g_abi_selftest
+
+      - name: Compile & run C11 UEFI GOP / SimpleDRM splash blitter self-test (-Werror)
+        run: |
+          cc -std=c11 -Wall -Wextra -Werror \
+            os/bootloader/uefi-gop-splash/holo_splash.c \
+            os/bootloader/uefi-gop-splash/holo_splash_test.c \
+            -o /tmp/holo_splash_test
+          (cd os/bootloader && /tmp/holo_splash_test)

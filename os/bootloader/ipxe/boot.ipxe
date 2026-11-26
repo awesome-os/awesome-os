@@ -1,0 +1,16 @@
+#!ipxe
+# Awesome-OS Holo-Linux 7.3.6 — Stateless HTTPS Netboot (UEFI/PXE/Proxmox/Hyper-V)
+echo ====================================================================
+echo   Awesome-OS Holo-Linux 7.3.6 — Stateless Netboot (B8G_ABI_MAGIC_V3)
+echo   Bootloader: iPXE -> SimpleDRM Splash -> v11 CAS tmpfs
+echo ====================================================================
+
+set base https://github.com/awesome-os/t2linux-baseline/releases/latest/download
+
+kernel ${base}/vmlinuz-7.3.6-x86_64 initrd=initramfs-x86_64.cpio.zst quiet splash vt.global_cursor_default=0 console=tty0 console=ttyS0,115200 b8g.abi=v3 scx_holo=1 awesome.netboot=1 || goto failed
+initrd ${base}/initramfs-x86_64.cpio.zst || goto failed
+boot || goto failed
+
+:failed
+echo [AWESOME-OS] Netboot failed — dropping to iPXE shell
+shell

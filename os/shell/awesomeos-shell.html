@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AwesomeOS — Sovereign ChromeOS-Grade Desktop Shell</title>
+  <meta name="description" content="AwesomeOS Desktop Shell powered by Sectium, Holo-Linux 7.3.6, Ed25519 Verified Boot, A/B Atomic Slots, 1-Click Powerwash, and Holo Crostini Linux." />
+  <style>
+    :root {
+      --bg-0: #0b0e14;
+      --bg-1: #131822;
+      --glass: rgba(18, 24, 36, 0.78);
+      --glass-strong: rgba(15, 20, 30, 0.92);
+      --win-bg: #121722;
+      --win-head: #181f2e;
+      --border: rgba(148, 168, 204, 0.18);
+      --border-hi: rgba(57, 197, 207, 0.55);
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #39c5cf;
+      --accent-2: #58a6ff;
+      --ok: #3fb950;
+      --warn: #d29922;
+      --danger: #f85149;
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    }
+    html[data-theme="light"] {
+      --bg-0: #eaeef5;
+      --bg-1: #dde4f0;
+      --glass: rgba(248, 250, 253, 0.82);
+      --glass-strong: rgba(252, 253, 255, 0.95);
+      --win-bg: #ffffff;
+      --win-head: #f3f6fb;
+      --border: rgba(30, 45, 70, 0.14);
+      --border-hi: rgba(13, 148, 162, 0.55);
+      --text: #141923;
+      --muted: #576275;
+      --accent: #0d94a2;
+      --accent-2: #1f6feb;
+      --shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+    }
+    * { box-sizing: border-box; user-select: none; }
+    html, body {
+      margin: 0; width: 100%; height: 100%; overflow: hidden;
+      font-family: var(--sans); color: var(--text); background: var(--bg-0);
+    }
+    /* Wallpaper matching Bootloader GOP Splash */
+    .wallpaper {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(900px 540px at 50% 44%, rgba(57, 197, 207, 0.16), transparent 65%),
+        radial-gradient(700px 500px at 85% 15%, rgba(88, 166, 255, 0.14), transparent 60%),
+        linear-gradient(160deg, var(--bg-0), var(--bg-1));
+      display: grid; place-items: center;
+    }
+    .crest {
+      opacity: 0.22; pointer-events: none; text-align: center;
+      transition: opacity 0.25s;
+    }
+    .crest-sub {
+      margin-top: 12px; font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.24em; color: var(--muted);
+    }
+
+    /* Desktop Workspace */
+    #desktop { position: fixed; inset: 0 0 66px 0; z-index: 2; }
+
+    /* ChromeOS Window */
+    .os-win {
+      position: absolute; background: var(--win-bg);
+      border: 1px solid var(--border); border-radius: 14px;
+      box-shadow: var(--shadow); display: flex; flex-direction: column;
+      overflow: hidden; min-width: 340px; min-height: 240px;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .os-win.focused { border-color: var(--border-hi); }
+    .os-win.maximized {
+      top: 8px !important; left: 8px !important;
+      width: calc(100% - 16px) !important; height: calc(100% - 12px) !important;
+      border-radius: 12px;
+    }
+    .win-bar {
+      height: 38px; background: var(--win-head); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px; cursor: grab; font-size: 13px; font-weight: 600;
+    }
+    .win-title { display: flex; align-items: center; gap: 8px; }
+    .win-badge {
+      font-family: var(--mono); font-size: 10px; padding: 2px 6px;
+      border-radius: 99px; background: rgba(57, 197, 207, 0.14); color: var(--accent);
+    }
+    .win-ctrls { display: flex; gap: 6px; }
+    .win-btn {
+      width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); cursor: pointer;
+      display: grid; place-items: center; font-size: 12px;
+    }
+    .win-btn:hover { background: rgba(128,128,128,0.16); color: var(--text); }
+    .win-btn.close:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+    .win-body { flex: 1; overflow: auto; user-select: text; position: relative; }
+
+    /* ChromeOS Floating Bottom Shelf */
+    .shelf-wrap {
+      position: fixed; left: 12px; right: 12px; bottom: 8px; height: 50px;
+      z-index: 50; display: flex; align-items: center; justify-content: space-between;
+      pointer-events: none;
+    }
+    .shelf-pill {
+      pointer-events: auto; height: 48px; padding: 0 10px;
+      background: var(--glass); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: 999px;
+      display: flex; align-items: center; gap: 6px; box-shadow: var(--shadow);
+    }
+    .app-icon {
+      width: 38px; height: 38px; border-radius: 50%; border: none;
+      background: rgba(255,255,255,0.05); color: var(--text);
+      cursor: pointer; display: grid; place-items: center; font-size: 16px;
+      position: relative; transition: transform 0.14s, background 0.14s;
+    }
+    .app-icon:hover { transform: translateY(-2px); background: rgba(57, 197, 207, 0.18); }
+    .app-icon.launcher {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #081018; font-weight: 800;
+    }
+    .app-icon.running::after {
+      content: ""; position: absolute; bottom: 2px; width: 12px; height: 3px;
+      border-radius: 3px; background: var(--accent);
+    }
+
+    /* Quick Settings Tray Button */
+    .tray-btn {
+      pointer-events: auto; height: 44px; padding: 0 14px;
+      background: var(--glass); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: 999px;
+      color: var(--text); font-size: 12.5px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px; cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+    .tray-btn:hover { border-color: var(--border-hi); }
+    .vboot-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--ok);
+      box-shadow: 0 0 8px var(--ok);
+    }
+
+    /* Launcher / Everything Omnibox Overlay */
+    .overlay {
+      position: fixed; z-index: 60; background: var(--glass-strong);
+      backdrop-filter: blur(24px); border: 1px solid var(--border);
+      border-radius: 20px; box-shadow: var(--shadow); padding: 20px;
+      display: none;
+    }
+    .overlay.open { display: block; animation: popUp 0.16s ease-out; }
+    @keyframes popUp {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    #launcher-overlay {
+      left: 50%; bottom: 68px; transform: translateX(-50%);
+      width: min(640px, calc(100vw - 24px));
+    }
+    #launcher-overlay.open { animation: none; }
+    .omnibox {
+      width: 100%; padding: 12px 16px; border-radius: 999px;
+      border: 1px solid var(--border-hi); background: rgba(0,0,0,0.22);
+      color: var(--text); font-size: 14px; outline: none; margin-bottom: 16px;
+    }
+    .launcher-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px;
+    }
+    .launcher-tile {
+      padding: 12px 8px; border-radius: 14px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03); color: var(--text); cursor: pointer;
+      text-align: center; font-size: 12px; display: grid; gap: 6px; place-items: center;
+    }
+    .launcher-tile:hover { border-color: var(--border-hi); background: rgba(57,197,207,0.1); }
+    .tile-glyph { font-size: 22px; }
+
+    /* Quick Settings Popover (ChromeOS Right Tray) */
+    #qs-overlay {
+      right: 12px; bottom: 68px; width: min(370px, calc(100vw - 24px));
+    }
+    .qs-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .qs-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .qs-tile {
+      padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04); color: var(--text); cursor: pointer;
+      text-align: left; font-size: 12px;
+    }
+    .qs-tile.active { background: rgba(57, 197, 207, 0.18); border-color: var(--border-hi); }
+    .qs-tile strong { display: block; font-size: 12.5px; margin-bottom: 2px; }
+    .qs-tile span { color: var(--muted); font-size: 11px; font-family: var(--mono); }
+    .qs-card {
+      padding: 12px; border-radius: 12px; border: 1px solid var(--border);
+      background: rgba(0,0,0,0.18); font-size: 12px; display: grid; gap: 6px; margin-bottom: 10px;
+    }
+    .powerwash-btn {
+      width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(248,81,73,0.45);
+      background: rgba(248,81,73,0.12); color: var(--danger); font-weight: 700;
+      cursor: pointer; font-size: 12.5px;
+    }
+    .powerwash-btn:hover { background: var(--danger); color: #fff; }
+
+    /* App Interiors */
+    .term {
+      background: #090c12; color: #d5e3f7; font-family: var(--mono);
+      font-size: 12.5px; height: 100%; padding: 14px; display: flex;
+      flex-direction: column; gap: 6px;
+    }
+    .term-out { flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.5; }
+    .term-in-row { display: flex; gap: 8px; align-items: center; border-top: 1px solid #1d2636; padding-top: 8px; }
+    .term-prompt { color: #39c5cf; font-weight: 700; }
+    .term-input {
+      flex: 1; background: transparent; border: none; color: #fff;
+      font-family: var(--mono); font-size: 12.5px; outline: none;
+    }
+    .pane-pad { padding: 16px; display: grid; gap: 12px; font-size: 13px; }
+    .kv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+    .kv-card {
+      padding: 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: rgba(128,128,128,0.05);
+    }
+    .kv-card small { color: var(--muted); display: block; font-size: 11px; }
+    .kv-card strong { font-family: var(--mono); font-size: 13px; }
+    .pill-btn {
+      padding: 7px 12px; border-radius: 8px; border: 1px solid var(--border-hi);
+      background: rgba(57,197,207,0.14); color: var(--text); cursor: pointer; font-size: 12px; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wallpaper" id="wallpaper">
+    <div class="crest">
+      <svg width="116" height="116" viewBox="0 0 240 240">
+        <circle cx="120" cy="120" r="88" fill="none" stroke="#39C5CF" stroke-width="18"/>
+        <polygon points="120,76 164,120 120,164 76,120" fill="none" stroke="#E6EDF3" stroke-width="10"/>
+        <circle cx="120" cy="120" r="13" fill="#56D4DD"/>
+      </svg>
+      <div class="crest-sub">AWESOMEOS · HOLO-LINUX 7.3.6 · VERIFIED BOOT</div>
+    </div>
+  </div>
+
+  <main id="desktop" aria-label="AwesomeOS Desktop Workspace"></main>
+
+  <!-- Launcher / AtlasKV Omnibox -->
+  <section class="overlay" id="launcher-overlay" aria-label="AwesomeOS Launcher">
+    <input class="omnibox" id="omnibox" type="text" placeholder="Search apps, files, Holo v11 packages, or type a Linux / Colibri AI command…" />
+    <div class="launcher-grid" id="launcher-grid"></div>
+  </section>
+
+  <!-- ChromeOS Quick Settings & Verified Boot Tray -->
+  <section class="overlay" id="qs-overlay" aria-label="Quick Settings">
+    <div class="qs-header">
+      <strong>AwesomeOS System</strong>
+      <span class="win-badge" id="qs-abi">Ed25519 VERIFIED</span>
+    </div>
+    <div class="qs-pills">
+      <button class="qs-tile active" id="tile-slot">
+        <strong>Active Boot Slot</strong>
+        <span id="lbl-slot">Slot A (7.3.6-v11)</span>
+      </button>
+      <button class="qs-tile active" id="tile-channel">
+        <strong>Update Channel</strong>
+        <span id="lbl-channel">stable (Omaha v11)</span>
+      </button>
+      <button class="qs-tile active" id="tile-theme">
+        <strong>Appearance</strong>
+        <span id="lbl-theme">Neutral Graphite</span>
+      </button>
+      <button class="qs-tile active" id="tile-scx">
+        <strong>scx_holo BPF</strong>
+        <span>1ms Frame Priority</span>
+      </button>
+    </div>
+    <div class="qs-card">
+      <div><strong>Kernel:</strong> <code>Holo-Linux 7.3.6 + b8g_abi.ko</code></div>
+      <div><strong>Shell Engine:</strong> <code>Sectium Compositor (Zero X11)</code></div>
+      <div><strong>Immutable Root:</strong> <code>cas/v11 (SHA-512 + Ed25519)</code></div>
+    </div>
+    <button class="powerwash-btn" id="btn-powerwash">⚡ 1-Click ChromeOS Powerwash (Reset User State)</button>
+  </section>
+
+  <!-- Bottom Floating ChromeOS Shelf -->
+  <footer class="shelf-wrap">
+    <div style="width: 140px;"></div>
+    <nav class="shelf-pill" id="shelf" aria-label="Pinned Apps"></nav>
+    <button class="tray-btn" id="btn-tray" title="Quick Settings, Verified Boot & Powerwash">
+      <span class="vboot-dot"></span>
+      <span id="tray-slot">Slot A</span>
+      <span>·</span>
+      <span id="tray-clock">12:00</span>
+    </button>
+  </footer>
+
+  <script type="module">
+    const STORAGE_KEY = 'awesomeos.shell.state.v1';
+    const defaultState = {
+      slot: 'A',
+      channel: 'stable',
+      theme: 'dark',
+      bootCount: 1,
+      powerwashedAt: null,
+    };
+    let sys = { ...defaultState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') };
+    const saveSys = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(sys));
+
+    const APPS = [
+      {
+        id: 'sectium',
+        name: 'Sectium Browser',
+        glyph: '🌐',
+        badge: 'Chromium 160 · BSD-3',
+        w: 720, h: 460, x: 48, y: 28,
+        render: () => `
+          <div class="pane-pad">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input id="sec-url" style="flex:1;padding:8px 12px;border-radius:99px;border:1px solid var(--border);background:rgba(0,0,0,0.2);color:var(--text);font-family:var(--mono);font-size:12px;" value="sectium://system-overview" />
+              <a class="pill-btn" href="https://b8g.dev/awesome-os/apps/oversight.html" target="_blank" rel="noopener" style="text-decoration:none;">Open Live Oversight ↗</a>
+            </div>
+            <div class="kv-grid">
+              <div class="kv-card"><small>Browser & OS Shell</small><strong>Sectium (Zero Closed DLLs)</strong></div>
+              <div class="kv-card"><small>Local Search</small><strong>AtlasKV (&lt; 5 ms)</strong></div>
+              <div class="kv-card"><small>Zero-Copy IPC</small><strong>/dev/b8g-arena (64B)</strong></div>
+              <div class="kv-card"><small>v11 CAS Store</small><strong>427 Verified Blobs · 1.22 GB</strong></div>
+            </div>
+            <div class="kv-card" style="line-height:1.55;">
+              <small>ChromeOS Architecture Alignment</small>
+              <div>Just like ChromeOS pairs <strong>Linux + Verified Boot + Chrome Ash</strong>, <strong>AwesomeOS</strong> pairs <strong>Holo-Linux 7.3.6 + Ed25519 Verified Boot + Sectium</strong> as the single OS shell — with Linux &amp; AI developer workspaces running isolated over <code>v11</code> CAS hardlinks.</div>
+            </div>
+          </div>
+        `,
+      },
+      {
+        id: 'terminal',
+        name: 'Linux (Holo Crostini)',
+        glyph: '❯_',
+        badge: 'Holo-Linux 7.3.6',
+        w: 660, h: 400, x: 260, y: 110,
+        render: () => `
+          <div class="term">
+            <div class="term-out" id="term-out">AwesomeOS Holo-Linux 7.3.6-awesome-v11-desktop (ttyS0 / b8g_abi v3)
+Verified Boot: Ed25519 OK · Active Slot: Slot ${sys.slot} · Scheduler: scx_holo (BPF)
+Type 'help' for built-in OS inspection commands.
+</div>
+            <div class="term-in-row">
+              <span class="term-prompt">frank@awesomeos:~$</span>
+              <input class="term-input" id="term-in" type="text" autocomplete="off" spellcheck="false" autofocus />
+            </div>
+          </div>
+        `,
+        onMount: (winEl) => {
+          const out = winEl.querySelector('#term-out');
+          const inp = winEl.querySelector('#term-in');
+          const print = (t) => { out.textContent += '\n' + t; out.scrollTop = out.scrollHeight; };
+          inp.addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter') return;
+            const raw = inp.value.trim();
+            inp.value = '';
+            print(`frank@awesomeos:~$ ${raw}`);
+            if (!raw) return;
+            const cmd = raw.split(/\s+/)[0];
+            if (cmd === 'help') {
+              print('Commands: uname, slot, scx, abi, cas, holo, powerwash, clear');
+            } else if (cmd === 'uname') {
+              print(`Linux awesomeos 7.3.6-awesome-v11-slot-${sys.slot.toLowerCase()} #1 SMP PREEMPT_DYNAMIC LLVM=1 x86_64 AwesomeOS`);
+            } else if (cmd === 'slot') {
+              print(`Active Slot: Slot ${sys.slot} | Standby: Slot ${sys.slot === 'A' ? 'B' : 'A'} | Channel: ${sys.channel} | BootVerify: Ed25519+SHA512`);
+            } else if (cmd === 'scx') {
+              print('scx_holo (sched_ext BPF): ACTIVE\n  DSQ 100 SECTIUM_FRAME : 1.0 ms slice\n  DSQ 101 CONTROL_PLANE : 2.0 ms slice\n  DSQ 102 AI_INFERENCE  : 4.0 ms slice\n  GLOBAL  BATCH_CAS     : 10.0 ms slice');
+            } else if (cmd === 'abi') {
+              print('/dev/b8g-arena: magic=0x33564742 (B8G_ABI_MAGIC_V3) hdr=64B sqe=64B zero-copy=READY');
+            } else if (cmd === 'cas') {
+              print('holo-v11 registry: 427 physical SHA-512 blobs (1.22 GB across 69 repos) | 22 Big Boys tracked');
+            } else if (cmd === 'holo') {
+              print('holo-compiler 0.7.0 (Tier-A <1s C11/WASI/TS, zero WSL, v11 hardlink projection)');
+            } else if (cmd === 'powerwash') {
+              print('Use Quick Settings (bottom-right pill) -> 1-Click ChromeOS Powerwash to wipe mutable state.');
+            } else if (cmd === 'clear') {
+              out.textContent = '';
+            } else {
+              print(`sh: ${cmd}: command simulated in browser shell (install Holo CLI for native execution)`);
+            }
+          });
+        },
+      },
+      {
+        id: 'fleet',
+        name: 'Host Manager',
+        glyph: '🖥️',
+        badge: 'Enterprise MDM',
+        w: 760, h: 470, x: 140, y: 64,
+        render: () => `
+          <div class="pane-pad">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <strong>AwesomeOS Fleet &amp; Verified A/B Slot Console</strong>
+              <a class="pill-btn" href="https://b8g.dev/awesome-os/apps/host-manager.html" target="_blank" rel="noopener" style="text-decoration:none;">Open Full 4-Column Console ↗</a>
+            </div>
+            <div class="kv-grid">
+              <div class="kv-card"><small>This Device</small><strong>local-workstation (Slot ${sys.slot})</strong></div>
+              <div class="kv-card"><small>Enrollment</small><strong>Zero-Touch mTLS Ready</strong></div>
+              <div class="kv-card"><small>Workspaces URI</small><strong>workspaces://awesome-os/*</strong></div>
+              <div class="kv-card"><small>MCP Server</small><strong>11 Tools (stdio)</strong></div>
+            </div>
+            <div class="kv-card">
+              <small>Quick Slot &amp; Channel Actions</small>
+              <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+                <button class="pill-btn" data-act="flip-slot">Atomic Rollback to Slot ${sys.slot === 'A' ? 'B' : 'A'}</button>
+                <button class="pill-btn" data-act="cycle-chan">Switch Update Channel (${sys.channel})</button>
+              </div>
+            </div>
+          </div>
+        `,
+        onMount: (winEl) => {
+          winEl.querySelector('[data-act="flip-slot"]').addEventListener('click', () => { toggleSlot(); openApp('fleet', true); });
+          winEl.querySelector('[data-act="cycle-chan"]').addEventListener('click', () => { cycleChannel(); openApp('fleet', true); });
+        },
+      },
+      {
+        id: 'colibri',
+        name: 'Colibri AI',
+        glyph: '⚡',
+        badge: 'LumiBERT 2.8ms',
+        w: 520, h: 390, x: 340, y: 90,
+        render: () => `
+          <div class="pane-pad">
+            <strong>Local Sovereign AI Triad (Colibri · llama.cpp · vLLM)</strong>
+            <div class="kv-grid">
+              <div class="kv-card"><small>Fast Classifier</small><strong>LumiBERT (2.8 ms)</strong></div>
+              <div class="kv-card"><small>Kernel Class</small><strong>B8G_CLASS_AI_INFERENCE</strong></div>
+            </div>
+            <div class="kv-card" id="ai-log" style="min-height:130px;line-height:1.5;">Ask about AwesomeOS Verified Boot, Powerwash, Holo-Linux 7.3.6, or v11 CAS deduplication.</div>
+            <div style="display:flex;gap:8px;">
+              <input id="ai-q" style="flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,0.2);color:var(--text);" placeholder="Ask local Lumi assistant…" />
+              <button class="pill-btn" id="ai-send">Ask</button>
+            </div>
+          </div>
+        `,
+        onMount: (winEl) => {
+          const log = winEl.querySelector('#ai-log');
+          const q = winEl.querySelector('#ai-q');
+          const respond = () => {
+            const text = q.value.trim();
+            if (!text) return;
+            q.value = '';
+            log.innerHTML = `<strong>You:</strong> ${text.replace(/</g, '&lt;')}<br/><br/><strong>Lumi (local):</strong> AwesomeOS isolates user state from the immutable <code>cas/v11</code> root on <strong>Slot ${sys.slot}</strong>. Kernel I/O flows through 64-byte <code>/dev/b8g-arena</code> rings under <code>scx_holo</code> with zero X11 or localhost HTTP daemons.`;
+          };
+          winEl.querySelector('#ai-send').addEventListener('click', respond);
+          q.addEventListener('keydown', (e) => { if (e.key === 'Enter') respond(); });
+        },
+      },
+      {
+        id: 'files',
+        name: 'Files (v11 CAS)',
+        glyph: '📁',
+        badge: 'Immutable Root',
+        w: 560, h: 360, x: 190, y: 140,
+        render: () => `
+          <div class="pane-pad" style="font-family:var(--mono);font-size:12px;">
+            <div><strong>/boot/slot-${sys.slot.toLowerCase()}/</strong> — vmlinuz-7.3.6 + initramfs.cpio.zst + awesome-os-1920x1080.bmp</div>
+            <div><strong>/cas/v11/files/00..ff/</strong> — Immutable SHA-512 content-addressed store (read-only)</div>
+            <div><strong>/cas/v11/links/</strong> — 0-byte hardlink projections (.dll / .so / .wasm)</div>
+            <div><strong>/stateful/user/</strong> — Mutable profile &amp; workspace (wiped cleanly by Powerwash)</div>
+            <div><strong>/manifest/v11-bundle.json</strong> — Signed with <code>ed25519-sha512-v1</code></div>
+          </div>
+        `,
+      },
+    ];
+
+    const openWins = new Map();
+    let zTop = 10;
+
+    function focusWin(id) {
+      document.querySelectorAll('.os-win').forEach((w) => w.classList.remove('focused'));
+      const w = openWins.get(id);
+      if (w) {
+        w.style.zIndex = String(++zTop);
+        w.classList.add('focused');
+      }
+      renderShelf();
+    }
+
+    function openApp(id, replaceBody = false) {
+      closeOverlays();
+      const app = APPS.find((a) => a.id === id);
+      if (!app) return;
+      if (openWins.has(id)) {
+        const existing = openWins.get(id);
+        if (replaceBody) {
+          existing.querySelector('.win-body').innerHTML = app.render();
+          if (app.onMount) app.onMount(existing);
+        }
+        existing.style.display = 'flex';
+        focusWin(id);
+        return;
+      }
+
+      const win = document.createElement('section');
+      win.className = 'os-win focused';
+      win.style.width = app.w + 'px';
+      win.style.height = app.h + 'px';
+      win.style.left = Math.min(app.x, Math.max(12, window.innerWidth - app.w - 20)) + 'px';
+      win.style.top = Math.min(app.y, Math.max(12, window.innerHeight - app.h - 90)) + 'px';
+      win.style.zIndex = String(++zTop);
+      win.innerHTML = `
+        <header class="win-bar">
+          <div class="win-title"><span>${app.glyph}</span><span>${app.name}</span><span class="win-badge">${app.badge}</span></div>
+          <div class="win-ctrls">
+            <button class="win-btn max" title="Maximize">▢</button>
+            <button class="win-btn close" title="Close">✕</button>
+          </div>
+        </header>
+        <div class="win-body">${app.render()}</div>
+      `;
+      win.addEventListener('mousedown', () => focusWin(id));
+      win.querySelector('.max').addEventListener('click', () => win.classList.toggle('maximized'));
+      win.querySelector('.close').addEventListener('click', () => {
+        win.remove();
+        openWins.delete(id);
+        renderShelf();
+      });
+
+      // Drag window bar
+      const bar = win.querySelector('.win-bar');
+      bar.addEventListener('mousedown', (e) => {
+        if (e.target.closest('button') || win.classList.contains('maximized')) return;
+        const startX = e.clientX - win.offsetLeft;
+        const startY = e.clientY - win.offsetTop;
+        const move = (ev) => {
+          win.style.left = Math.max(0, ev.clientX - startX) + 'px';
+          win.style.top = Math.max(0, ev.clientY - startY) + 'px';
+        };
+        const up = () => {
+          window.removeEventListener('mousemove', move);
+          window.removeEventListener('mouseup', up);
+        };
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', up);
+      });
+
+      document.getElementById('desktop').appendChild(win);
+      openWins.set(id, win);
+      if (app.onMount) app.onMount(win);
+      focusWin(id);
+    }
+
+    function renderShelf() {
+      const shelf = document.getElementById('shelf');
+      shelf.innerHTML = '';
+      const lBtn = document.createElement('button');
+      lBtn.className = 'app-icon launcher';
+      lBtn.title = 'AwesomeOS Launcher (Everything Key)';
+      lBtn.textContent = '◎';
+      lBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('qs-overlay').classList.remove('open');
+        const ov = document.getElementById('launcher-overlay');
+        ov.classList.toggle('open');
+        if (ov.classList.contains('open')) document.getElementById('omnibox').focus();
+      });
+      shelf.appendChild(lBtn);
+
+      for (const app of APPS) {
+        const b = document.createElement('button');
+        b.className = 'app-icon' + (openWins.has(app.id) ? ' running' : '');
+        b.title = app.name;
+        b.textContent = app.glyph;
+        b.addEventListener('click', () => openApp(app.id));
+        shelf.appendChild(b);
+      }
+    }
+
+    function renderLauncher(filter = '') {
+      const q = filter.trim().toLowerCase();
+      const grid = document.getElementById('launcher-grid');
+      grid.innerHTML = '';
+      for (const app of APPS.filter((a) => !q || a.name.toLowerCase().includes(q) || a.badge.toLowerCase().includes(q))) {
+        const t = document.createElement('button');
+        t.className = 'launcher-tile';
+        t.innerHTML = `<span class="tile-glyph">${app.glyph}</span><span>${app.name}</span>`;
+        t.addEventListener('click', () => openApp(app.id));
+        grid.appendChild(t);
+      }
+    }
+
+    function syncSystemUI() {
+      document.documentElement.dataset.theme = sys.theme;
+      document.getElementById('tray-slot').textContent = `Slot ${sys.slot}`;
+      document.getElementById('lbl-slot').textContent = `Slot ${sys.slot} (7.3.6-v11)`;
+      document.getElementById('lbl-channel').textContent = `${sys.channel} (Omaha v11)`;
+      document.getElementById('lbl-theme').textContent = sys.theme === 'dark' ? 'Neutral Graphite' : 'Warm Paper';
+    }
+
+    function toggleSlot() {
+      sys.slot = sys.slot === 'A' ? 'B' : 'A';
+      saveSys();
+      syncSystemUI();
+    }
+
+    function cycleChannel() {
+      const order = ['stable', 'beta', 'canary'];
+      sys.channel = order[(order.indexOf(sys.channel) + 1) % order.length];
+      saveSys();
+      syncSystemUI();
+    }
+
+    function closeOverlays() {
+      document.getElementById('launcher-overlay').classList.remove('open');
+      document.getElementById('qs-overlay').classList.remove('open');
+    }
+
+    document.getElementById('btn-tray').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('launcher-overlay').classList.remove('open');
+      document.getElementById('qs-overlay').classList.toggle('open');
+    });
+    document.getElementById('tile-slot').addEventListener('click', toggleSlot);
+    document.getElementById('tile-channel').addEventListener('click', cycleChannel);
+    document.getElementById('tile-theme').addEventListener('click', () => {
+      sys.theme = sys.theme === 'dark' ? 'light' : 'dark';
+      saveSys();
+      syncSystemUI();
+    });
+    document.getElementById('btn-powerwash').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      sys = { ...defaultState, powerwashedAt: new Date().toISOString() };
+      saveSys();
+      openWins.forEach((w) => w.remove());
+      openWins.clear();
+      closeOverlays();
+      syncSystemUI();
+      openApp('terminal');
+    });
+    document.getElementById('omnibox').addEventListener('input', (e) => renderLauncher(e.target.value));
+    document.getElementById('wallpaper').addEventListener('click', closeOverlays);
+
+    const tickClock = () => {
+      const d = new Date();
+      document.getElementById('tray-clock').textContent =
+        d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+    tickClock();
+    setInterval(tickClock, 15000);
+
+    syncSystemUI();
+    renderShelf();
+    renderLauncher();
+    openApp('sectium');
+    openApp('terminal');
+  </script>
+</body>
+</html>

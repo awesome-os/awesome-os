@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Awesome-OS Control Plane — Unified Dashboard</title>
+<script>
+(() => {
+  let choice = 'system';
+  try { const s = localStorage.getItem('awesome-os.theme'); if (['light','dark','system'].includes(s)) choice = s; } catch {}
+  const t = choice === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : choice;
+  document.documentElement.dataset.theme = t;
+  document.documentElement.dataset.appearance = choice;
+})();
+</script>
+<style>
+  :root {
+    --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "Cascadia Code", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    --rail: 60px;
+    --nav-w: 264px;
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+  [data-theme="dark"] {
+    --bg: #141414; --surface: #1a1a1a; --surface-2: #222222; --surface-3: #2a2a2a;
+    --line: #333333; --line-soft: #262626;
+    --ink: #ececec; --ink-soft: #c8c8c8; --ink-muted: #8b8b8b;
+    --accent: #38c6c6; --accent-hover: #5fd7d7; --accent-ink: #062222; --accent-tint: rgba(56,198,198,.14); --accent-text: #5fd7d7;
+    --info: #3aa9ff; --info-tint: rgba(58,169,255,.14); --info-text: #7cc4ff;
+    --plum: #e07ae0; --plum-tint: rgba(224,122,224,.14); --plum-text: #eaa0ea;
+    --warn-tint: rgba(245,181,61,.14); --warn-text: #f8c96a;
+    --ok: #4ad08a; --ok-tint: rgba(74,208,138,.14);
+    --del: #ff7a88; --code-bg: #0c0c0c;
+    color-scheme: dark;
+  }
+  [data-theme="light"] {
+    --bg: #f7f7f6; --surface: #ffffff; --surface-2: #f1f1ef; --surface-3: #e7e7e4;
+    --line: #dcdcd8; --line-soft: #ececea;
+    --ink: #1b1b1b; --ink-soft: #333333; --ink-muted: #6e6e6e;
+    --accent: #0a8c8c; --accent-hover: #077171; --accent-ink: #ffffff; --accent-tint: #e2f5f5; --accent-text: #067070;
+    --info: #0f8ff0; --info-tint: #e6f3ff; --info-text: #0666bd;
+    --plum: #b440b4; --plum-tint: #f8e8f8; --plum-text: #8e2a8e;
+    --warn-tint: #fff6e0; --warn-text: #8a5a00;
+    --ok: #108a4a; --ok-tint: #e4f7ec;
+    --del: #c42a3a; --code-bg: #15191d;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 14.5px; line-height: 1.5; overflow: hidden; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  a { color: var(--accent-text); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* 4-column Colibri shell */
+  .app {
+    display: grid;
+    grid-template-columns: var(--rail) var(--nav-w) minmax(0, 1fr) 0;
+    height: 100vh;
+    transition: grid-template-columns 220ms var(--ease);
+  }
+  .app[data-nav="closed"] { grid-template-columns: var(--rail) 0 minmax(0, 1fr) 0; }
+  .app[data-inspect="open"] { grid-template-columns: var(--rail) var(--nav-w) minmax(0, 1fr) 360px; }
+  .app[data-nav="closed"][data-inspect="open"] { grid-template-columns: var(--rail) 0 minmax(0, 1fr) 360px; }
+  @media (max-width: 960px) {
+    .app, .app[data-inspect="open"] { grid-template-columns: var(--rail) 0 minmax(0, 1fr) 0; }
+  }
+
+  /* Icon Rail */
+  .rail {
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    gap: 8px;
+  }
+  .rail-logo {
+    width: 38px; height: 38px; border-radius: 11px;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center; font-weight: 900; font-size: 13px; letter-spacing: -.02em;
+    margin-bottom: 6px;
+  }
+  .rail-btn {
+    width: 40px; height: 40px; border-radius: 11px; border: 1px solid transparent;
+    background: transparent; color: var(--ink-muted); display: grid; place-items: center; font-size: 17px;
+  }
+  .rail-btn:hover { background: var(--surface-2); color: var(--ink); }
+  .rail-btn.active { background: var(--accent-tint); color: var(--accent-text); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+  .rail-spacer { flex: 1; }
+
+  /* Collapsible Nav Drawer */
+  .nav {
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; overflow: hidden; min-width: 0;
+  }
+  .nav-head {
+    height: 56px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--line-soft); font-weight: 800; font-size: 15px; white-space: nowrap;
+  }
+  .nav-body { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 4px; min-width: var(--nav-w); }
+  .nav-sec { font-size: 11.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .06em; padding: 10px 10px 4px; }
+  .nav-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 11px; border-radius: 10px; border: 0; background: transparent;
+    color: var(--ink-soft); text-align: left; font-weight: 500; font-size: 13.5px;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--ink); }
+  .nav-item.active { background: var(--surface-2); color: var(--ink); font-weight: 700; }
+  .nav-foot { padding: 12px; border-top: 1px solid var(--line-soft); font-size: 12px; color: var(--ink-muted); min-width: var(--nav-w); }
+
+  /* Main Stage */
+  .main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .topbar {
+    height: 56px; padding: 0 20px; border-bottom: 1px solid var(--line-soft);
+    display: flex; align-items: center; gap: 12px; flex: none; background: var(--bg);
+  }
+  .topbar-title { font-weight: 700; font-size: 15px; }
+  .topbar-spacer { flex: 1; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px;
+    border-radius: 999px; border: 1px solid var(--line); background: var(--surface);
+    font-size: 12px; font-weight: 600; color: var(--ink-soft); font-variant-numeric: tabular-nums;
+  }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+  .stage { flex: 1; overflow-y: auto; padding: 24px 28px 48px; }
+  .view { display: none; max-width: 1040px; margin: 0 auto; }
+  .view.active { display: block; }
+  h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: -.02em; }
+  .lead { margin: 0 0 20px; color: var(--ink-muted); font-size: 14px; }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .metric { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; padding: 14px 16px; }
+  .metric .v { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .metric .k { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+  .card h2 { margin: 0 0 10px; font-size: 15px; display: flex; align-items: center; justify-content: space-between; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--line-soft); }
+  th { color: var(--ink-muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; }
+  tr:last-child td { border-bottom: 0; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; background: var(--surface-2); color: var(--ink-muted);
+  }
+  .badge.ok { background: var(--ok-tint); color: var(--ok); }
+  .badge.accent { background: var(--accent-tint); color: var(--accent-text); }
+  .badge.warn { background: var(--warn-tint); color: var(--warn-text); }
+  .badge.plum { background: var(--plum-tint); color: var(--plum-text); }
+
+  .btn {
+    padding: 7px 12px; border-radius: 9px; border: 1px solid var(--line);
+    background: var(--surface-2); color: var(--ink); font-size: 12.5px; font-weight: 600;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent-text); }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn.primary:hover { background: var(--accent-hover); color: var(--accent-ink); }
+
+  /* Colibri-style v11 CAS Shard / Expert Map */
+  .shard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px;
+  }
+  .shard-layer {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    padding: 11px;
+  }
+  .shard-layer-title { font-size: 12px; font-weight: 700; margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .cells { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+  .cell {
+    aspect-ratio: 1; border-radius: 4px; background: var(--surface-3); border: 1px solid var(--line-soft);
+    transition: transform .12s;
+  }
+  .cell:hover { transform: scale(1.18); }
+  .cell.vram { background: var(--accent); border-color: var(--accent); }
+  .cell.ram { background: var(--info); border-color: var(--info); }
+  .cell.nvme { background: var(--plum); border-color: var(--plum); }
+
+  .code-block {
+    background: var(--code-bg); color: #d8e4f0; border: 1px solid var(--line);
+    border-radius: 11px; padding: 13px 15px; font-family: var(--mono); font-size: 12.5px;
+    overflow-x: auto; white-space: pre;
+  }
+
+  /* Right Inspector Panel */
+  .inspector {
+    background: var(--surface); border-left: 1px solid var(--line);
+    display: flex; flex-direction: column; overflow: hidden; min-width: 0;
+  }
+  .insp-head {
+    height: 56px; padding: 0 16px; border-bottom: 1px solid var(--line-soft);
+    display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 14px;
+  }
+  .insp-body { flex: 1; overflow-y: auto; padding: 16px; font-size: 13px; display: grid; gap: 12px; align-content: start; }
+  .kv { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--line-soft); font-family: var(--mono); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="app" id="app" data-nav="open" data-inspect="closed">
+  <!-- 1. Icon Rail -->
+  <aside class="rail">
+    <div class="rail-logo" title="Awesome-OS">AOS</div>
+    <button class="rail-btn active" data-view="fleet" title="Fleet & A/B Slots">⊞</button>
+    <button class="rail-btn" data-view="shards" title="v11 CAS & MoE Shard Map">▦</button>
+    <button class="rail-btn" data-view="fit" title="Fits My Machine (OS & LLMs)">◈</button>
+    <button class="rail-btn" data-view="agents" title="AI Setup & MCP Server">⌘</button>
+    <div class="rail-spacer"></div>
+    <button class="rail-btn" id="btn-nav-toggle" title="Toggle Navigation Drawer">◧</button>
+    <button class="rail-btn" id="btn-theme" title="Switch Light / Dark Theme">◐</button>
+    <button class="rail-btn" id="btn-inspect-toggle" title="Toggle Inspector Panel">◨</button>
+  </aside>
+
+  <!-- 2. Collapsible Nav -->
+  <nav class="nav">
+    <div class="nav-head">
+      <span>Awesome-OS</span>
+      <span class="badge accent">v11 CAS</span>
+    </div>
+    <div class="nav-body">
+      <div class="nav-sec">Control Plane</div>
+      <button class="nav-item active" data-view="fleet"><span>Fleet &amp; Hosts</span><span class="badge ok">3</span></button>
+      <button class="nav-item" data-view="shards"><span>v11 CAS &amp; MoE Map</span><span class="badge accent">live</span></button>
+      <button class="nav-item" data-view="fit"><span>Fits My Machine</span><span class="badge">OS+LLM</span></button>
+      <button class="nav-item" data-view="agents"><span>AI Agents &amp; MCP</span><span class="badge plum">stdio</span></button>
+
+      <div class="nav-sec">Quick Links</div>
+      <a class="nav-item" href="https://awesome-os.com/install/" target="_blank" rel="noopener"><span>Web Installer (/install/)</span><span>↗</span></a>
+      <a class="nav-item" href="https://b8g.app/" target="_blank" rel="noopener"><span>Workstation Hub</span><span>↗</span></a>
+      <a class="nav-item" href="https://b8g.dev/awesome-os/" target="_blank" rel="noopener"><span>Developer Portal</span><span>↗</span></a>
+    </div>
+    <div class="nav-foot">
+      <div><strong>Lumi Status:</strong> <span id="lumi-state" style="color:var(--ok);">idle · all slots verified</span></div>
+      <div style="margin-top:4px;font-family:var(--mono);font-size:11px;">ABI 0x33564742 · zero X11</div>
+    </div>
+  </nav>
+
+  <!-- 3. Main Stage -->
+  <main class="main">
+    <header class="topbar">
+      <span class="topbar-title" id="topbar-title">Fleet &amp; Hosts</span>
+      <div class="topbar-spacer"></div>
+      <span class="pill"><span class="dot"></span> 587 MB IDE+Browser · 0 B dup</span>
+      <a class="btn primary" href="https://awesome-os.com/install/" target="_blank" rel="noopener">Launch Installer</a>
+    </header>
+
+    <section class="stage">
+      <!-- View 1: Fleet -->
+      <div class="view active" id="view-fleet">
+        <h1>Fleet &amp; Verified A/B Hosts</h1>
+        <p class="lead">Unified ChromeOS/Fuchsia-grade host manager for local &amp; remote <code>desktop</code> and <code>terminal</code> surfaces with O(1) slot rollback and 1-click Powerwash.</p>
+
+        <div class="metrics">
+          <div class="metric"><div class="v">3 / 3</div><div class="k">A/B Verified Slots</div></div>
+          <div class="metric"><div class="v">5,070</div><div class="k">Clean v11 Packages</div></div>
+          <div class="metric"><div class="v">V8 16.0.88</div><div class="k">Unified Monolith Pin</div></div>
+          <div class="metric"><div class="v">3 Engines</div><div class="k">Colibri · llama.cpp · vLLM</div></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Enrolled Hosts</span><span class="badge ok">B8G_ABI_MAGIC_V3</span></h2>
+          <table>
+            <thead><tr><th>Host</th><th>Profile</th><th>Surface</th><th>Active Slot</th><th>Driver Track</th><th>Actions</th></tr></thead>
+            <tbody id="fleet-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- View 2: v11 CAS & MoE Shard Map (Colibri Expert Map inspired) -->
+      <div class="view" id="view-shards">
+        <h1>v11 CAS &amp; Colibri MoE Placement Map</h1>
+        <p class="lead">Inspired by Colibri's live Expert Map — visualize where every runtime library and MoE expert shard lives across <strong>VRAM/Vulkan</strong>, <strong>RAM</strong>, and <strong>NVMe v11 CAS</strong>.</p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;font-size:12.5px;">
+          <span class="badge accent">■ Hot (VRAM / Vulkan / GPU)</span>
+          <span class="badge" style="background:var(--info-tint);color:var(--info-text);">■ Warm (Resident RAM / Shared)</span>
+          <span class="badge plum">■ Cold (NVMe v11 CAS / io_uring)</span>
+          <button class="btn" id="btn-sim-step" style="margin-left:auto;">Simulate Routing Tick</button>
+        </div>
+
+        <div class="shard-grid" id="shard-grid"></div>
+      </div>
+
+      <!-- View 3: Fits My Machine -->
+      <div class="view" id="view-fit">
+        <h1>Fits My Machine — OS Profiles &amp; Local LLMs</h1>
+        <p class="lead">Hardware-aware placement recommendations modeled on Colibri's <code>setup --list --json</code>. Run <code>holo-host-manager recommend --json</code> locally for exact disk &amp; RAM bandwidth probes.</p>
+
+        <div class="card">
+          <h2><span>Browser Hardware Probe</span><span class="badge accent" id="hw-badge">probing…</span></h2>
+          <div id="hw-probe-line" style="font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);"></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Recommended Workstations &amp; LLM Engines</span></h2>
+          <table>
+            <thead><tr><th>Profile / Engine</th><th>RAM (Min / Good)</th><th>Tier</th><th>Status</th></tr></thead>
+            <tbody id="fit-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- View 4: AI Agents & MCP -->
+      <div class="view" id="view-agents">
+        <h1>AI Assistant Setup &amp; MCP Server</h1>
+        <p class="lead">Point Claude Code, Codex, Cursor, or Antigravity straight at Awesome-OS via <code>docs/AI_SETUP.md</code> or the built-in zero-dependency stdio MCP server.</p>
+
+        <div class="card">
+          <h2><span>MCP Client Configuration (stdio JSON-RPC 2.0)</span><span class="badge plum">holo-host-manager mcp</span></h2>
+          <div class="code-block">{
+  "mcpServers": {
+    "awesome-os": {
+      "command": "holo-host-manager",
+      "args": ["mcp"]
+    }
+  }
+}</div>
+        </div>
+
+        <div class="card">
+          <h2><span>Ask Your AI Assistant</span></h2>
+          <div class="code-block">Set up Awesome-OS on this machine following docs/AI_SETUP.md from https://github.com/awesome-os/host-manager</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 4. Slide-Over Inspector -->
+  <aside class="inspector">
+    <div class="insp-head">
+      <span id="insp-title">Host Inspector</span>
+      <button class="btn" id="btn-insp-close">✕</button>
+    </div>
+    <div class="insp-body" id="insp-body">
+      <div class="muted">Select any host or shard to inspect its SHA-512 verified v11 CAS manifest.</div>
+    </div>
+  </aside>
+</div>
+
+<script type="module">
+  const HOSTS = [
+    { id: 'workstation-local', profile: 'system://profile/workstation-omarchy', surface: 'desktop', slot: 'A', prevSlot: 'B', track: 'open-foss', ram: '587 MB', sha: '8a4f2c91e0b7d312' },
+    { id: 'colibri-ai-node', profile: 'system://profile/workstation-sectium', surface: 'desktop', slot: 'A', prevSlot: 'B', track: 'open-foss', ram: '9.9 GB (744B MoE)', sha: '3d91c0a4f7e281b0' },
+    { id: 'edge-posix-01', profile: 'system://profile/baseline-t2sde', surface: 'terminal', slot: 'B', prevSlot: 'A', track: 'pinned-v1', ram: '31 MB', sha: 'f12a7e4490c16b23' },
+  ];
+
+  const SHARD_GROUPS = [
+    { name: 'v11 Core Runtimes (9 Big Boys)', counts: [8, 12, 4] },
+    { name: 'Colibri MoE Layers 0–15', counts: [6, 10, 8] },
+    { name: 'Colibri MoE Layers 16–31', counts: [5, 9, 10] },
+    { name: 'LumiBERT 2.8ms Auto-Repair', counts: [12, 12, 0] },
+    { name: 'Wayland + WebGPU + Xwayland', counts: [10, 10, 4] },
+    { name: 'Kernel modalias Drivers', counts: [4, 8, 12] },
+  ];
+
+  const app = document.getElementById('app');
+  const setLumi = (txt) => { document.getElementById('lumi-state').textContent = txt; };
+
+  function renderFleet() {
+    const tb = document.getElementById('fleet-tbody');
+    tb.innerHTML = '';
+    for (const h of HOSTS) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${h.id}</strong></td>
+        <td><code>${h.profile.replace('system://profile/', '')}</code></td>
+        <td><span class="badge">${h.surface}</span></td>
+        <td><span class="badge ok">Slot ${h.slot} ✓</span></td>
+        <td><code>${h.track}</code></td>
+        <td style="display:flex;gap:6px;">
+          <button class="btn" data-act="inspect" data-id="${h.id}">Inspect</button>
+          <button class="btn" data-act="rollback" data-id="${h.id}">Rollback</button>
+        </td>
+      `;
+      tb.appendChild(tr);
+    }
+    tb.querySelectorAll('button').forEach((b) => {
+      b.addEventListener('click', () => {
+        const host = HOSTS.find((x) => x.id === b.dataset.id);
+        if (b.dataset.act === 'rollback') {
+          const tmp = host.slot; host.slot = host.prevSlot; host.prevSlot = tmp;
+          setLumi(`rolled back ${host.id} -> Slot ${host.slot}`);
+          renderFleet();
+        }
+        openInspector(host);
+      });
+    });
+  }
+
+  function openInspector(host) {
+    app.dataset.inspect = 'open';
+    document.getElementById('insp-title').textContent = host.id;
+    document.getElementById('insp-body').innerHTML = `
+      <div class="kv"><span>Profile</span><strong>${host.profile}</strong></div>
+      <div class="kv"><span>Active Slot</span><strong>Slot ${host.slot} (verified)</strong></div>
+      <div class="kv"><span>Driver Track</span><strong>system://driver-set/${host.track}</strong></div>
+      <div class="kv"><span>Footprint</span><strong>${host.ram}</strong></div>
+      <div class="kv"><span>CAS Tree SHA-512</span><strong>${host.sha}…</strong></div>
+      <div class="code-block">holo-host-manager rollback ${host.id}\nholo-host-manager powerwash ${host.id}</div>
+    `;
+  }
+
+  function renderShards(shuffle = false) {
+    const grid = document.getElementById('shard-grid');
+    grid.innerHTML = '';
+    for (const g of SHARD_GROUPS) {
+      const [v, r, n] = g.counts;
+      const types = [...Array(v).fill('vram'), ...Array(r).fill('ram'), ...Array(n).fill('nvme')];
+      if (shuffle) types.sort(() => Math.random() - 0.5);
+      const card = document.createElement('div');
+      card.className = 'shard-layer';
+      card.innerHTML = `
+        <div class="shard-layer-title"><span>${g.name}</span><span style="color:var(--ink-muted);font-family:var(--mono);">${v}/${r}/${n}</span></div>
+        <div class="cells">${types.map((t, i) => `<div class="cell ${t}" title="${g.name} shard #${i} (${t})"></div>`).join('')}</div>
+      `;
+      grid.appendChild(card);
+    }
+  }
+
+  function renderFit() {
+    const cores = navigator.hardwareConcurrency || 8;
+    const mem = navigator.deviceMemory || 16;
+    document.getElementById('hw-badge').textContent = `${cores} threads · ~${mem} GB+ RAM`;
+    document.getElementById('hw-probe-line').textContent = `Browser probe: ${cores} logical CPUs, ~${mem} GB reported RAM (browser-capped), platform=${navigator.platform}`;
+    const items = [
+      { name: 'Omarchy Wayland Workstation', ram: '2 / 8 GB', tier: 'RAM Resident', ok: true, rec: true },
+      { name: 'Sectium Canvas + Code-OSS', ram: '2 / 8 GB', tier: 'RAM Resident (587 MB)', ok: true, rec: false },
+      { name: 'Colibri — Qwen3.6-35B-A3B', ram: '10 / 20 GB', tier: 'Vulkan / RAM', ok: mem >= 8, rec: true },
+      { name: 'Colibri — GLM-5.2 744B MoE', ram: '16 / 32 GB', tier: 'NVMe io_uring Stream', ok: mem >= 8, rec: false },
+      { name: 'llama.cpp — Universal GGUF', ram: '4 / 16 GB', tier: 'CPU / Vulkan / Metal', ok: true, rec: false },
+      { name: 'vLLM — Multi-GPU Serving', ram: '16 / 64 GB', tier: 'GPU VRAM PagedAttention', ok: mem >= 16, rec: false },
+    ];
+    document.getElementById('fit-tbody').innerHTML = items.map((it) => `
+      <tr>
+        <td><strong>${it.name}</strong> ${it.rec ? '<span class="badge accent">Recommended</span>' : ''}</td>
+        <td style="font-family:var(--mono);font-size:12.5px;">${it.ram}</td>
+        <td>${it.tier}</td>
+        <td><span class="badge ${it.ok ? 'ok' : 'warn'}">${it.ok ? 'good' : 'tight'}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  function switchView(name) {
+    const titles = { fleet: 'Fleet & Hosts', shards: 'v11 CAS & MoE Map', fit: 'Fits My Machine', agents: 'AI Agents & MCP' };
+    document.getElementById('topbar-title').textContent = titles[name] || name;
+    document.querySelectorAll('.view').forEach((v) => v.classList.toggle('active', v.id === `view-${name}`));
+    document.querySelectorAll('[data-view]').forEach((el) => el.classList.toggle('active', el.dataset.view === name));
+  }
+
+  document.querySelectorAll('[data-view]').forEach((el) => {
+    el.addEventListener('click', () => switchView(el.dataset.view));
+  });
+  document.getElementById('btn-nav-toggle').addEventListener('click', () => {
+    app.dataset.nav = app.dataset.nav === 'open' ? 'closed' : 'open';
+  });
+  document.getElementById('btn-inspect-toggle').addEventListener('click', () => {
+    app.dataset.inspect = app.dataset.inspect === 'open' ? 'closed' : 'open';
+  });
+  document.getElementById('btn-insp-close').addEventListener('click', () => {
+    app.dataset.inspect = 'closed';
+  });
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('awesome-os.theme', next); } catch {}
+  });
+  document.getElementById('btn-sim-step').addEventListener('click', () => {
+    renderShards(true);
+    setLumi('routed MoE + v11 CAS tick · 0 B duplicated');
+  });
+
+  renderFleet();
+  renderShards(false);
+  renderFit();
+</script>
+</body>
+</html>

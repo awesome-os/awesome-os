@@ -1,0 +1,3 @@
+# SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+obj-m += b8g_abi.o
+ccflags-y += -I$(src)/../include/uapi -Wall -Wextra -Werror
