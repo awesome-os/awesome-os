@@ -1,0 +1,25 @@
+name: Holo-E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  holo-e2e:
+    uses: awesome-os/maintenance-workflows/.github/workflows/reusable-holo-e2e.yml@v1
+    with:
+      config-path: holo-ci.json
+      holo-ci-ref: v1
+      e2e-command: |
+        gcc -std=c11 -O2 -Wall -Wextra -Werror browser/firefox/firefox_launcher.c -o /tmp/firefox_launcher
+        /tmp/firefox_launcher --help
+        /tmp/firefox_launcher --self-test
+        /tmp/firefox_launcher --dry-run | tee "$HOLO_E2E_ARTIFACTS/firefox-dry-run.json"
+        node --test browser/firefox/firefox-cas.test.mts os/crostini/apt-dpkg-projector.test.mts os/bootstrap/holo-upgrade.test.mts
