@@ -18,7 +18,7 @@
 | :--- | ---: | :--- |
 | **Deduplicated `v11` Package Universe** | **`5,070` packages** | `0` duplicate vendor `.tar.*` tarballs — every package resolves through `cas://v11/` & `repository://` hardlinks |
 | **22 "Big Boys" Ecosystems Collapsed** | **`13,987 MB` → `1` CAS layer** | **15 / 22 at `100%` shared-lib coverage** (`dup_v8 = 0 B` across Chromium, Electron, Node, Deno, Bun, `lo`) |
-| **Physical SHA-512 Blobs Indexed** | **`409` assets (`399` unique blobs · `1.22 GB`)** | Ed25519-signed across `61` active repos in [`awesome-os/holo-v11`](https://github.com/awesome-os/holo-v11) (`0` archived `b8g-ghost` remnants) + `8,311` local hardlinks |
+| **Physical SHA-512 Blobs Indexed** | **`409` assets (`399` unique blobs · `1.22 GB`)** | Ed25519-signed across `61` active repos in [`awesome-os/holo-v11`](https://github.com/awesome-os/holo-v11) (unified Holo `v11` CAS, verified via [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows)) + `8,311` local hardlinks |
 | **Live Upstream Libraries Tracked** | **`56` core C/C++/GPU libs** | Auto-tracked at ahead-of-Chrome max (`openssl 4.1.0`, `harfbuzz 15.2.0`, `zstd 1.6.0`, `mimalloc 3.7.1`, `vulkan 1.4.369`, `ROCm 7.14.0`) |
 | **Dual Ring-0 Kernel Backends** | **`Holo-Linux 7.3.6` + `14.17 KB` Zig** | Full hardware Linux `7.3.6` (`b8g_abi.ko` + `scx_holo` BPF) **+** `14,512 B` freestanding RISC-V 64 Zig microkernel |
 | **Dual Sovereign Browser Engines** | **`Sectium` + `Ladybird (18/18)`** | **Sectium** (Chromium `160` Canary BSD-3, `0` closed DLLs) **+** **Ladybird** (`18/18` Chrome parity probes, `HoloHotLoopJIT`, `Wasm SIMD128`, `uBlock MV3`) |
@@ -113,6 +113,10 @@ awesome-os/
 > **Sovereign AI Companion Repo — [`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform):** Unified home for **LLM & LoRA Studio**, the **Model Garden** (`Inkling 2 Mini`, `B8G Xenon 1B`, `LittleBit`, `Micro-MoE`, `SpinWave`), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** ([Live App](https://b8g.dev/awesome-os/apps/agent-platform.html)).
 >
 > **Chromium & V8 Substrate Repo — [`awesome-os/chromium-baseline`](https://github.com/awesome-os/chromium-baseline):** Unified shared dynamic `libv8` (`components/libv8_monolith`), `just-js`/`lo` (`components/just-js/{lo,just-js}`), and `components/angrybird` substrates (`dup_v8 = 0 B`).
+>
+> **Unified DevTools Monorepo — [`awesome-os/devtools`](https://github.com/awesome-os/devtools):** Consolidates IDEs (`code-oss`, `theia`, `b8g-ide`), VS Code / Open VSX extensions, Game Engines, native C11 dynamic launchers, and 4DGS / Holonomic Game Engine research over **Holo v11 CAS**.
+>
+> **Zero-Dependency CI & Verification — [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows):** Centralized Node 24/26 erasable-TS verification, guard enforcement, and `holo-ci.receipt.v1` telemetry via [`reusable-holo-ci.yml@v1`](https://github.com/awesome-os/maintenance-workflows/blob/v1/.github/workflows/reusable-holo-ci.yml).
 
 ---
 

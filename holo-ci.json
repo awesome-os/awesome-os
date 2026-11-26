@@ -1,0 +1,17 @@
+{
+  "schema": "holo-ci.v1",
+  "name": "awesome-os",
+  "kind": "monorepo",
+  "tests": [
+    "node --test os/bootstrap/holo-upgrade.test.mts",
+    "node --test os/bootstrap/holo-distro-bootstrap.test.mts"
+  ],
+  "docs": [
+    "README.md",
+    "ARCHITECTURE.md"
+  ],
+  "guards": {
+    "zeroGhost": true,
+    "zeroCasV1": true
+  }
+}
