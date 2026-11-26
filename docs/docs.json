@@ -1,0 +1,57 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Awesome-OS",
+  "description": "Tiny immutable v11 CAS core, infinite software — zero-duplication workstations, bare-metal UEFI/POSIX, and hierarchical MoE LLMs.",
+  "colors": {
+    "primary": "#0a8c8c",
+    "light": "#38c6c6",
+    "dark": "#067070"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": ["index", "quickstart", "web-installer", "AI_SETUP", "MCP_SERVER"]
+          },
+          {
+            "group": "Workstations & Desktop",
+            "pages": ["desktop/omarchy", "desktop/noctalia", "desktop/sectium", "desktop/chonkstep", "desktop/why-no-x11"]
+          },
+          {
+            "group": "AI & LLM Engines",
+            "pages": ["llm/colibri", "llm/llama-cpp", "llm/vllm", "llm/lumibert"]
+          },
+          {
+            "group": "Fleet & Host Manager",
+            "pages": ["fleet/ab-slots", "fleet/powerwash", "fleet/drivers-modalias", "fleet/netboot"]
+          },
+          {
+            "group": "Compilers & Runtimes",
+            "pages": ["runtimes/holo-compiler", "runtimes/v11-cas", "runtimes/big-boys-overlap", "runtimes/t2linux-baseline"]
+          },
+          {
+            "group": "Benchmarks & Contribute",
+            "pages": ["benchmarks/ecosystem-scoreboard", "benchmarks/chrome-parity"]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      { "label": "Web Installer", "href": "https://awesome-os.com/install/" },
+      { "label": "Workstations", "href": "https://b8g.app/" },
+      { "label": "Developers", "href": "https://b8g.dev/awesome-os/" },
+      { "label": "GitHub", "href": "https://github.com/awesome-os", "icon": "github" }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Install Now",
+      "href": "https://awesome-os.com/install/"
+    }
+  }
+}
