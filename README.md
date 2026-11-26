@@ -31,11 +31,14 @@ awesome-os/
 │   ├── bootloader/       # Limine v11/v12, systemd-boot, iPXE + C11 UEFI GOP 24-bit BMP splash blitter
 │   ├── kernel/           # Holo-Linux 7.3.6 kconfig, b8g_abi.ko (/dev/b8g-arena), scx_holo BPF, AGENTS.md
 │   └── shell/            # ChromeOS-style AwesomeOS Desktop Shell (Shelf, Omnibox, Crostini, Powerwash)
-├── compiler/
-│   └── holo-ffi/         # Zero-dependency SHA-512 v11 CAS FFI loader & 0-byte hardlink projector
-├── security/
-│   └── verified-boot.mts # Ed25519 + SHA-512 root manifest signer & Omaha-style update verifier
+├── runtime/              # 4-Layer C11/WASI/Kotlin substrates (sectium-cp, b8g-runtime, sectium-es, sectium-jvm)
+├── compiler/             # holo-compiler (Tier-A <1s), holo-pm, and holo-ffi (0-byte hardlink projector)
+├── registry/             # holo-v11 fixed-point verifier, CAS deduplicator, and Oversight dashboard
+├── security/             # Ed25519 + SHA-512 root manifest signer & Omaha-style update verifier
 ├── fleet/                # Host Manager (A/B slots, Powerwash, Hardware-Fit MoE, 11-tool stdio MCP)
+├── installer/            # Declarative .mts stamper + Browser OPFS / showDirectoryPicker OOBE
+├── deployment/           # Production multi-domain deployer + C++20 Virtual Domain Manager
+├── ai/                   # Sovereign AI Triad bridges (Colibri LumiBERT 2.8ms, llama.cpp, vLLM)
 ├── sections/             # Core zero-copy runtime & device boundary units (sectium-device, web-components)
 ├── intersections/        # Multi-section control-plane & agent host compositions
 ├── packages/             # Shared @awesome-os/* TypeScript & StealifyLang libraries

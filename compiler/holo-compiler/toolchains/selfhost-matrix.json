@@ -1,0 +1,109 @@
+{
+  "schema": "awesome-os-selfhost-toolchain-matrix-v1",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "bootstrapProvider": "repository://github.com/awesome-os/holo-pm@main",
+  "nativeCore": [
+    {
+      "id": "libholo_codegen",
+      "repositoryUri": "repository://github.com/awesome-os/holo-compiler@main#src/codegen",
+      "projectUri": "project://holo-compiler/libholo_codegen?from=repository://github.com/awesome-os/holo-compiler@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Native C11/WASI code generator and object emitter"
+    },
+    {
+      "id": "stealify-ssa",
+      "repositoryUri": "repository://github.com/awesome-os/holo-compiler@main#src/ssa",
+      "projectUri": "project://holo-compiler/stealify-ssa?from=repository://github.com/awesome-os/holo-compiler@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "StealifyLang SSA IR lowering and 7-Tuple effect verifier"
+    },
+    {
+      "id": "sub-tu-splicer",
+      "repositoryUri": "repository://github.com/awesome-os/holo-compiler@main#src/splicer",
+      "projectUri": "project://holo-compiler/sub-tu-splicer?from=repository://github.com/awesome-os/holo-compiler@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Sub-TU incremental code-block splicer over v11 CAS"
+    },
+    {
+      "id": "holo-project",
+      "repositoryUri": "repository://github.com/awesome-os/holo-compiler@main#src/project",
+      "projectUri": "project://holo-compiler/holo-project?from=repository://github.com/awesome-os/holo-compiler@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "0-byte hardlink worktree and runtime projector"
+    },
+    {
+      "id": "git-remote-repository",
+      "repositoryUri": "repository://github.com/awesome-os/holo-compiler@main#src/git-remote-repository",
+      "projectUri": "project://holo-compiler/git-remote-repository?from=repository://github.com/awesome-os/holo-compiler@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Stock git remote helper for repository:// URIs"
+    },
+    {
+      "id": "holo-jq",
+      "repositoryUri": "repository://github.com/awesome-os/holo-compiler@main#src/holo-jq",
+      "projectUri": "project://holo-compiler/holo-jq?from=repository://github.com/awesome-os/holo-compiler@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Zero-copy JSON/manifest query filter for Holo pipelines"
+    }
+  ],
+  "projectedToolchains": [
+    {
+      "id": "llvm-zig",
+      "repositoryUri": "repository://github.com/awesome-os/ghost-cpp@main",
+      "projectUri": "project://holo-cpp/zig-cc?from=repository://github.com/awesome-os/ghost-cpp@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Native C/C++ and Zig cross-compilation toolchain"
+    },
+    {
+      "id": "cargo-rust",
+      "repositoryUri": "repository://github.com/awesome-os/cargo@main",
+      "projectUri": "project://holo-rust/cargo?from=repository://github.com/awesome-os/cargo@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Hermetic Rust/Cargo crate projection (awesome-os/cargo)"
+    },
+    {
+      "id": "go-lang",
+      "repositoryUri": "repository://github.com/awesome-os/go-lang@main",
+      "projectUri": "project://holo-go/go?from=repository://github.com/awesome-os/go-lang@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "cacheProg": "b8g-gocacheprog",
+      "role": "Go toolchain with b8g-gocacheprog v11 CAS object cache"
+    },
+    {
+      "id": "dart",
+      "repositoryUri": "repository://github.com/awesome-os/dart@main",
+      "projectUri": "project://holo-dart/dart?from=repository://github.com/awesome-os/dart@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Dart AOT and WasmGC v11 toolchain projection"
+    },
+    {
+      "id": "node-v8",
+      "repositoryUri": "repository://github.com/awesome-os/node@main",
+      "projectUri": "project://holo-node/node?from=repository://github.com/awesome-os/node@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Shared-V8 (dup_v8=0 B) Node.js runtime projection"
+    },
+    {
+      "id": "uv-py",
+      "repositoryUri": "repository://github.com/awesome-os/uv@main",
+      "projectUri": "project://holo-py/uv?from=repository://github.com/awesome-os/uv@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Hermetic uv/Python wheel projection"
+    },
+    {
+      "id": "coreutils",
+      "repositoryUri": "repository://github.com/awesome-os/coreutils@main",
+      "projectUri": "project://holo-coreutils/coreutils?from=repository://github.com/awesome-os/coreutils@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "Hermetic multicall POSIX coreutils projection"
+    },
+    {
+      "id": "wasi-host",
+      "repositoryUri": "repository://github.com/awesome-os/wasi-host@main",
+      "projectUri": "project://holo-wasi-host/wasi-host?from=repository://github.com/awesome-os/wasi-host@main&mode=persistent",
+      "casHardlinkMode": "v11",
+      "role": "2.6 KB WASI sandbox and 7-Tuple hook executor"
+    }
+  ]
+}

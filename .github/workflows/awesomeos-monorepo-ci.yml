@@ -18,13 +18,19 @@ jobs:
       - name: Generate deterministic 24-bit UEFI GOP splash BMPs
         run: node os/bootloader/assets/generate-splash.mts
 
-      - name: Run TypeScript verification suites (Ed25519 Verified Boot, Kernel, Bootloader, Holo-FFI)
+      - name: Run TypeScript verification suites (Verified Boot, Kernel, Bootloader, Holo-FFI, Installer, VDM, Compiler Debug)
         run: |
           node --test \
             security/verified-boot.test.mts \
             os/kernel/holo-kbuild.test.mts \
             os/bootloader/bootloader.test.mts \
-            compiler/holo-ffi/holo-ffi.test.mts
+            compiler/holo-ffi/holo-ffi.test.mts \
+            sections/sectium-device/universal-compiler-debug.test.mts \
+            installer/test/installer.test.mts \
+            deployment/virtual-domain-manager.test.mts
+
+      - name: Compile C++20 Virtual Domain Manager (-Werror)
+        run: g++ -std=c++20 -O2 -Wall -Wextra -Werror deployment/local-cpp/vdm_local.cpp -o /tmp/vdm-local
 
       - name: Compile & run C11 Holo-Linux B8G_ABI_MAGIC_V3 self-test (-Werror)
         run: |

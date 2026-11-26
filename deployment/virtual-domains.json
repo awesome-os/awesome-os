@@ -1,0 +1,107 @@
+{
+  "schema": "awesome-os.virtual-domains.v1",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "updatedAt": "2026-11-26T08:33:00.000Z",
+  "mounts": [
+    {
+      "id": "awesome-os.com/",
+      "host": "awesome-os.com",
+      "pathPrefix": "/",
+      "activeSlot": "A",
+      "slots": { "A": "repository://github.com/awesome-os/desktop@main/web-sites/awesome-os-enterprise.html" },
+      "kind": "repository",
+      "cacheControl": "public, max-age=60",
+      "description": "Enterprise Sovereign OS landing page"
+    },
+    {
+      "id": "awesome-os.com/cloud",
+      "host": "awesome-os.com",
+      "pathPrefix": "/cloud",
+      "activeSlot": "A",
+      "slots": { "A": "repository://github.com/awesome-os/desktop@main/web-sites/awesome-os-cloud.html" },
+      "kind": "repository",
+      "cacheControl": "public, max-age=60",
+      "description": "Enterprise Cloud & Fleet offers"
+    },
+    {
+      "id": "awesome-os.com/install",
+      "host": "awesome-os.com",
+      "pathPrefix": "/install",
+      "activeSlot": "A",
+      "slots": { "A": "repository://github.com/awesome-os/installer@main/web" },
+      "kind": "repository",
+      "cacheControl": "public, max-age=60",
+      "description": "Direct-Drop OPFS & Local Folder Web Installer + v11 blobs"
+    },
+    {
+      "id": "b8g.app/",
+      "host": "b8g.app",
+      "pathPrefix": "/",
+      "activeSlot": "A",
+      "slots": { "A": "repository://github.com/awesome-os/desktop@main/web-sites/b8g-app-index.html" },
+      "kind": "repository",
+      "cacheControl": "public, max-age=60",
+      "description": "Workstation & Instant Apps Hub"
+    },
+    {
+      "id": "b8g.dev/",
+      "host": "b8g.dev",
+      "pathPrefix": "/",
+      "activeSlot": "A",
+      "slots": { "A": "repository://github.com/awesome-os/desktop@main/web-sites/b8g-dev-index.html" },
+      "kind": "repository",
+      "cacheControl": "public, max-age=60",
+      "description": "Developer & Systems Engineering Portal"
+    },
+    {
+      "id": "b8g.dev/awesome-os/apps/host-manager.html",
+      "host": "b8g.dev",
+      "pathPrefix": "/awesome-os/apps/host-manager.html",
+      "activeSlot": "A",
+      "slots": { "A": "repository://github.com/awesome-os/host-manager@main/console/index.html" },
+      "kind": "repository",
+      "cacheControl": "public, max-age=60",
+      "description": "Colibri-style 4-column Unified Host Manager Dashboard"
+    },
+    {
+      "id": "b8g.dev/awesome-os/apps/oversight.html",
+      "host": "b8g.dev",
+      "pathPrefix": "/awesome-os/apps/oversight.html",
+      "activeSlot": "A",
+      "slots": { "A": "repository://github.com/awesome-os/holo-v11@main/dashboard/oversight.html" },
+      "kind": "repository",
+      "cacheControl": "public, max-age=60",
+      "description": "Internal Oversight & Live GitHub Runner Telemetry Dashboard"
+    },
+    {
+      "id": "ide.b8g.dev/ai-colibri",
+      "host": "ide.b8g.dev",
+      "pathPrefix": "/ai-colibri",
+      "activeSlot": "A",
+      "slots": { "A": "workspaces://awesome-os/ai-colibri" },
+      "kind": "workspaces",
+      "cacheControl": "public, max-age=60",
+      "description": "Virtual subdomain mount for workspaces://awesome-os/ai-colibri"
+    },
+    {
+      "id": "ai.b8g.app/v1",
+      "host": "ai.b8g.app",
+      "pathPrefix": "/v1",
+      "activeSlot": "A",
+      "slots": { "A": "pipe://b8g-colibri" },
+      "kind": "pipe",
+      "description": "Colibri MoE inference gateway bridged over host pipe / mTLS"
+    },
+    {
+      "id": "cdn.awesome-os.com/v11",
+      "host": "cdn.awesome-os.com",
+      "pathPrefix": "/v11",
+      "activeSlot": "A",
+      "slots": { "A": "cas://v11/files" },
+      "kind": "cas-v11",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "description": "Immutable SHA-512 v11 CAS blob CDN"
+    }
+  ]
+}

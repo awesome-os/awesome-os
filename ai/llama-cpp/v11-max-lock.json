@@ -1,0 +1,20 @@
+{
+  "schema": "awesome-os.v11-max-lock.v1",
+  "repo": "awesome-os/llama.cpp",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "workspaceUri": "workspaces://awesome-os/ai-colibri",
+  "pins": {
+    "vulkan-headers": "1.4.369",
+    "vulkan-loader": "1.4.369",
+    "glslang": "16.6.0",
+    "curl": "8.23.0",
+    "openssl": "4.1.0",
+    "zstd": "1.6.0",
+    "zlib-ng": "2.3.3",
+    "mimalloc": "3.7.1",
+    "openblas": "0.3.34",
+    "cmake": "4.5.1",
+    "ninja": "1.13.2"
+  }
+}

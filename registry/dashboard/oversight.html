@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Awesome-OS Oversight — Runners, Upstreams &amp; v11 Telemetry</title>
+<script>
+(() => {
+  let c = 'dark';
+  try { const s = localStorage.getItem('awesome-os.theme'); if (s === 'light' || s === 'dark') c = s; } catch {}
+  document.documentElement.dataset.theme = c;
+})();
+</script>
+<style>
+  :root {
+    --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "Cascadia Code", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #141414; --surface: #1a1a1a; --surface-2: #222222; --line: #333333; --line-soft: #262626;
+    --ink: #ececec; --muted: #8b8b8b; --accent: #38c6c6; --accent-tint: rgba(56,198,198,.14);
+    --ok: #4ad08a; --ok-tint: rgba(74,208,138,.14); --warn: #f8c96a; --warn-tint: rgba(245,181,61,.14);
+    --err: #ff7a88; --err-tint: rgba(255,122,136,.14); --info: #7cc4ff; --info-tint: rgba(58,169,255,.14);
+  }
+  [data-theme="light"] {
+    --bg: #f7f7f6; --surface: #ffffff; --surface-2: #f1f1ef; --line: #dcdcd8; --line-soft: #ececea;
+    --ink: #1b1b1b; --muted: #6e6e6e; --accent: #0a8c8c; --accent-tint: #e2f5f5;
+    --ok: #108a4a; --ok-tint: #e4f7ec; --warn: #8a5a00; --warn-tint: #fff6e0;
+    --err: #c42a3a; --err-tint: #fdebec; --info: #0666bd; --info-tint: #e6f3ff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 14px; line-height: 1.5; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  header {
+    position: sticky; top: 0; z-index: 10; background: var(--surface); border-bottom: 1px solid var(--line);
+    padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .brand { font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+  .logo { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); color: #051d1d; display: grid; place-items: center; font-size: 11px; font-weight: 900; }
+  .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  button, .pill-link {
+    background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 9px;
+    padding: 6px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  button:hover, .pill-link:hover { border-color: var(--accent); text-decoration: none; }
+
+  main { max-width: 1220px; margin: 0 auto; padding: 24px 20px 64px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 22px; }
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 13px; padding: 14px 16px; }
+  .kpi .v { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .kpi .k { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .grid2 { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 16px; align-items: start; }
+  @media (max-width: 960px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+  .card h2 { margin: 0 0 12px; font-size: 15px; display: flex; align-items: center; justify-content: space-between; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--line-soft); }
+  th { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  tr:last-child td { border-bottom: 0; }
+  code { font-family: var(--mono); font-size: 12px; }
+
+  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; font-family: var(--mono); }
+  .badge.ok { background: var(--ok-tint); color: var(--ok); }
+  .badge.run { background: var(--info-tint); color: var(--info); }
+  .badge.fail { background: var(--err-tint); color: var(--err); }
+  .badge.warn { background: var(--warn-tint); color: var(--warn); }
+  .badge.accent { background: var(--accent-tint); color: var(--accent); }
+
+  .bar-wrap { height: 7px; border-radius: 999px; background: var(--surface-2); overflow: hidden; margin-top: 5px; }
+  .bar-fill { height: 100%; background: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">AOS</span> Awesome-OS Internal Oversight &amp; Telemetry</div>
+  <div class="actions">
+    <span id="gen-at" style="font-family:var(--mono);font-size:11.5px;color:var(--muted);">Loading…</span>
+    <button id="btn-refresh">↻ Refresh</button>
+    <button id="btn-theme">◐ Theme</button>
+    <a class="pill-link" href="https://awesome-os.com/shell/">AwesomeOS Shell</a>
+    <a class="pill-link" href="/awesome-os/apps/host-manager.html">Host Manager</a>
+    <a class="pill-link" href="https://awesome-os.com/install/">Web Installer</a>
+  </div>
+</header>
+
+<main>
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grid2">
+    <div>
+      <section class="card">
+        <h2><span id="runners-heading">GitHub Actions Runners (Core Org)</span><span class="badge accent" id="runner-summary">live</span></h2>
+        <table>
+          <thead><tr><th>Repository</th><th>Workflow</th><th>Status</th><th>Updated</th></tr></thead>
+          <tbody id="runners-tbody"></tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2><span id="bb-heading">Big Boys × v11 CAS Deduplication</span><span class="badge ok" id="bb-saved">live</span></h2>
+        <div id="bigboys-list"></div>
+      </section>
+    </div>
+
+    <div>
+      <section class="card">
+        <h2><span id="upstreams-heading">Upstream Library Drift Radar</span><span class="badge ok" id="upstream-summary">live</span></h2>
+        <table>
+          <thead><tr><th>Library</th><th>v11 Pin</th><th>Upstream</th><th>State</th></tr></thead>
+          <tbody id="upstreams-tbody"></tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+  async function loadTelemetry() {
+    const resp = await fetch('./oversight-telemetry.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const d = await resp.json();
+
+    document.getElementById('gen-at').textContent = `Updated: ${d.generatedAt.replace('T', ' ').slice(0, 19)} UTC`;
+    document.getElementById('kpis').innerHTML = `
+      <div class="kpi"><div class="v" style="color:var(--ok);">${d.summary.passingRuns} / ${d.summary.totalReposMonitored}</div><div class="k">CI Passing Repos</div></div>
+      <div class="kpi"><div class="v" style="color:var(--info);">${d.summary.activeRuns}</div><div class="k">Active GitHub Runners</div></div>
+      <div class="kpi"><div class="v">${d.chromiumCanary.version}</div><div class="k">Chromium Canary (M${d.chromiumCanary.milestone} · V8 ${d.chromiumCanary.v8Hash})</div></div>
+      <div class="kpi"><div class="v">${d.summary.upstreamLibsTracked} libs</div><div class="k">Live Upstream Tracked</div></div>
+      <div class="kpi"><div class="v">427 blobs</div><div class="k">Physical Verified v11 CAS (1.22 GB · 69 repos)</div></div>
+      <div class="kpi"><div class="v">${d.summary.bigBoysCount} targets</div><div class="k">Tracked Dedup Matrix (${d.summary.standaloneDiskSavedMb} MB)</div></div>
+    `;
+
+    document.getElementById('runners-heading').textContent = `GitHub Actions Runners (${d.runners.length} Core Repos)`;
+    document.getElementById('upstreams-heading').textContent = `Upstream Library Drift Radar (${d.upstreams.length} Core Libs)`;
+    document.getElementById('bb-heading').textContent = `${d.bigBoys.length} Big Boys × v11 CAS Deduplication`;
+    document.getElementById('bb-saved').textContent = `${d.summary.standaloneDiskSavedMb.toLocaleString()} MB → 1 layer`;
+    document.getElementById('runner-summary').textContent = `${d.summary.passingRuns} pass · ${d.summary.activeRuns} active · ${d.summary.failingRuns} fail`;
+    document.getElementById('runners-tbody').innerHTML = d.runners.map((r) => {
+      const cls = r.status === 'in_progress' || r.status === 'queued'
+        ? 'run'
+        : r.conclusion === 'success'
+          ? 'ok'
+          : r.conclusion === 'failure'
+            ? 'fail'
+            : 'warn';
+      const label = r.status === 'in_progress' ? 'RUNNING' : (r.conclusion || r.status).toUpperCase();
+      return `
+        <tr>
+          <td><a href="${r.url}" target="_blank" rel="noopener"><code>${r.repo.replace('awesome-os/', '')}</code></a></td>
+          <td style="color:var(--muted);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.workflowName}</td>
+          <td><span class="badge ${cls}">${label}</span></td>
+          <td style="font-family:var(--mono);font-size:11.5px;color:var(--muted);">${r.updatedAt ? r.updatedAt.slice(5, 16).replace('T', ' ') : '—'}</td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('upstreams-tbody').innerHTML = d.upstreams.map((u) => {
+      const pin = u.previousV11 || u.upstreamVersion;
+      const cls = u.bumped ? 'warn' : 'ok';
+      const state = u.bumped ? 'BUMPED' : 'AT MAX';
+      return `
+        <tr>
+          <td><strong>${u.pkg}</strong></td>
+          <td><code>${pin}</code></td>
+          <td><code>${u.upstreamVersion}</code></td>
+          <td><span class="badge ${cls}">${state}</span></td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('bigboys-list').innerHTML = d.bigBoys.map((b) => {
+      const covered = b.coveredInV11 ?? b.covered ?? 0;
+      const total = b.totalLibs ?? b.total ?? 0;
+      const pct = b.coveragePercent ?? Math.round((covered / Math.max(1, total)) * 100);
+      return `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+            <strong>${b.name}</strong>
+            <span style="font-family:var(--mono);color:var(--muted);">${covered}/${total} (${pct}%)</span>
+          </div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;"></div></div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('btn-refresh').addEventListener('click', loadTelemetry);
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('awesome-os.theme', next); } catch {}
+  });
+  loadTelemetry().catch((e) => {
+    document.getElementById('gen-at').textContent = `Error: ${e.message}`;
+  });
+</script>
+</body>
+</html>

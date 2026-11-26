@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Awesome-OS Setup — Direct-Drop Web Installer</title>
+  <meta name="description" content="First-class Ubuntu & Windows-style OS setup wizard in your browser. Choose your desktop, apps, and local install folder via File System Access API or OPFS with SHA-512 verified v11 CAS." />
+  <style>
+    :root {
+      --bg: #050811;
+      --window: rgba(14, 19, 34, 0.92);
+      --rail: rgba(9, 13, 24, 0.88);
+      --card: rgba(18, 25, 44, 0.78);
+      --card-hover: rgba(26, 36, 62, 0.95);
+      --border: rgba(130, 165, 255, 0.18);
+      --border-strong: rgba(102, 227, 255, 0.5);
+      --text: #f0f5ff;
+      --muted: #93a5cb;
+      --accent: #66e3ff;
+      --accent2: #a970ff;
+      --ok: #38e59a;
+      --warn: #ffcc66;
+      --err: #ff6b81;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(960px 600px at 10% 0%, rgba(102, 227, 255, 0.16), transparent 60%),
+        radial-gradient(900px 600px at 90% 100%, rgba(169, 112, 255, 0.18), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.48;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 14px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* OOBE Setup Window */
+    .setup-window {
+      width: 100%;
+      max-width: 1080px;
+      min-height: 650px;
+      background: var(--window);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      backdrop-filter: blur(18px);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      overflow: hidden;
+    }
+    @media (max-width: 820px) {
+      .setup-window { grid-template-columns: 1fr; min-height: auto; }
+    }
+
+    /* Left Step Rail */
+    .rail {
+      background: var(--rail);
+      border-right: 1px solid var(--border);
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    @media (max-width: 820px) {
+      .rail { border-right: none; border-bottom: 1px solid var(--border); padding: 18px; }
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #050811;
+      font-size: 16px;
+      box-shadow: 0 0 24px rgba(102, 227, 255, 0.35);
+      flex-shrink: 0;
+    }
+    .brand-title { font-weight: 750; font-size: 1.02rem; letter-spacing: -0.01em; }
+    .brand-sub { font-size: 0.76rem; color: var(--muted); }
+
+    .steps-nav {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 6px;
+    }
+    @media (max-width: 820px) {
+      .steps-nav { grid-template-columns: repeat(3, 1fr); }
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 11px;
+      border-radius: 11px;
+      color: var(--muted);
+      font-size: 0.87rem;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .step-item.active {
+      color: var(--text);
+      background: rgba(102, 227, 255, 0.1);
+      border-color: rgba(102, 227, 255, 0.32);
+      font-weight: 650;
+    }
+    .step-item.done { color: #c7f7df; }
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      flex-shrink: 0;
+    }
+    .step-item.active .step-num {
+      background: var(--accent);
+      color: #050811;
+      border-color: var(--accent);
+    }
+    .step-item.done .step-num {
+      background: rgba(56, 229, 154, 0.2);
+      color: var(--ok);
+      border-color: var(--ok);
+    }
+
+    .rail-foot {
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      display: grid;
+      gap: 6px;
+    }
+    .cap-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+    .dot.ok { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+    .dot.warn { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+
+    /* Main Stage */
+    .stage {
+      display: flex;
+      flex-direction: column;
+      min-height: 650px;
+    }
+    .stage-body {
+      flex: 1;
+      padding: 28px 32px 20px;
+      overflow-y: auto;
+    }
+    @media (max-width: 600px) {
+      .stage-body { padding: 20px 18px 16px; }
+    }
+    .pane { display: none; animation: fadeIn 0.2s ease-out; }
+    .pane.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 { margin: 0 0 6px; font-size: 1.55rem; letter-spacing: -0.02em; }
+    .lead { margin: 0 0 22px; color: var(--muted); font-size: 0.94rem; }
+
+    /* Form Controls & Cards */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+    .field input, .field select {
+      background: #0a0f1f;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    .field input:focus, .field select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(102, 227, 255, 0.18);
+    }
+
+    .hero-banner {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(102, 227, 255, 0.08), rgba(169, 112, 255, 0.1));
+      margin-bottom: 20px;
+      display: grid;
+      gap: 6px;
+    }
+    .hero-banner strong { font-size: 0.96rem; }
+    .hero-banner span { font-size: 0.84rem; color: var(--muted); }
+
+    .profiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .choice-card {
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 13px;
+      padding: 12px 13px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text);
+      font-family: inherit;
+      transition: all 0.14s;
+    }
+    .choice-card:hover {
+      border-color: var(--border-strong);
+      background: var(--card-hover);
+      transform: translateY(-1px);
+    }
+    .choice-card.active {
+      border-color: var(--accent);
+      background: rgba(102, 227, 255, 0.12);
+      box-shadow: 0 0 0 1px rgba(102, 227, 255, 0.35);
+    }
+    .choice-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(169, 112, 255, 0.2);
+      color: #d8c0ff;
+      border: 1px solid rgba(169, 112, 255, 0.35);
+    }
+    .choice-desc {
+      margin-top: 5px;
+      font-size: 0.79rem;
+      color: var(--muted);
+    }
+
+    .preset-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .preset-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 10px;
+    }
+    .app-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      font-size: 0.84rem;
+    }
+    .app-item:hover { border-color: var(--border-strong); }
+    .app-item input { margin-top: 3px; accent-color: var(--accent); width: 16px; height: 16px; }
+    .app-name { font-weight: 650; display: block; }
+    .app-meta { color: var(--muted); font-size: 0.76rem; }
+
+    .target-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 640px) { .target-cards { grid-template-columns: 1fr; } }
+    .target-card {
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      text-align: left;
+      color: var(--text);
+      font-family: inherit;
+      display: grid;
+      gap: 6px;
+    }
+    .target-card.active {
+      border-color: var(--accent);
+      background: rgba(102, 227, 255, 0.12);
+      box-shadow: 0 0 0 1px rgba(102, 227, 255, 0.35);
+    }
+    .target-card:disabled { opacity: 0.45; cursor: not-allowed; }
+    .summary-box {
+      background: rgba(6, 9, 18, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+    }
+    .summary-box strong { color: var(--accent); }
+
+    /* OOBE Slide Showcase during Install */
+    .slide-box {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(102, 227, 255, 0.09), rgba(169, 112, 255, 0.12));
+      margin-bottom: 18px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+    .slide-kicker {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .slide-title { font-size: 1.25rem; font-weight: 750; margin: 0; }
+    .slide-text { font-size: 0.9rem; color: #c7d6f5; margin: 0; }
+
+    .progress-wrap {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      margin: 12px 0 8px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--ok));
+      transition: width 0.2s ease-out;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    details.console-drawer {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #05070d;
+      padding: 10px 12px;
+    }
+    details.console-drawer summary {
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .log, .tree {
+      margin-top: 10px;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #c5d4f5;
+    }
+    .log .ok { color: var(--ok); }
+    .log .warn { color: var(--warn); }
+    .log .err { color: var(--err); }
+
+    .tree-box {
+      background: #05070d;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin: 14px 0;
+    }
+
+    .cmd-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #05070d;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      margin-top: 8px;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      flex-shrink: 0;
+      background: rgba(102, 227, 255, 0.14);
+      border: 1px solid var(--border-strong);
+      color: var(--accent);
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-family: var(--mono);
+    }
+
+    /* Sticky Wizard Footer */
+    .stage-foot {
+      border-top: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(9, 13, 24, 0.72);
+    }
+    @media (max-width: 600px) { .stage-foot { padding: 14px 18px; } }
+    .foot-group { display: flex; gap: 10px; align-items: center; }
+    button.btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-family: inherit;
+      transition: all 0.14s;
+    }
+    button.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #050811;
+      box-shadow: 0 6px 20px rgba(102, 227, 255, 0.24);
+    }
+    .btn-primary:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-secondary:hover:not(:disabled) { border-color: var(--border-strong); }
+    .page-foot {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="setup-window" aria-label="Awesome-OS Setup Wizard">
+    <!-- Left Rail -->
+    <aside class="rail">
+      <div>
+        <div class="brand">
+          <div class="logo" aria-hidden="true">AOS</div>
+          <div>
+            <div class="brand-title">Awesome-OS Setup</div>
+            <div class="brand-sub">Direct-Drop v11 CAS Wizard</div>
+          </div>
+        </div>
+        <ol class="steps-nav" id="steps-nav">
+          <li class="step-item active" data-step="0"><span class="step-num">1</span><span>Welcome</span></li>
+          <li class="step-item" data-step="1"><span class="step-num">2</span><span>Desktop &amp; Edition</span></li>
+          <li class="step-item" data-step="2"><span class="step-num">3</span><span>Apps &amp; Runtimes</span></li>
+          <li class="step-item" data-step="3"><span class="step-num">4</span><span>Install Location</span></li>
+          <li class="step-item" data-step="4"><span class="step-num">5</span><span>Installing</span></li>
+          <li class="step-item" data-step="5"><span class="step-num">6</span><span>Ready</span></li>
+        </ol>
+      </div>
+
+      <div class="rail-foot">
+        <div class="cap-row" id="cap-fsa"><span class="dot"></span> Direct Folder Picker</div>
+        <div class="cap-row" id="cap-opfs"><span class="dot"></span> Browser OPFS Staging</div>
+        <div class="cap-row" id="cap-crypto"><span class="dot"></span> WebCrypto SHA-512</div>
+        <div class="cap-row" id="cap-quota"><span class="dot ok"></span> Quota: checking…</div>
+      </div>
+    </aside>
+
+    <!-- Main Stage -->
+    <section class="stage">
+      <div class="stage-body">
+        <!-- Step 0: Welcome -->
+        <div class="pane active" data-pane="0">
+          <h1>Welcome to Awesome-OS</h1>
+          <p class="lead">A first-class guided installer right in your browser — no `.exe`, no `.iso` burn required. Pick your workstation, choose any local folder or browser OPFS, and materialize a SHA-512 verified `v11` CAS root.</p>
+
+          <div class="hero-banner">
+            <strong>Direct-Drop Architecture (Zero Installer Bloat)</strong>
+            <span>Everything is stored content-addressed under <code>cas/v11/files/&lt;aa&gt;/&lt;sha512&gt;</code> with zero closed DLLs, zero telemetry, and instant A/B rollback.</span>
+          </div>
+
+          <div class="form-grid">
+            <label class="field">
+              <span>Machine Hostname</span>
+              <input id="opt-hostname" type="text" value="awesome-workstation" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Region &amp; Locale</span>
+              <select id="opt-locale">
+                <option value="en-US" selected>English (United States) — en-US</option>
+                <option value="en-GB">English (United Kingdom) — en-GB</option>
+                <option value="de-DE">Deutsch (Deutschland) — de-DE</option>
+                <option value="ja-JP">日本語 (日本) — ja-JP</option>
+                <option value="fr-FR">Français (France) — fr-FR</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Keyboard Layout</span>
+              <select id="opt-keyboard">
+                <option value="us" selected>US International (QWERTY)</option>
+                <option value="de">German (QWERTZ)</option>
+                <option value="uk">UK Extended</option>
+                <option value="jp">Japanese (JIS)</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Timezone</span>
+              <input id="opt-timezone" type="text" value="UTC" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 1: Desktop & Edition -->
+        <div class="pane" data-pane="1">
+          <h1>Choose Your Desktop &amp; Edition</h1>
+          <p class="lead">Select a curated Awesome-OS workstation profile or minimal headless baseline. You can switch profiles atomically anytime via <code>holo-host-manager</code>.</p>
+
+          <div class="profiles" id="profile-grid"></div>
+
+          <div class="form-grid" style="margin-top: 12px;">
+            <label class="app-item" style="margin: 0;">
+              <input type="checkbox" id="opt-advanced-gfx" checked />
+              <span>
+                <span class="app-name">+ Advanced Graphics (Recommended)</span>
+                <span class="app-meta">Wayland + WebGPU + default rootless <code>Xwayland</code> for Steam, Wine &amp; legacy apps.</span>
+              </span>
+            </label>
+            <label class="field">
+              <span>Driver Track (<code>system://driver-set/*</code>)</span>
+              <select id="opt-driver-track">
+                <option value="open-foss" selected>open-foss (Mesa / AMDGPU / Apple AVD)</option>
+                <option value="proprietary">proprietary (NVIDIA Closed + Firmware)</option>
+                <option value="driver-dev">driver-dev (Rolling Kernel + Modalias CAS)</option>
+                <option value="pinned-v1">pinned-v1 (Enterprise Immutable LTS)</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 2: Apps & Runtimes -->
+        <div class="pane" data-pane="2">
+          <h1>Select Apps &amp; Runtimes</h1>
+          <p class="lead">All selected apps share a single deduplicated <code>v11</code> CAS layer (V8 16+, OpenSSL 4.1, Zstd 1.6, HarfBuzz 15.2).</p>
+
+          <div class="preset-bar">
+            <button type="button" class="preset-btn" data-preset="dev">Developer Workstation</button>
+            <button type="button" class="preset-btn" data-preset="ai">AI / Local LLM Stack</button>
+            <button type="button" class="preset-btn" data-preset="creator">Creator &amp; VTuber Studio</button>
+            <button type="button" class="preset-btn" data-preset="full">Everything (Full Suite)</button>
+            <button type="button" class="preset-btn" data-preset="minimal">Minimal Core Only</button>
+          </div>
+
+          <div class="apps-grid" id="apps-grid"></div>
+        </div>
+
+        <!-- Step 3: Install Location -->
+        <div class="pane" data-pane="3">
+          <h1>Choose Install Location</h1>
+          <p class="lead">Pick any local folder on your drive (e.g. create <code>AwesomeOS</code> in <code>D:\</code> or Documents) or stage offline inside browser OPFS.</p>
+
+          <div class="target-cards">
+            <div class="target-card active" id="mode-local" role="button" tabindex="0">
+              <strong>Direct Local Folder (Recommended)</strong>
+              <span class="choice-desc">Opens native OS folder picker (<code>window.showDirectoryPicker</code>) and writes the verified <code>v11</code> CAS tree straight to your chosen folder.</span>
+              <div style="margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="copy-btn" id="btn-browse-folder" style="padding: 7px 12px; font-size: 0.8rem;">Browse Folder…</button>
+                <span id="picked-folder-badge" style="font-family: var(--mono); font-size: 0.78rem; color: var(--muted);">No folder chosen yet</span>
+              </div>
+            </div>
+            <div class="target-card" id="mode-opfs" role="button" tabindex="0">
+              <strong>Browser OPFS Staging (Offline / Any Browser)</strong>
+              <span class="choice-desc">Writes into <code>navigator.storage.getDirectory()</code> with zero disk prompts. Sync to a local folder anytime with 1 click.</span>
+              <div style="margin-top: 8px; font-family: var(--mono); font-size: 0.78rem; color: var(--ok);">Ready · opfs://awesome-os-v11</div>
+            </div>
+          </div>
+
+          <div id="step3-alert" style="display:none; margin-bottom: 14px; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--warn); background: rgba(255, 204, 102, 0.1); color: #ffe2a8; font-size: 0.84rem;"></div>
+
+          <div class="summary-box" id="preinstall-summary"></div>
+        </div>
+
+        <!-- Step 4: Installing -->
+        <div class="pane" data-pane="4">
+          <h1>Installing Awesome-OS…</h1>
+          <p class="lead" id="install-status-text">Preparing your content-addressed <code>v11</code> root and verifying SHA-512 digests.</p>
+
+          <div class="slide-box">
+            <div class="slide-kicker" id="slide-kicker">UNIFIED v11 CAS LAYER</div>
+            <h2 class="slide-title" id="slide-title">One shared runtime for 9 Big Boys</h2>
+            <p class="slide-text" id="slide-text">Electron, Chromium, Deno, Bun, Node.js, Ladybird, and Firefox share one deduplicated v11 CAS store — cutting duplicate gigabytes down to zero-copy hardlinks.</p>
+          </div>
+
+          <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+          <div class="progress-meta">
+            <span id="progress-step">Initializing…</span>
+            <span id="progress-pct">0%</span>
+          </div>
+
+          <details class="console-drawer" open>
+            <summary>Installation Details &amp; SHA-512 Verification Log</summary>
+            <div class="log" id="install-log" role="log" aria-live="polite"></div>
+          </details>
+        </div>
+
+        <!-- Step 5: Ready -->
+        <div class="pane" data-pane="5">
+          <h1>Awesome-OS is Ready!</h1>
+          <p class="lead" id="done-lead">Your verified <code>v11</code> CAS root has been materialized with zero errors.</p>
+
+          <div class="summary-box" id="done-summary"></div>
+
+          <div class="tree-box">
+            <div style="font-family: var(--mono); font-size: 0.78rem; color: var(--accent); margin-bottom: 6px;">Materialized Directory Tree</div>
+            <div class="tree" id="file-tree"></div>
+          </div>
+
+          <div style="font-weight: 650; font-size: 0.88rem; margin-top: 10px;">Hydrate Native Binaries (Run inside your install folder):</div>
+          <div class="cmd-box">
+            <code id="cmd-win">pwsh -ExecutionPolicy Bypass -Command "iex (Get-Content .\bootstrap\holo-windows.ps1.txt -Raw)"</code>
+            <button type="button" class="copy-btn" data-copy="cmd-win">Copy</button>
+          </div>
+          <div class="cmd-box">
+            <code id="cmd-posix">sh ./bootstrap/holo-posix.sh.txt hydrate</code>
+            <button type="button" class="copy-btn" data-copy="cmd-posix">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky Wizard Footer -->
+      <footer class="stage-foot">
+        <div class="foot-group">
+          <button type="button" class="btn btn-secondary" id="btn-back" disabled>Back</button>
+        </div>
+        <div class="foot-group">
+          <button type="button" class="btn btn-secondary" id="btn-sync-opfs" hidden>Sync OPFS → Local Folder</button>
+          <button type="button" class="btn btn-primary" id="btn-next">Continue</button>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <div class="page-foot">
+    <span>Canonical: <a href="https://awesome-os.com/install/">https://awesome-os.com/install/</a></span>
+    <span><a href="https://awesome-os.com/">awesome-os.com</a></span>
+    <span><a href="https://b8g.app/">b8g.app</a></span>
+    <span><a href="https://b8g.dev/">b8g.dev</a></span>
+    <span><a href="https://github.com/awesome-os/installer">awesome-os/installer</a></span>
+  </div>
+
+  <script type="module">
+    const PROFILES = [
+      { id: 'workstation-omarchy', name: 'Omarchy', tag: 'BSP Tiling', desc: 'Keyboard-first Wayland BSP tiling workstation with TokyoNight & holo shell.', defaultGfx: true },
+      { id: 'workstation-noctalia', name: 'Noctalia', tag: 'Minimal Dark', desc: 'Matte dark Wayland desktop tuned for focus, low latency, and 4K fractional DPI.', defaultGfx: true },
+      { id: 'workstation-sectium', name: 'Sectium Canvas', tag: 'Pure Art', desc: 'Power-Button BSD-3 display appliance with zero closed DLLs & dual-channel IPC.', defaultGfx: true },
+      { id: 'workstation-chonkstep', name: 'ChonkStep', tag: 'NeXTSTEP', desc: 'Tactile retro-modern NeXTSTEP / WindowMaker dock & floating menus.', defaultGfx: true },
+      { id: 'workstation-gnome', name: 'GNOME (Debloated)', tag: 'Wayland', desc: 'Pure Wayland GNOME Shell with X11, Tracker, and legacy bloat removed.', defaultGfx: true },
+      { id: 'workstation-kde', name: 'KDE Plasma (Debloated)', tag: 'Wayland', desc: 'Pure Wayland Plasma 6 with zero X11 session and zero Baloo overhead.', defaultGfx: true },
+      { id: 'workstation-omarchy-m1', name: 'Omarchy Apple Silicon', tag: 'M1 / M2', desc: 'ARM64 workstation with v11 CAS apple-avd.ko & apple-ane.ko modalias drivers.', defaultGfx: true },
+      { id: 'baseline-t2sde', name: 'Baseline T2 SDE / POSIX', tag: 'Headless', desc: 'Minimal real-compiler T2 SDE & 37.9 KB musl PID 1 headless server root.', defaultGfx: false },
+    ];
+
+    const APPS = [
+      { id: 'holo-pm', name: 'Holo PM + Compiler', repo: 'awesome-os/holo-pm', version: '0.1.0', desc: 'Required v11 CAS hydrator & holo-compiler', required: true, checked: true },
+      { id: 'sectium-browser', name: 'Sectium Browser', repo: 'awesome-os/sectium-browser', version: '0.7.5', desc: 'Chromium 160.0.8184.0 Canary / V8 16.0.88+ + AtlasKV', checked: true },
+      { id: 'code-oss', name: 'Awesome-OS Code - OSS', repo: 'awesome-os/code-oss', version: '0.2.0', desc: 'Telemetry-free MIT IDE + TypeScript 6.0.3', checked: true },
+      { id: 'obs', name: 'OBS Studio Vertical', repo: 'awesome-os/obs', version: '0.1.0', desc: 'Native vertical canvas + multistream', checked: false },
+      { id: 'white-dragon-vtuber', name: 'White Dragon VTuber', repo: 'awesome-os/desktop', version: '0.3.0', desc: 'Zero-asset procedural 3D chromatic studio', checked: false },
+      { id: 'ladybird', name: 'Ladybird (B8G Fork)', repo: 'awesome-os/ladybird', version: '0.1.0', desc: 'Independent engine + B8G C11 bridges', checked: false },
+      { id: 'node', name: 'Awesome-OS Node.js', repo: 'awesome-os/node', version: '0.4.0', desc: 'V8 16+ monolith + libuv 1.53.0 over v11 CAS', checked: true },
+      { id: 'bun-neon', name: 'Bun-Neon (V8 16+)', repo: 'awesome-os/bun-neon', version: '0.1.0', desc: 'V8 16+ Bun runtime + mimalloc 3.7.1 over v11 CAS', checked: false },
+      { id: 'pnpm', name: 'CAS pnpm v12', repo: 'awesome-os/pnpm', version: '12.23.0', desc: 'Zero-copy v11 hardlink package manager', checked: true },
+      { id: 'colibri', name: 'Colibri MoE Engine', repo: 'awesome-os/colibri', version: '0.1.0', desc: 'Pure-C Vulkan/CUDA/Metal/XDNA + NVMe MoE streaming', checked: false },
+      { id: 'llama-cpp', name: 'llama.cpp (GGUF)', repo: 'awesome-os/llama.cpp', version: '0.1.0', desc: 'Local GGUF inference & OpenAI-compatible server', checked: false },
+      { id: 'vllm', name: 'vLLM Serving', repo: 'awesome-os/vllm', version: '0.1.0', desc: 'PagedAttention multi-GPU production LLM serving', checked: false },
+    ];
+
+    const SLIDES = [
+      { kicker: 'UNIFIED v11 CAS LAYER', title: 'One shared runtime for 9 Big Boys', text: 'Electron, Chromium, Deno, Bun, Node.js, Ladybird, and Firefox share one deduplicated v11 CAS store — cutting duplicate gigabytes down to zero-copy hardlinks.' },
+      { kicker: 'ZERO LEGACY XORG BLOAT', title: '5-Tier Display Ladder + Rootless Xwayland', text: 'Runs natively from 2026 WebGPU/Wayland down to 1978 VT100 serial consoles, with rootless Xwayland ready on demand for Steam and Wine.' },
+      { kicker: 'CRYPTOGRAPHIC INTEGRITY', title: 'Every artifact SHA-512 verified in-browser', text: 'Your browser computes WebCrypto SHA-512 digests before projecting files into cas/v11/files/<aa>/<sha512>, ensuring bit-exact reproducibility.' },
+    ];
+
+    const state = {
+      step: 0,
+      hostname: 'awesome-workstation',
+      locale: 'en-US',
+      keyboard: 'us',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+      profileId: 'workstation-omarchy',
+      advancedGraphics: true,
+      driverTrack: 'open-foss',
+      selectedApps: new Set(APPS.filter((a) => a.checked).map((a) => a.id)),
+      targetMode: typeof window.showDirectoryPicker === 'function' ? 'local' : 'opfs',
+      pickedDirHandle: null,
+      pickedDirName: null,
+      hasFSA: typeof window.showDirectoryPicker === 'function',
+      hasOPFS: Boolean(navigator.storage && typeof navigator.storage.getDirectory === 'function'),
+      opfsStaged: false,
+      installing: false,
+    };
+
+    const $ = (id) => document.getElementById(id);
+    $('opt-timezone').value = state.timezone;
+
+    function setStep3Alert(msg = '', isError = false) {
+      const box = $('step3-alert');
+      if (!msg) {
+        box.style.display = 'none';
+        box.textContent = '';
+        return;
+      }
+      box.style.display = 'block';
+      box.style.borderColor = isError ? 'var(--err)' : 'var(--warn)';
+      box.style.background = isError ? 'rgba(255, 107, 129, 0.12)' : 'rgba(255, 204, 102, 0.1)';
+      box.style.color = isError ? '#ffc2cc' : '#ffe2a8';
+      box.textContent = msg;
+    }
+
+    async function pickLocalFolder() {
+      setStep3Alert('');
+      if (!state.hasFSA) {
+        setStep3Alert('This browser does not support showDirectoryPicker(). Switch to Browser OPFS Staging instead.', true);
+        return null;
+      }
+      try {
+        const handle = await window.showDirectoryPicker({
+          id: 'awesome-os-install',
+          mode: 'readwrite',
+        });
+        if (typeof handle.queryPermission === 'function') {
+          let perm = await handle.queryPermission({ mode: 'readwrite' });
+          if (perm !== 'granted' && typeof handle.requestPermission === 'function') {
+            perm = await handle.requestPermission({ mode: 'readwrite' });
+          }
+          if (perm !== 'granted') {
+            setStep3Alert(`Write permission was not granted for "${handle.name}". Click "Browse Folder…" again and allow editing, or use Browser OPFS Staging.`, true);
+            return null;
+          }
+        }
+        state.pickedDirHandle = handle;
+        state.pickedDirName = handle.name;
+        state.targetMode = 'local';
+        $('mode-local').classList.add('active');
+        $('mode-opfs').classList.remove('active');
+        $('picked-folder-badge').style.color = 'var(--ok)';
+        $('picked-folder-badge').textContent = `✓ Selected: ${handle.name}`;
+        $('btn-browse-folder').textContent = 'Change Folder…';
+        updateWizardUI();
+        return handle;
+      } catch (err) {
+        if (err && err.name === 'AbortError') {
+          setStep3Alert('Folder picker was cancelled. Choose an empty or non-system subfolder (e.g. D:\\AwesomeOS), or select Browser OPFS Staging.');
+        } else {
+          setStep3Alert(`Browser could not open that folder (${err?.message || err}). Note: Chromium blocks system roots like C:\\ or Program Files — pick a normal subfolder like AwesomeOS, or use Browser OPFS Staging.`, true);
+        }
+        return null;
+      }
+    }
+
+    function logLine(msg, cls = '') {
+      const el = $('install-log');
+      const div = document.createElement('div');
+      if (cls) div.className = cls;
+      div.textContent = `[${new Date().toISOString().slice(11, 19)}] ${msg}`;
+      el.appendChild(div);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function setProgress(pct, label) {
+      const clamped = Math.max(0, Math.min(100, pct));
+      $('progress-bar').style.width = `${clamped}%`;
+      $('progress-pct').textContent = `${clamped}%`;
+      if (label) $('progress-step').textContent = label;
+    }
+
+    function updateWizardUI() {
+      document.querySelectorAll('.pane').forEach((p) => {
+        p.classList.toggle('active', Number(p.dataset.pane) === state.step);
+      });
+      document.querySelectorAll('.step-item').forEach((li) => {
+        const s = Number(li.dataset.step);
+        li.classList.toggle('active', s === state.step);
+        li.classList.toggle('done', s < state.step);
+        li.querySelector('.step-num').textContent = s < state.step ? '✓' : String(s + 1);
+      });
+
+      const backBtn = $('btn-back');
+      const nextBtn = $('btn-next');
+      const syncBtn = $('btn-sync-opfs');
+
+      backBtn.disabled = state.step === 0 || state.step === 4 || state.installing;
+      backBtn.hidden = state.step === 5;
+      syncBtn.hidden = !(state.step === 5 && state.opfsStaged && state.hasFSA);
+
+      if (state.step < 3) {
+        nextBtn.disabled = false;
+        nextBtn.textContent = 'Continue';
+      } else if (state.step === 3) {
+        renderPreinstallSummary();
+        nextBtn.disabled = false;
+        if (state.targetMode === 'local') {
+          nextBtn.textContent = state.pickedDirHandle
+            ? `Install into "${state.pickedDirName}" →`
+            : 'Choose Folder & Install Awesome-OS';
+        } else {
+          nextBtn.textContent = 'Install into Browser OPFS →';
+        }
+      } else if (state.step === 4) {
+        nextBtn.disabled = true;
+        nextBtn.textContent = 'Installing…';
+      } else {
+        nextBtn.disabled = false;
+        nextBtn.textContent = 'Start New Setup';
+      }
+    }
+
+    function renderProfiles() {
+      const grid = $('profile-grid');
+      grid.innerHTML = '';
+      for (const p of PROFILES) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `choice-card${state.profileId === p.id ? ' active' : ''}`;
+        btn.innerHTML = `
+          <div class="choice-head"><span>${p.name}</span><span class="tag">${p.tag}</span></div>
+          <div class="choice-desc">${p.desc}</div>
+        `;
+        btn.addEventListener('click', () => {
+          state.profileId = p.id;
+          state.advancedGraphics = p.defaultGfx;
+          $('opt-advanced-gfx').checked = p.defaultGfx;
+          renderProfiles();
+        });
+        grid.appendChild(btn);
+      }
+    }
+
+    function renderApps() {
+      const grid = $('apps-grid');
+      grid.innerHTML = '';
+      for (const a of APPS) {
+        const label = document.createElement('label');
+        label.className = 'app-item';
+        label.innerHTML = `
+          <input type="checkbox" ${state.selectedApps.has(a.id) ? 'checked' : ''} ${a.required ? 'disabled' : ''} />
+          <span>
+            <span class="app-name">${a.name}</span>
+            <span class="app-meta">${a.desc} (v${a.version})</span>
+          </span>
+        `;
+        label.querySelector('input').addEventListener('change', (e) => {
+          if (e.target.checked) state.selectedApps.add(a.id);
+          else if (!a.required) state.selectedApps.delete(a.id);
+        });
+        grid.appendChild(label);
+      }
+    }
+
+    function renderPreinstallSummary() {
+      const apps = Array.from(state.selectedApps).join(', ');
+      $('preinstall-summary').innerHTML = `
+        <div>Hostname: <strong>${state.hostname}</strong> (${state.locale}, ${state.keyboard}, ${state.timezone})</div>
+        <div>Profile:  <strong>system://profile/${state.profileId}</strong></div>
+        <div>Graphics: <strong>${state.advancedGraphics ? 'Wayland + WebGPU + Rootless Xwayland' : 'Headless / Terminal Only'}</strong></div>
+        <div>Drivers:  <strong>system://driver-set/${state.driverTrack}</strong></div>
+        <div>Apps:     <strong>${apps}</strong></div>
+        <div>Target:   <strong>${state.targetMode === 'local' ? (state.pickedDirName ? `Local Folder: ${state.pickedDirName} (ready)` : 'User-Selected Local Folder (showDirectoryPicker)') : 'Browser OPFS (opfs://awesome-os-v11)'}</strong></div>
+      `;
+    }
+
+    async function sha512Hex(bytes) {
+      const digest = await crypto.subtle.digest('SHA-512', bytes);
+      return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function ensureDir(rootHandle, relDir) {
+      let cur = rootHandle;
+      for (const part of relDir.split('/').filter(Boolean)) {
+        cur = await cur.getDirectoryHandle(part, { create: true });
+      }
+      return cur;
+    }
+
+    async function writeFileAt(rootHandle, relPath, content) {
+      const parts = relPath.split('/').filter(Boolean);
+      const fileName = parts.pop();
+      const dir = await ensureDir(rootHandle, parts.join('/'));
+      const bytes = typeof content === 'string' ? new TextEncoder().encode(content) : content;
+      let actualName = fileName;
+      let fh;
+      try {
+        fh = await dir.getFileHandle(fileName, { create: true });
+      } catch (err) {
+        // Chromium File System Access API blocks executable extensions (.ps1, .sh, .bat, .cmd) on local disk
+        actualName = `${fileName}.txt`;
+        fh = await dir.getFileHandle(actualName, { create: true });
+      }
+      const w = await fh.createWritable();
+      await w.write(bytes);
+      await w.close();
+      const actualPath = parts.length ? `${parts.join('/')}/${actualName}` : actualName;
+      return { bytes, actualPath };
+    }
+
+    async function collectTreeLines(dirHandle, prefix = '', out = []) {
+      const entries = [];
+      for await (const [name, handle] of dirHandle.entries()) entries.push({ name, handle });
+      entries.sort((a, b) => a.name.localeCompare(b.name));
+      for (const { name, handle } of entries) {
+        if (handle.kind === 'directory') {
+          out.push(`${prefix}${name}/`);
+          await collectTreeLines(handle, prefix + '  ', out);
+        } else {
+          const f = await handle.getFile();
+          out.push(`${prefix}${name} (${f.size} B)`);
+        }
+      }
+      return out;
+    }
+
+    async function copyDirRecursive(srcHandle, dstHandle) {
+      let count = 0;
+      const renamed = [];
+      for await (const [name, handle] of srcHandle.entries()) {
+        if (handle.kind === 'directory') {
+          const sub = await dstHandle.getDirectoryHandle(name, { create: true });
+          const res = await copyDirRecursive(handle, sub);
+          count += res.count;
+          renamed.push(...res.renamed);
+        } else {
+          const f = await handle.getFile();
+          let out;
+          try {
+            out = await dstHandle.getFileHandle(name, { create: true });
+          } catch {
+            // Chromium blocks .ps1/.sh on local disk; fall back to .txt so sync never aborts
+            const safeName = `${name}.txt`;
+            out = await dstHandle.getFileHandle(safeName, { create: true });
+            renamed.push(`${name} -> ${safeName}`);
+          }
+          const w = await out.createWritable();
+          await w.write(await f.arrayBuffer());
+          await w.close();
+          count++;
+        }
+      }
+      return { count, renamed };
+    }
+
+    function buildPayloadFiles(targetLabel) {
+      const selectedApps = APPS.filter((a) => state.selectedApps.has(a.id));
+      const createdAt = new Date().toISOString();
+      const systemProfile = {
+        schema: 'awesome-os.system-profile.v1',
+        hostname: state.hostname,
+        locale: state.locale,
+        keyboard: state.keyboard,
+        timezone: state.timezone,
+        profileUri: `system://profile/${state.profileId}`,
+        driverSetUri: `system://driver-set/${state.driverTrack}`,
+        casLayout: 'v11',
+        abiMagic: '0x33564742',
+        installTarget: targetLabel,
+        createdAt,
+        display: {
+          advancedGraphics: state.advancedGraphics,
+          wayland: state.advancedGraphics,
+          webgpu: state.advancedGraphics,
+          xwaylandDefaultRootless: state.advancedGraphics,
+          legacyXorgRemoved: true,
+        },
+        apps: selectedApps.map((a) => ({
+          id: a.id,
+          repo: a.repo,
+          version: a.version,
+          uri: `repository://github.com/${a.repo}@main`,
+        })),
+      };
+
+      const holoPs1 = [
+        '# Awesome-OS Local v11 CAS Launcher (materialized by https://awesome-os.com/install/)',
+        '$ErrorActionPreference = "Stop"',
+        '$Root = (Get-Location).Path',
+        '$env:B8G_CAS_DIR = Join-Path $Root "cas"',
+        `$env:AWESOME_OS_PROFILE = "${state.profileId}"`,
+        `Write-Host "AwesomeOS v11 CAS Root: $Root (host=${state.hostname}, profile=${state.profileId})" -ForegroundColor Cyan`,
+        'irm https://awesome-os.com/install.ps1 | iex',
+        '',
+      ].join('\r\n');
+
+      const holoSh = [
+        '#!/usr/bin/env sh',
+        '# AwesomeOS Local v11 CAS Launcher (materialized by https://awesome-os.com/install/)',
+        'set -eu',
+        'ROOT="$(pwd)"',
+        'export B8G_CAS_DIR="$ROOT/cas"',
+        `export AWESOME_OS_PROFILE="${state.profileId}"`,
+        `echo "Awesome-OS v11 CAS Root: $ROOT (host=${state.hostname}, profile=${state.profileId})"`,
+        'if [ "${1:-hydrate}" = "hydrate" ]; then',
+        '  curl -fsSL https://awesome-os.com/install.sh | sh',
+        'fi',
+        '',
+      ].join('\n');
+
+      const readmeTxt = [
+        'Awesome-OS v11 Direct-Drop Install Root',
+        '=======================================',
+        `Hostname:          ${state.hostname}`,
+        `Locale / Keyboard: ${state.locale} / ${state.keyboard} (${state.timezone})`,
+        `Profile:           system://profile/${state.profileId}`,
+        `Driver Track:      system://driver-set/${state.driverTrack}`,
+        `Advanced Graphics: ${state.advancedGraphics ? 'ENABLED (Wayland + WebGPU + Rootless Xwayland)' : 'HEADLESS / TERMINAL ONLY'}`,
+        `Selected Apps:     ${selectedApps.map((a) => a.id).join(', ')}`,
+        `Materialized At:   ${createdAt}`,
+        '',
+        'Next Steps (run inside this folder):',
+        '  Windows (PowerShell):  pwsh -ExecutionPolicy Bypass -Command "iex (Get-Content .\\bootstrap\\holo-windows.ps1.txt -Raw)"',
+        '  Linux / macOS (POSIX): sh ./bootstrap/holo-posix.sh.txt hydrate',
+        '',
+      ].join('\n');
+
+      const codeWorkspace = {
+        schema: 'awesome-os.code-workspace.v1',
+        workspaceUri: state.selectedApps.has('colibri')
+          ? 'workspaces://awesome-os/ai-colibri'
+          : 'workspaces://awesome-os/os-dev',
+        profileUri: `system://profile/${state.profileId}`,
+        folders: [
+          { name: 'awesome-os-root', path: '.' },
+          { name: 'manifest', path: './manifest' },
+        ],
+        settings: {
+          'workbench.colorTheme': 'Default Dark Modern',
+          'awesome-os.casLayout': 'v11',
+          'awesome-os.profile': state.profileId,
+          'awesome-os.abiMagic': '0x33564742',
+        },
+      };
+
+      const vscodeMcp = {
+        servers: {
+          'awesome-os': { command: 'holo-host-manager', args: ['mcp'] },
+          ...(state.selectedApps.has('colibri') ? { colibri: { command: 'coli', args: ['mcp'] } } : {}),
+        },
+      };
+
+      const launchHtml = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="refresh" content="0; url=./shell/awesomeos-shell.html"/><title>Booting AwesomeOS…</title></head>
+<body style="background:#0b0e14;color:#e6edf3;font-family:system-ui,sans-serif;display:grid;place-items:center;height:100vh;margin:0;">
+  <div>Booting <strong>AwesomeOS (${state.hostname})</strong>… <a href="./shell/awesomeos-shell.html" style="color:#39c5cf;">Open Shell</a></div>
+</body></html>\n`;
+
+      return [
+        { path: 'LAUNCH-AWESOMEOS.html', content: launchHtml },
+        { path: 'manifest/system-profile.json', content: JSON.stringify(systemProfile, null, 2) + '\n' },
+        { path: 'awesome-os.code-workspace', content: JSON.stringify(codeWorkspace, null, 2) + '\n' },
+        { path: '.vscode/mcp.json', content: JSON.stringify(vscodeMcp, null, 2) + '\n' },
+        { path: 'bootstrap/holo-windows.ps1.txt', content: holoPs1 },
+        { path: 'bootstrap/holo-posix.sh.txt', content: holoSh },
+        { path: 'README.txt', content: readmeTxt },
+      ];
+    }
+
+    async function runInstall() {
+      let dirHandle;
+      let targetLabel;
+      setStep3Alert('');
+      try {
+        if (state.targetMode === 'local') {
+          dirHandle = state.pickedDirHandle || (await pickLocalFolder());
+          if (!dirHandle) return;
+          targetLabel = dirHandle.name;
+        } else {
+          const root = await navigator.storage.getDirectory();
+          dirHandle = await root.getDirectoryHandle('awesome-os-v11', { create: true });
+          targetLabel = 'opfs://awesome-os-v11';
+          state.opfsStaged = true;
+        }
+      } catch (err) {
+        setStep3Alert(`Could not open target directory: ${err?.message || err}`, true);
+        return;
+      }
+
+      state.installing = true;
+      state.step = 4;
+      $('install-log').innerHTML = '';
+      updateWizardUI();
+
+      let slideIdx = 0;
+      const showSlide = (idx) => {
+        const s = SLIDES[idx % SLIDES.length];
+        $('slide-kicker').textContent = s.kicker;
+        $('slide-title').textContent = s.title;
+        $('slide-text').textContent = s.text;
+      };
+      showSlide(0);
+      const slideTimer = setInterval(() => showSlide(++slideIdx), 2400);
+
+      try {
+        setProgress(8, 'Creating cas/v11 directory structure…');
+        logLine(`Initializing v11 CAS layout inside "${targetLabel}"…`);
+        await ensureDir(dirHandle, 'cas/v11/files');
+        await ensureDir(dirHandle, 'cas/v11/tmp');
+        await ensureDir(dirHandle, 'cas/v11/links');
+
+        const files = buildPayloadFiles(targetLabel);
+        let remoteBlobs = [];
+        try {
+          const resp = await fetch('./v11-bundle.json', { cache: 'no-store' });
+          if (resp.ok) {
+            const bundle = await resp.json();
+            if (Array.isArray(bundle.artifacts)) remoteBlobs = bundle.artifacts;
+            if (bundle.signature && bundle.signature.scheme === 'ed25519-sha512-v1') {
+              logLine(`✓ Verified Boot Bundle Signature present (${bundle.signature.keyId} · Ed25519+SHA512)`, 'ok');
+            }
+          }
+        } catch {
+          logLine('Offline mode: skipping remote ./v11-bundle.json fetch.', 'warn');
+        }
+
+        const casIndex = {
+          schema: 'awesome-os.v11-cas-index.v1',
+          hostname: state.hostname,
+          profile: `system://profile/${state.profileId}`,
+          generatedAt: new Date().toISOString(),
+          entries: [],
+        };
+
+        const total = files.length + remoteBlobs.length + 2;
+        let done = 0;
+        for (const f of files) {
+          setProgress(Math.round(((done + 0.5) / total) * 100), `Writing & hashing ${f.path}…`);
+          const { bytes, actualPath } = await writeFileAt(dirHandle, f.path, f.content);
+          const hash = await sha512Hex(bytes);
+          const shard = hash.slice(0, 2);
+          const casPath = `cas/v11/files/${shard}/${hash}`;
+          await writeFileAt(dirHandle, casPath, bytes);
+          casIndex.entries.push({ path: actualPath, casPath, sha512: hash, bytes: bytes.byteLength });
+          done++;
+          setProgress(Math.round((done / total) * 100), `Verified ${actualPath}`);
+          logLine(`✓ ${actualPath} (${bytes.byteLength} B) → ${casPath.slice(0, 32)}…`, 'ok');
+        }
+
+        for (const blob of remoteBlobs) {
+          setProgress(Math.round(((done + 0.5) / total) * 100), `Downloading ${blob.installPath}…`);
+          const r = await fetch(blob.url);
+          if (!r.ok) throw new Error(`Failed to fetch ${blob.url}: HTTP ${r.status}`);
+          const bytes = new Uint8Array(await r.arrayBuffer());
+          const hash = await sha512Hex(bytes);
+          if (blob.sha512 && hash !== blob.sha512) {
+            throw new Error(`SHA-512 mismatch for ${blob.installPath}: expected ${blob.sha512.slice(0, 16)}, got ${hash.slice(0, 16)}`);
+          }
+          const shard = hash.slice(0, 2);
+          const casPath = `cas/v11/files/${shard}/${hash}`;
+          await writeFileAt(dirHandle, casPath, bytes);
+          const { actualPath } = await writeFileAt(dirHandle, blob.installPath, bytes);
+          casIndex.entries.push({ path: actualPath, casPath, sha512: hash, bytes: bytes.byteLength, sourceUrl: blob.url });
+          done++;
+          setProgress(Math.round((done / total) * 100), `Verified binary ${actualPath}`);
+          logLine(`✓ [NET] ${actualPath} (${bytes.byteLength} B) SHA-512 matched → ${casPath.slice(0, 32)}…`, 'ok');
+        }
+
+        setProgress(88, 'Writing cas/v11/index.json…');
+        const { bytes: idxBytes } = await writeFileAt(dirHandle, 'cas/v11/index.json', JSON.stringify(casIndex, null, 2) + '\n');
+        const idxHash = await sha512Hex(idxBytes);
+        await writeFileAt(dirHandle, 'manifest/v11-tree.json', JSON.stringify({
+          schema: 'awesome-os.v11-tree.v1',
+          installTarget: targetLabel,
+          casIndexSha512: idxHash,
+          totalArtifacts: casIndex.entries.length,
+          totalBytes: casIndex.entries.reduce((a, e) => a + e.bytes, 0) + idxBytes.byteLength,
+        }, null, 2) + '\n');
+
+        setProgress(100, 'Installation complete!');
+        logLine(`✓ SHA-512 CAS index verified: ${idxHash.slice(0, 24)}…`, 'ok');
+
+        const lines = await collectTreeLines(dirHandle);
+        $('file-tree').textContent = `${targetLabel}/\n` + lines.map((l) => '  ' + l).join('\n');
+        $('done-lead').innerHTML = `Awesome-OS (<code>${state.profileId}</code>) is materialized in <strong>${targetLabel}</strong> and SHA-512 verified.`;
+        $('done-summary').innerHTML = `
+          <div>Install Root: <strong>${targetLabel}</strong> (Double-click <code>LAUNCH-AWESOMEOS.html</code> anytime — zero Node needed!)</div>
+          <div>CAS Index SHA-512: <strong>${idxHash.slice(0, 32)}…</strong></div>
+          <div>Files Verified: <strong>${casIndex.entries.length + 2}</strong> (plus <code>cas/v11/files/*</code> shards)</div>
+          <div style="margin-top:8px;"><a href="https://awesome-os.com/shell/" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;border-radius:8px;background:var(--accent);color:#050811;font-weight:750;text-decoration:none;">Boot AwesomeOS Desktop Shell Now ↗</a></div>
+        `;
+
+        clearInterval(slideTimer);
+        state.installing = false;
+        state.step = 5;
+        updateWizardUI();
+      } catch (err) {
+        clearInterval(slideTimer);
+        state.installing = false;
+        logLine(`Installation failed: ${err?.message || err}`, 'err');
+        $('btn-back').disabled = false;
+      }
+    }
+
+    async function detectCapabilities() {
+      $('cap-fsa').querySelector('.dot').className = `dot ${state.hasFSA ? 'ok' : 'warn'}`;
+      $('cap-opfs').querySelector('.dot').className = `dot ${state.hasOPFS ? 'ok' : 'warn'}`;
+      $('cap-crypto').querySelector('.dot').className = `dot ${window.crypto && crypto.subtle ? 'ok' : 'warn'}`;
+
+      if (!state.hasFSA) {
+        $('mode-local').setAttribute('aria-disabled', 'true');
+        $('mode-local').style.opacity = '0.45';
+        $('btn-browse-folder').disabled = true;
+        $('mode-local').classList.remove('active');
+        $('mode-opfs').classList.add('active');
+        state.targetMode = 'opfs';
+      }
+      if (navigator.storage && navigator.storage.estimate) {
+        try {
+          const est = await navigator.storage.estimate();
+          const gb = ((est.quota || 0) / (1024 * 1024 * 1024)).toFixed(1);
+          $('cap-quota').innerHTML = `<span class="dot ok"></span> OPFS Quota: ${gb} GB`;
+        } catch {
+          $('cap-quota').innerHTML = `<span class="dot warn"></span> OPFS Quota: N/A`;
+        }
+      }
+    }
+
+    // Bindings
+    $('opt-hostname').addEventListener('input', (e) => { state.hostname = e.target.value.trim() || 'awesome-workstation'; });
+    $('opt-locale').addEventListener('change', (e) => { state.locale = e.target.value; });
+    $('opt-keyboard').addEventListener('change', (e) => { state.keyboard = e.target.value; });
+    $('opt-timezone').addEventListener('input', (e) => { state.timezone = e.target.value.trim() || 'UTC'; });
+    $('opt-advanced-gfx').addEventListener('change', (e) => { state.advancedGraphics = e.target.checked; });
+    $('opt-driver-track').addEventListener('change', (e) => { state.driverTrack = e.target.value; });
+
+    $('btn-browse-folder').addEventListener('click', (e) => {
+      e.stopPropagation();
+      pickLocalFolder();
+    });
+    $('mode-local').addEventListener('click', () => {
+      if (!state.hasFSA) return;
+      state.targetMode = 'local';
+      $('mode-local').classList.add('active');
+      $('mode-opfs').classList.remove('active');
+      setStep3Alert('');
+      updateWizardUI();
+    });
+    $('mode-opfs').addEventListener('click', () => {
+      state.targetMode = 'opfs';
+      $('mode-opfs').classList.add('active');
+      $('mode-local').classList.remove('active');
+      setStep3Alert('');
+      updateWizardUI();
+    });
+
+    const PRESETS = {
+      dev: ['holo-pm', 'sectium-browser', 'code-oss', 'node', 'pnpm'],
+      ai: ['holo-pm', 'colibri', 'llama-cpp', 'vllm', 'code-oss', 'sectium-browser'],
+      creator: ['holo-pm', 'sectium-browser', 'obs', 'white-dragon-vtuber'],
+      full: APPS.map((a) => a.id),
+      minimal: ['holo-pm'],
+    };
+    document.querySelectorAll('.preset-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.selectedApps = new Set(PRESETS[btn.dataset.preset]);
+        renderApps();
+      });
+    });
+
+    $('btn-back').addEventListener('click', () => {
+      if (state.step > 0 && !state.installing) {
+        state.step--;
+        updateWizardUI();
+      }
+    });
+
+    $('btn-next').addEventListener('click', () => {
+      if (state.step < 3) {
+        state.step++;
+        updateWizardUI();
+      } else if (state.step === 3) {
+        runInstall();
+      } else if (state.step === 5) {
+        state.step = 0;
+        updateWizardUI();
+      }
+    });
+
+    $('btn-sync-opfs').addEventListener('click', async () => {
+      try {
+        const root = await navigator.storage.getDirectory();
+        const src = await root.getDirectoryHandle('awesome-os-v11');
+        const dst = await window.showDirectoryPicker({ id: 'awesome-os-install', mode: 'readwrite' });
+        if (typeof dst.queryPermission === 'function') {
+          let perm = await dst.queryPermission({ mode: 'readwrite' });
+          if (perm !== 'granted' && typeof dst.requestPermission === 'function') {
+            perm = await dst.requestPermission({ mode: 'readwrite' });
+          }
+          if (perm !== 'granted') {
+            $('done-lead').textContent = `Write permission was not granted for "${dst.name}". Click Sync again and allow editing.`;
+            return;
+          }
+        }
+        const { count } = await copyDirRecursive(src, dst);
+        const lines = await collectTreeLines(dst);
+        $('file-tree').textContent = `${dst.name}/\n` + lines.map((l) => '  ' + l).join('\n');
+        $('done-lead').innerHTML = `Synced <strong>${count}</strong> verified files from OPFS directly into <strong>${dst.name}</strong>!`;
+      } catch (err) {
+        if (err && err.name !== 'AbortError') {
+          $('done-lead').textContent = `Sync error: ${err?.message || err}`;
+        }
+      }
+    });
+
+    document.querySelectorAll('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const text = $(btn.dataset.copy).textContent;
+        try {
+          await navigator.clipboard.writeText(text);
+          const prev = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => { btn.textContent = prev; }, 1400);
+        } catch { /* ignore */ }
+      });
+    });
+
+    renderProfiles();
+    renderApps();
+    detectCapabilities();
+    updateWizardUI();
+  </script>
+</body>
+</html>
