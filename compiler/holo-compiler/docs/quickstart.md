@@ -4,12 +4,12 @@
 
 ```powershell
 # Windows (PowerShell)
-irm https://awesome-os.com/install.ps1 | iex
+irm https://awesome-os.github.io/installer/install.ps1 | iex
 ```
 
 ```bash
 # Linux / macOS
-curl -fsSL https://awesome-os.com/install.sh | sh
+curl -fsSL https://awesome-os.github.io/installer/install.sh | sh
 ```
 
 ## 2. Configure the Unified `v11` CAS Root (Optional)

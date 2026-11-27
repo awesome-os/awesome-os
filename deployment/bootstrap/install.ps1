@@ -1,5 +1,5 @@
 # Awesome-OS Universal Holo Bootstrapper (Windows PowerShell, UTF-8 no BOM)
-# Usage: irm https://awesome-os.com/install.ps1 | iex
+# Usage: irm https://awesome-os.github.io/installer/install.ps1 | iex
 $ErrorActionPreference = "Stop"
 
 $b8gRoot = Join-Path $HOME ".b8g"
@@ -37,4 +37,4 @@ Write-Host "Ready! Everything now runs through holo:" -ForegroundColor Green
 Write-Host "  holo install repository://github.com/awesome-os/desktop@main"
 Write-Host "  holo install repository://github.com/awesome-os/sectium-browser@main"
 Write-Host "  holo enroll my-pc --profile system://profile/workstation-omarchy"
-Write-Host "  Web Hub: https://b8g.app/  |  Dev: https://b8g.dev/awesome-os/  |  Cloud: https://awesome-os.com/cloud/"
+Write-Host "  Web Hub: https://awesome-os.github.io/  |  Oversight: https://awesome-os.github.io/holo-v11/oversight.html  |  Agents: https://awesome-os.github.io/agent-platform/"

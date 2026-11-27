@@ -1,6 +1,6 @@
 #!/bin/sh
 # Awesome-OS Universal Holo Bootstrapper (Linux / macOS POSIX sh)
-# Usage: curl -fsSL https://awesome-os.com/install.sh | sh
+# Usage: curl -fsSL https://awesome-os.github.io/installer/install.sh | sh
 set -eu
 
 B8G_ROOT="${HOME}/.b8g"
@@ -43,4 +43,4 @@ echo "Ready! Everything now runs through holo:"
 echo "  holo install repository://github.com/awesome-os/desktop@main"
 echo "  holo install repository://github.com/awesome-os/posix@main"
 echo "  holo enroll my-host --profile system://profile/workstation-omarchy"
-echo "  Web Hub: https://b8g.app/  |  Dev: https://b8g.dev/awesome-os/  |  Cloud: https://awesome-os.com/cloud/"
+echo "  Web Hub: https://awesome-os.github.io/  |  Oversight: https://awesome-os.github.io/holo-v11/oversight.html  |  Agents: https://awesome-os.github.io/agent-platform/"

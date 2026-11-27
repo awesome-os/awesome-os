@@ -22,21 +22,21 @@ describe('@awesome-os/installer', () => {
       const webResult = stampCatalog(
         AWESOME_OS_CATALOG,
         join(tmp, 'web'),
-        'https://awesome-os.com/downloads',
+        'https://awesome-os.github.io/installer/downloads',
       );
       const sb = webResult.stamped.find((s) => s.id === 'sectium-browser');
       assert.ok(sb);
       assert.equal(
         sb.installPs1Command,
-        'irm https://awesome-os.com/downloads/sectium-browser/install.ps1 | iex',
+        'irm https://awesome-os.github.io/installer/downloads/sectium-browser/install.ps1 | iex',
       );
       assert.equal(
         sb.installShCommand,
-        'curl -fsSL https://awesome-os.com/downloads/sectium-browser/install.sh | sh',
+        'curl -fsSL https://awesome-os.github.io/installer/downloads/sectium-browser/install.sh | sh',
       );
 
       const ps1 = readFileSync(join(sb.outDir, 'install.ps1'), 'utf8');
-      assert.ok(ps1.includes('https://awesome-os.com/downloads/sectium-browser'));
+      assert.ok(ps1.includes('https://awesome-os.github.io/installer/downloads/sectium-browser'));
       assert.ok(ps1.includes('SHA256SUMS.txt'));
 
       const sh = readFileSync(join(sb.outDir, 'install.sh'), 'utf8');
@@ -110,7 +110,7 @@ describe('@awesome-os/installer', () => {
     }
   });
 
-  it('ships a self-contained OPFS + showDirectoryPicker web installer for awesome-os.com/install', () => {
+  it('ships a self-contained OPFS + showDirectoryPicker web installer for awesome-os.github.io/installer', () => {
     const htmlPath = join(import.meta.dirname, '..', 'web', 'opfs-installer.html');
     assert.ok(existsSync(htmlPath));
     const html = readFileSync(htmlPath, 'utf8');
@@ -119,6 +119,6 @@ describe('@awesome-os/installer', () => {
     assert.ok(html.includes("crypto.subtle.digest('SHA-512'"));
     assert.ok(html.includes('cas/v11/files/'));
     assert.ok(html.includes('workstation-omarchy'));
-    assert.ok(html.includes('https://awesome-os.com/install/'));
+    assert.ok(html.includes('https://awesome-os.github.io/installer/'));
   });
 });

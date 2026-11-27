@@ -4,7 +4,7 @@ set -eu
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 SHELL_TARGET="$SCRIPT_DIR/shell/awesomeos-shell.html"
-[ -f "$SHELL_TARGET" ] || SHELL_TARGET="https://awesome-os.com/shell/"
+[ -f "$SHELL_TARGET" ] || SHELL_TARGET="https://awesome-os.github.io/"
 
 if command -v sectium-browser >/dev/null 2>&1; then
   exec sectium-browser "--app=$SHELL_TARGET"
@@ -16,5 +16,5 @@ elif command -v open >/dev/null 2>&1; then
   exit 0
 fi
 
-echo "Bootstrapping AwesomeOS v11 CAS via https://awesome-os.com/install.sh ..."
-curl -fsSL https://awesome-os.com/install.sh | sh
+echo "Bootstrapping AwesomeOS v11 CAS via https://awesome-os.github.io/installer/install.sh ..."
+curl -fsSL https://awesome-os.github.io/installer/install.sh | sh

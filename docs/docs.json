@@ -43,15 +43,15 @@
   },
   "navbar": {
     "links": [
-      { "label": "Web Installer", "href": "https://awesome-os.com/install/" },
-      { "label": "Workstations", "href": "https://b8g.app/" },
-      { "label": "Developers", "href": "https://b8g.dev/awesome-os/" },
+      { "label": "Web Installer", "href": "https://awesome-os.github.io/installer/opfs-installer.html" },
+      { "label": "Workstations", "href": "https://awesome-os.github.io/" },
+      { "label": "Developers", "href": "https://awesome-os.github.io/holo-v11/oversight.html" },
       { "label": "GitHub", "href": "https://github.com/awesome-os", "icon": "github" }
     ],
     "primary": {
       "type": "button",
       "label": "Install Now",
-      "href": "https://awesome-os.com/install/"
+      "href": "https://awesome-os.github.io/installer/opfs-installer.html"
     }
   }
 }

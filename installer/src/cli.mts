@@ -5,7 +5,7 @@
  * `splash_layout.h`, and `web-catalog.json` from `.mts` release matrix definitions.
  *
  * Usage:
- *   node src/cli.mts stamp [--out ./dist] [--web-host https://awesome-os.com/downloads] [--only sectium-browser]
+ *   node src/cli.mts stamp [--out ./dist] [--web-host https://awesome-os.github.io/installer/downloads] [--only sectium-browser]
  */
 
 import { resolve } from 'node:path';

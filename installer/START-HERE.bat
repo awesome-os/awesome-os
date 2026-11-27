@@ -5,7 +5,7 @@ echo ============================================================
 echo   AwesomeOS — ChromeOS-Grade Desktop & v11 CAS Launcher
 echo ============================================================
 set "SHELL_HTML=%~dp0shell\awesomeos-shell.html"
-if not exist "%SHELL_HTML%" set "SHELL_HTML=https://awesome-os.com/shell/"
+if not exist "%SHELL_HTML%" set "SHELL_HTML=https://awesome-os.github.io/"
 
 if exist "D:\Sectium\sectium.exe" (
   echo [OK] Launching AwesomeOS via Sovereign Sectium Appliance...

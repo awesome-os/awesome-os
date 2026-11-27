@@ -286,12 +286,12 @@ async function runCli(argv: string[]): Promise<void> {
   fs.mkdirSync(binDir, { recursive: true });
 
   const webAppMap: Record<string, string> = {
-    'desktop-omarchy': 'https://awesome-os.com/apps/omarchy.html',
-    'awesome-os-desktop': 'https://awesome-os.com/apps/desktop.html',
-    'sectium': 'https://awesome-os.com/apps/sectium.html',
-    'noctalia': 'https://awesome-os.com/apps/noctalia.html',
-    'chonkstep': 'https://awesome-os.com/apps/chonkstep.html',
-    'gitlab-foss': 'https://awesome-os.com/apps/gitlab.html',
+    'desktop-omarchy': 'https://awesome-os.github.io/apps/omarchy.html',
+    'awesome-os-desktop': 'https://awesome-os.github.io/apps/desktop.html',
+    'sectium': 'https://awesome-os.github.io/apps/sectium.html',
+    'noctalia': 'https://awesome-os.github.io/apps/noctalia.html',
+    'chonkstep': 'https://awesome-os.github.io/apps/chonkstep.html',
+    'gitlab-foss': 'https://awesome-os.github.io/apps/gitlab.html',
   };
   const webUrl = webAppMap[parsed.repo] || `https://github.com/${parsed.org}/${parsed.repo}`;
 

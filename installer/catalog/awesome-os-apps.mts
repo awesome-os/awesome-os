@@ -1,7 +1,7 @@
 /**
  * @file catalog/awesome-os-apps.mts
  * @description Canonical Awesome-OS `.mts` release matrix catalog.
- * Flip `downloadBaseUrl` (or pass `--web-host https://awesome-os.com/downloads`)
+ * Flip `downloadBaseUrl` (or pass `--web-host https://awesome-os.github.io/installer/downloads`)
  * to stamp installers for GitHub Releases OR static self-hosted web distribution
  * with zero GitHub rebuilds required.
  */

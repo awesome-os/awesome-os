@@ -2,7 +2,7 @@
  * @file scripts/build-web-bundle.mts
  * @description Generates Ed25519 + SHA-512 signed web/v11-bundle.json and stages
  * verified AwesomeOS artifacts (sectium_cp.wasm, awesomeos-shell.html, max-version-lock.json,
- * ECOSYSTEM-SCOREBOARD.md) into web/blobs/ for https://awesome-os.com/install/.
+ * ECOSYSTEM-SCOREBOARD.md) into web/blobs/ for https://awesome-os.github.io/installer/.
  */
 
 import { createHash } from 'node:crypto';

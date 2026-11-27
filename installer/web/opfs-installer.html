@@ -716,10 +716,10 @@
   </main>
 
   <div class="page-foot">
-    <span>Canonical: <a href="https://awesome-os.com/install/">https://awesome-os.com/install/</a></span>
-    <span><a href="https://awesome-os.com/">awesome-os.com</a></span>
-    <span><a href="https://b8g.app/">b8g.app</a></span>
-    <span><a href="https://b8g.dev/">b8g.dev</a></span>
+    <span>Canonical: <a href="https://awesome-os.github.io/installer/">https://awesome-os.github.io/installer/</a></span>
+    <span><a href="https://awesome-os.github.io/">AwesomeOS Shell</a></span>
+    <span><a href="https://awesome-os.github.io/agent-platform/">Agent Platform</a></span>
+    <span><a href="https://awesome-os.github.io/holo-v11/oversight.html">Live Oversight</a></span>
     <span><a href="https://github.com/awesome-os/installer">awesome-os/installer</a></span>
   </div>
 
@@ -1054,26 +1054,26 @@
       };
 
       const holoPs1 = [
-        '# Awesome-OS Local v11 CAS Launcher (materialized by https://awesome-os.com/install/)',
+        '# Awesome-OS Local v11 CAS Launcher (materialized by https://awesome-os.github.io/installer/)',
         '$ErrorActionPreference = "Stop"',
         '$Root = (Get-Location).Path',
         '$env:B8G_CAS_DIR = Join-Path $Root "cas"',
         `$env:AWESOME_OS_PROFILE = "${state.profileId}"`,
         `Write-Host "AwesomeOS v11 CAS Root: $Root (host=${state.hostname}, profile=${state.profileId})" -ForegroundColor Cyan`,
-        'irm https://awesome-os.com/install.ps1 | iex',
+        'irm https://awesome-os.github.io/installer/install.ps1 | iex',
         '',
       ].join('\r\n');
 
       const holoSh = [
         '#!/usr/bin/env sh',
-        '# AwesomeOS Local v11 CAS Launcher (materialized by https://awesome-os.com/install/)',
+        '# AwesomeOS Local v11 CAS Launcher (materialized by https://awesome-os.github.io/installer/)',
         'set -eu',
         'ROOT="$(pwd)"',
         'export B8G_CAS_DIR="$ROOT/cas"',
         `export AWESOME_OS_PROFILE="${state.profileId}"`,
         `echo "Awesome-OS v11 CAS Root: $ROOT (host=${state.hostname}, profile=${state.profileId})"`,
         'if [ "${1:-hydrate}" = "hydrate" ]; then',
-        '  curl -fsSL https://awesome-os.com/install.sh | sh',
+        '  curl -fsSL https://awesome-os.github.io/installer/install.sh | sh',
         'fi',
         '',
       ].join('\n');
@@ -1257,7 +1257,7 @@
           <div>Install Root: <strong>${targetLabel}</strong> (Double-click <code>LAUNCH-AWESOMEOS.html</code> anytime — zero Node needed!)</div>
           <div>CAS Index SHA-512: <strong>${idxHash.slice(0, 32)}…</strong></div>
           <div>Files Verified: <strong>${casIndex.entries.length + 2}</strong> (plus <code>cas/v11/files/*</code> shards)</div>
-          <div style="margin-top:8px;"><a href="https://awesome-os.com/shell/" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;border-radius:8px;background:var(--accent);color:#050811;font-weight:750;text-decoration:none;">Boot AwesomeOS Desktop Shell Now ↗</a></div>
+          <div style="margin-top:8px;"><a href="https://awesome-os.github.io/" target="_blank" rel="noopener" style="display:inline-block;padding:8px 14px;border-radius:8px;background:var(--accent);color:#050811;font-weight:750;text-decoration:none;">Boot AwesomeOS Desktop Shell Now ↗</a></div>
         `;
 
         clearInterval(slideTimer);

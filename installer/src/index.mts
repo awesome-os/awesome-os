@@ -5,7 +5,7 @@
  * Generates pixel-aligned, SHA-256/SHA-512 verified pnpm `v11` CAS installers (`install.ps1`, `install.sh`),
  * Windows `.rc` icon resource scripts, web-hostable download catalog JSON (`web-catalog.json`),
  * and GitHub Actions caller manifests from ONE typed `.mts` definition — works identically
- * whether hosted on GitHub Releases OR directly on `awesome-os.com` (zero rebuild required).
+ * whether hosted on GitHub Releases OR directly on `awesome-os.github.io/installer` (zero rebuild required).
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -45,7 +45,7 @@ export interface ReleaseMatrixDef {
   readonly casAssets: Partial<Record<TargetPlatform, string>>;
   readonly splash?: SplashSpec;
   /**
-   * Optional static web host base URL (e.g. "https://awesome-os.com/downloads/sectium-browser").
+   * Optional static web host base URL (e.g. "https://awesome-os.github.io/installer/downloads/sectium-browser").
    * When omitted, installers default to GitHub Releases `releases/latest/download`.
    */
   readonly downloadBaseUrl?: string;
