@@ -2,7 +2,7 @@
   "schema": "awesome-os.web-v11-bundle.v1",
   "abiMagic": "0x33564742",
   "casLayout": "v11",
-  "generatedAt": "2026-11-26T19:07:56.481Z",
+  "generatedAt": "2026-11-27T00:07:38.926Z",
   "artifacts": [
     {
       "id": "sectium-control-plane-wasi",
@@ -27,30 +27,30 @@
     {
       "id": "max-version-lock",
       "path": "manifest/max-version-lock.json",
-      "size": 13041,
+      "size": 13072,
       "url": "./blobs/max-version-lock.json",
       "installPath": "manifest/max-version-lock.json",
       "description": "Unified V8 16+ & ahead-of-Chrome dependency version lockfile",
-      "bytes": 13041,
-      "sha512": "be70fa9bc6f4220abbf87b8527501dc0f31abdf9cc3b2c4f4c421d57fb3134efff41737719ec289964dbb2e719644e68079fe46752bcd1059d23440e6f08ce7f"
+      "bytes": 13072,
+      "sha512": "5696cfd7fb348b3ee8799cc06ba81bf197ddc856faca4d38f79c0039ab4aa078c594115019ce06de619dc1339d27b1e838fa8c900d6d76f0f6a950d8dcd4ef1e"
     },
     {
       "id": "ecosystem-scoreboard",
       "path": "docs/ECOSYSTEM-SCOREBOARD.md",
-      "size": 2978,
+      "size": 2974,
       "url": "./blobs/ECOSYSTEM-SCOREBOARD.md",
       "installPath": "docs/ECOSYSTEM-SCOREBOARD.md",
       "description": "Live Big Boys v11 CAS overlap & version scoreboard",
-      "bytes": 2978,
-      "sha512": "0736c7d10fcc82c6c21e4fdf1adfcd50b7c68c130840571f5774a19122497440e40e7a58e94927c28c5af1f6325e12338b82e91fe671adacd2b78a3b3871fda5"
+      "bytes": 2974,
+      "sha512": "f9b18ce1f34e48e553c8389308edddc3eb38ef81f71962975a398b4c20eedd2647c0fde38370402e574cecf56c86b19c8e29bba4cc3db276c0bc5d83f74d9c5c"
     }
   ],
   "signature": {
     "scheme": "ed25519-sha512-v1",
     "keyId": "awesomeos-root-v11",
     "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
-    "payloadSha512": "b1eb86b22c3a7a0f4e868fbb9451bf76b81631f8c6332ebe3e3ff4eb602d9ec71b600dbbeb26747ed7bc85f511886de4d89788895e68ac54faa9961ffc188fd0",
-    "signatureHex": "6105a1f70cc693a323c8d4679a9ea7e55b0b7b0716e22c95e3ec1c026f9aa62af1a79ab8466e1ffa2a9d60b2f8472da5425d50ebacaa816f7ffdded46eb5b600",
-    "signedAt": "2026-11-26T19:07:56.485Z"
+    "payloadSha512": "5e59c84e3089ae7bd85b6c40bc2cb483fb453eb7eae2d37f2b4bb47ad6752c3b284eb66b1ed4802f2a94dad9bb2cdd2300d8819398047dc774435fc02ea05d5b",
+    "signatureHex": "99b95f8b016473782a11befc2fb745e05c3c711030b4dfb22971fec8f7a6894b1bbf8fcb36fefeecd318d687e301afc9d98b71a27d4108a7395b8a76bc4fd101",
+    "signedAt": "2026-11-27T00:07:38.928Z"
   }
 }

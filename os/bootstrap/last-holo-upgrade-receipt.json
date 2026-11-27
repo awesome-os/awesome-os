@@ -14,9 +14,9 @@
   "zeroLegacyGhostVerified": true,
   "dedupSummary": {
     "totalRepos": 61,
-    "totalAssets": 409,
-    "uniqueSha512Blobs": 399,
-    "dedupRatioPct": 2.76,
+    "totalAssets": 461,
+    "uniqueSha512Blobs": 450,
+    "dedupRatioPct": 4.7,
     "dupV8Bytes": 0
   },
   "phases": [
@@ -35,7 +35,7 @@
       "id": "align-monorepos",
       "title": "Align All 4 Sovereign Monorepos (Zero b8g-ghost Drift)",
       "status": "done",
-      "durationMs": 459,
+      "durationMs": 439,
       "notes": [
         "Aligned distro substrates via holo-distro-bootstrap (3 stages synthesized)",
         "Rebuilt awesome-os/agent-platform dashboards",
@@ -64,13 +64,13 @@
       ]
     }
   ],
-  "completedAt": "2026-11-26T19:07:56.014Z",
+  "completedAt": "2026-11-27T00:07:38.484Z",
   "signature": {
     "scheme": "ed25519-sha512-v1",
     "keyId": "awesomeos-root-v11",
     "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
-    "payloadSha512": "4643fd77b095d5faa570202ba3d04dfd87a3309e169ae3c27ae55dd565ff8701a017158e05ff60b80634734eb575e25ba19ff16a84a98b907e7b5ea4862854e3",
-    "signatureHex": "0b17066db89f2b4fa8b018014000a4a071b9bb02f0865d5bcda5d778425370c9c93a9dcd32b4acd27d9404105c5841176348ca5959ea8f55524f37f6b1fd6e02",
-    "signedAt": "2026-11-26T19:07:56.014Z"
+    "payloadSha512": "55c149b22dd373a107cce169691641e8f0341d7d29d91ebb84ce521fe6b4a63139ba1397a149fda77126dfe8a189ab48061a873f1356884c01c85c703e208237",
+    "signatureHex": "e4e71e52811be9fd53f22a28647b3b93648808f080d7381104f7581ed35a046ffdb895568bd729593f78e4ea8bb1c5edb7f6c9e17d8a2151c5f43cd26d74a601",
+    "signedAt": "2026-11-27T00:07:38.484Z"
   }
 }

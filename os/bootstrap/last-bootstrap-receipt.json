@@ -7,7 +7,7 @@
   "abiMagic": "0x33564742",
   "casLayout": "v11",
   "offlineMode": true,
-  "completedAt": "2026-11-26T19:07:56.499Z",
+  "completedAt": "2026-11-27T00:07:38.936Z",
   "stages": [
     {
       "number": 1,
@@ -25,16 +25,11 @@
       "id": "stamp-boot-substrate",
       "title": "Kernel, Zero-Flicker GOP Splash & Dual-Slot Bootloader Stamp",
       "status": "done",
-      "durationMs": 198,
+      "durationMs": 203,
       "artifactsWritten": [
         "os/bootloader/assets/splash/awesome-os-1920x1080.bmp",
         "os/bootloader/limine/limine.conf",
-        "os/bootloader/ipxe/boot.ipxe",
-        "bootloader/limine/limine.conf",
-        "bootloader/ipxe/boot.ipxe",
-        "desktop/boot/config/limine.conf",
-        "desktop/boot/netboot/boot.ipxe",
-        "desktop/boot/splash/awesome-os-1920x1080.bmp"
+        "os/bootloader/ipxe/boot.ipxe"
       ],
       "notes": []
     },
@@ -43,17 +38,14 @@
       "id": "assemble-v11-rootfs",
       "title": "Pure Holo v11 Rootfs, /etc/os-release & System Definition Synthesis",
       "status": "done",
-      "durationMs": 2,
+      "durationMs": 1,
       "artifactsWritten": [
         "os/rootfs/etc/awesome-os/system.json",
         "os/rootfs/etc/os-release.x86_64",
         "os/rootfs/etc/os-release.aarch64",
         "os/rootfs/etc/os-release.riscv64",
         "os/rootfs/etc/os-release.wasm32-wasi",
-        "os/rootfs/etc/os-release",
-        "desktop/boot/config/system.json",
-        "desktop/boot/config/os-release.x86_64",
-        "desktop/boot/config/os-release.aarch64"
+        "os/rootfs/etc/os-release"
       ],
       "notes": []
     },
@@ -84,11 +76,10 @@
       "id": "rollout-channels",
       "title": "Unified 4-Channel User Rollout (Web OOBE, Netboot, Omaha Fleet, Edge)",
       "status": "done",
-      "durationMs": 126,
+      "durationMs": 93,
       "artifactsWritten": [
         "installer/web/v11-bundle.json",
-        "fleet/channels/stable.json",
-        "host-manager/channels/stable.json"
+        "fleet/channels/stable.json"
       ],
       "notes": []
     }
@@ -97,8 +88,8 @@
     "scheme": "ed25519-sha512-v1",
     "keyId": "awesomeos-root-v11",
     "publicKeyHex": "8706ca1108354453755a32bc0d450a697b084cb5fb18a9a1ed1f4a31eb82a081",
-    "payloadSha512": "83dfb781d98c1c22a5622d0446b73da722a72858d92fb63390147b936f05eea62f64798763c5696422fedecddd709a3b7a24663a4c15776bd25e86efaec83813",
-    "signatureHex": "dcfa975374e578d55ae1da41ec1417b0012a06ab1fc9833f20893bce88ff88d4f9a2b832bad52fba9aa16bf318072428a1863a0dd79d13cd1b03bcde9328dc0e",
-    "signedAt": "2026-11-26T19:07:56.500Z"
+    "payloadSha512": "880a3fb4ab8991e9f72a5bca6df8a09a38286e722989776224bcdd3ccbab9b5411602f32772c20242c443facbef0a98757ac534a1f7e423e49c3b1195fb73c8f",
+    "signatureHex": "71194cea5c2ef0e4d919becb0f51d4548a3e1607259c7bd5832c9cb3c5a971633c0cab09cbc4842ac91825cbb5a486ee9edde257c1f0ea860f73862a8d17e707",
+    "signedAt": "2026-11-27T00:07:38.936Z"
   }
 }

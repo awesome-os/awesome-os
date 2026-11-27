@@ -1,0 +1,39 @@
+{
+  "schema": "holo-boundary.v1",
+  "plane": 3,
+  "includePaths": [
+    "ai",
+    "b8g-build",
+    "browser",
+    "compiler",
+    "deployment",
+    "fleet",
+    "installer",
+    "intersections",
+    "os",
+    "packages",
+    "registry",
+    "runtime",
+    "sections",
+    "security",
+    "site"
+  ],
+  "excludeDirs": [
+    ".git",
+    "node_modules",
+    "build",
+    "dist",
+    "target",
+    "out",
+    ".b8g-cas",
+    ".awesome-oci",
+    ".holo-ci-runtime"
+  ],
+  "forbiddenImports": [
+    "WidevineCdm",
+    "optimization_guide_internal",
+    "GoogleUpdate"
+  ],
+  "maxParentTraversals": 4,
+  "scanSourceHttpIpc": false
+}
