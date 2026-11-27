@@ -195,6 +195,7 @@ export function runHoloUpgrade(options: HoloUpgradeOptions = {}): {
         offline: true,
         writeLocalCas: Boolean(options.writeLocalCas),
         quiet,
+        monorepoRoot,
       });
     } finally {
       console.log = origLog;
@@ -349,6 +350,15 @@ export function runHoloUpgrade(options: HoloUpgradeOptions = {}): {
 }
 
 function parseCliArgs(argv: readonly string[]): HoloUpgradeOptions {
+  let monorepoRoot = process.env.HOLO_UPGRADE_MONOREPO_ROOT || undefined;
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]!;
+    if (arg === '--monorepo-root' && argv[i + 1]) {
+      monorepoRoot = argv[++i];
+    } else if (arg.startsWith('--monorepo-root=')) {
+      monorepoRoot = arg.slice('--monorepo-root='.length);
+    }
+  }
   return {
     offline: argv.includes('--offline'),
     writeLocalCas: argv.includes('--write-local-cas'),
@@ -356,6 +366,7 @@ function parseCliArgs(argv: readonly string[]): HoloUpgradeOptions {
     dispatchGravity: argv.includes('--dispatch-gravity'),
     deploy: argv.includes('--deploy'),
     json: argv.includes('--json'),
+    ...(monorepoRoot ? { monorepoRoot } : {}),
   };
 }
 

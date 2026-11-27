@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -75,12 +76,28 @@ describe('os/bootstrap — Unified 6-Stage Holo v11 Distro Bootstrap Framework',
     assert.equal(verified.valid, true);
     assert.equal(omaha.targetSlotPolicy, 'stage-standby-flip-atomic');
 
-    const result = runDistroBootstrap({
-      manifestPath: MANIFEST_PATH,
-      stageFilter: '2,3,6',
-      offline: true,
-    });
-    assert.equal(result.reports.filter((r) => r.status === 'done').length, 3);
-    assert.ok(existsSync(result.receiptPath));
+    const tmpWorkspace = mkdtempSync(join(tmpdir(), 'holo-bootstrap-test-'));
+    try {
+      const tmpMonorepo = join(tmpWorkspace, 'awesome-os');
+      const tmpManifestPath = join(tmpMonorepo, 'os', 'bootstrap', 'awesomeos-v1.0.manifest.json');
+      const tmpSplashGenPath = join(tmpMonorepo, 'os', 'bootloader', 'assets', 'generate-splash.mts');
+      mkdirSync(dirname(tmpManifestPath), { recursive: true });
+      mkdirSync(dirname(tmpSplashGenPath), { recursive: true });
+      copyFileSync(MANIFEST_PATH, tmpManifestPath);
+      copyFileSync(join(HERE, '..', 'bootloader', 'assets', 'generate-splash.mts'), tmpSplashGenPath);
+
+      const result = runDistroBootstrap({
+        manifestPath: tmpManifestPath,
+        stageFilter: '2,3,6',
+        offline: true,
+        quiet: true,
+        monorepoRoot: tmpMonorepo,
+      });
+      assert.equal(result.reports.filter((r) => r.status === 'done').length, 3);
+      assert.ok(existsSync(result.receiptPath));
+      assert.ok(result.receiptPath.startsWith(tmpMonorepo));
+    } finally {
+      rmSync(tmpWorkspace, { recursive: true, force: true });
+    }
   });
 });

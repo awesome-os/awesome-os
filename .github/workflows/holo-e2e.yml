@@ -11,6 +11,10 @@ permissions:
   contents: read
   packages: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   holo-e2e:
     uses: awesome-os/maintenance-workflows/.github/workflows/reusable-holo-e2e.yml@v1

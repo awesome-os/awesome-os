@@ -33,6 +33,7 @@ export interface BootstrapRunOptions {
   readonly offline?: boolean;
   readonly writeLocalCas?: boolean;
   readonly quiet?: boolean;
+  readonly monorepoRoot?: string;
 }
 
 export interface StageExecutionReport {
@@ -88,7 +89,7 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
   receiptPath: string;
 } {
   const bootstrapDir = dirname(fileURLToPath(import.meta.url));
-  const monorepoRoot = resolve(bootstrapDir, '..', '..');
+  const monorepoRoot = resolve(options.monorepoRoot ?? join(bootstrapDir, '..', '..'));
   const mirrorRoot = resolve(monorepoRoot, '..');
   const workspaceRoot = resolve(mirrorRoot, '..', '..');
 
@@ -432,7 +433,7 @@ export function runDistroBootstrap(options: BootstrapRunOptions = {}): {
     stages: reports,
   });
 
-  const receiptPath = join(bootstrapDir, 'last-bootstrap-receipt.json');
+  const receiptPath = join(monorepoRoot, 'os', 'bootstrap', 'last-bootstrap-receipt.json');
   writeTextEnsureDir(receiptPath, `${JSON.stringify(signedReceipt, null, 2)}\n`);
 
   log('\n====================================================================');
@@ -451,6 +452,7 @@ function parseCliArgs(argv: readonly string[]): BootstrapRunOptions {
   let stageFilter = 'all';
   let offline = false;
   let writeLocalCas = false;
+  let monorepoRoot: string | undefined;
 
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]!;
@@ -462,13 +464,17 @@ function parseCliArgs(argv: readonly string[]): BootstrapRunOptions {
       stageFilter = argv[++i]!;
     } else if (a.startsWith('--stage=')) {
       stageFilter = a.slice('--stage='.length);
+    } else if (a === '--monorepo-root' && argv[i + 1]) {
+      monorepoRoot = argv[++i];
+    } else if (a.startsWith('--monorepo-root=')) {
+      monorepoRoot = a.slice('--monorepo-root='.length);
     } else if (a === '--offline') {
       offline = true;
     } else if (a === '--write-local-cas') {
       writeLocalCas = true;
     }
   }
-  return { manifestPath, stageFilter, offline, writeLocalCas };
+  return { manifestPath, stageFilter, offline, writeLocalCas, ...(monorepoRoot ? { monorepoRoot } : {}) };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
