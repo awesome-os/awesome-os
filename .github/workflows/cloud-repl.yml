@@ -1,0 +1,23 @@
+name: Cloud Runner REPL
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Command to execute in the stateless Cloud Runner REPL'
+        required: false
+        type: string
+        default: 'node -v && echo "B8G_ABI_MAGIC_V3=0x33564742"'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cloud-repl:
+    uses: awesome-os/maintenance-workflows/.github/workflows/reusable-holo-repl.yml@v1
+    with:
+      command: ${{ inputs.command }}

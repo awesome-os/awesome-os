@@ -4502,5 +4502,14 @@
       "blobPath": "v11/files/96/962113a7871fda21e8ecf844f071bb037aa2ce8b14904d2df032a03474851c2a9391573cc0ab7bb876650f8bb6428d00b2042b62654d74c438eb28f964447565",
       "downloadUrl": "https://github.com/awesome-os/ws/releases/download/v0.1.0/ws-v0.1.0.tar.zst"
     }
-  ]
+  ],
+  "lockfileVersion": 3,
+  "migrationsApplied": [
+    "v0->v1",
+    "v1->v2",
+    "v2->v3"
+  ],
+  "provenanceChain": {
+    "commitAndTreeBound": true
+  }
 }

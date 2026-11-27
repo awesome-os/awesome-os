@@ -1,0 +1,53 @@
+name: Cloud Control Plane — Stateless Fleet Verification
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 4 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  stateless-fleet-verify:
+    name: Stateless Holo-CI Verify & Exhaust Audit Stack
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout awesome-os
+        uses: actions/checkout@v7
+
+      - name: Checkout holo-ci runtime (stateless, zero local mirror)
+        uses: actions/checkout@v7
+        with:
+          repository: awesome-os/maintenance-workflows
+          ref: v1
+          path: .holo-ci-runtime
+
+      - name: Setup Node.js 26
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+
+      - name: Run holo-ci verify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node .holo-ci-runtime/holo-ci/cli.mts verify \
+            --config holo-ci.json \
+            --emit-summary \
+            --receipt holo-ci-verify-receipt.ndjson
+
+      - name: Run holo-ci audit-stack --mode exhaust
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node .holo-ci-runtime/holo-ci/cli.mts audit-stack \
+            --config holo-ci.json \
+            --mode exhaust \
+            --emit-summary \
+            --json
