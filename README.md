@@ -1,14 +1,15 @@
 # AwesomeOS (`awesome-os/awesome-os`)
 
-> **The Sovereign, ChromeOS-Grade Operating System Monorepo** — collapsing **`5,075` OS packages** and **`22` major runtime/desktop/AI ecosystems (`13,987 MB` standalone)** into **ONE SHA-512 + Ed25519 verified `v11` Content-Addressable Store**, powered by **Holo-Linux `7.3.6`**, **A/B Atomic Rollback**, **1-Click Powerwash**, and **Sectium + Ladybird + Firefox** sovereign browser engines.
+> **The Sovereign, ChromeOS-Grade Operating System Monorepo** — collapsing **`5,078` OS packages** and **`22` major runtime/desktop/AI ecosystems (`13,987 MB` standalone)** into **ONE SHA-512 + Ed25519 verified `v11` Content-Addressable Store**, powered by **Holo-Linux `7.3.6`**, **A/B Atomic Rollback**, **1-Click Powerwash**, and **Sectium + Ladybird + Firefox** sovereign browser engines.
 
-[![Install AwesomeOS OOBE](https://img.shields.io/badge/Install-Web_OOBE_Installer-39C5CF?style=for-the-badge)](https://awesome-os.com/install/)
-[![Boot Live Shell](https://img.shields.io/badge/Boot_Live-AwesomeOS_Shell-58A6FF?style=for-the-badge)](https://awesome-os.com/shell/)
+[![Install AwesomeOS OOBE](https://img.shields.io/badge/Install-Web_OOBE_Installer-39C5CF?style=for-the-badge)](https://awesome-os.github.io/installer/opfs-installer.html)
+[![Boot Live Shell](https://img.shields.io/badge/Boot_Live-AwesomeOS_Shell-58A6FF?style=for-the-badge)](https://awesome-os.github.io/)
 [![Pure CAS v11 Release](https://img.shields.io/badge/Release-CAS_v11_(Ed25519)-3FB950?style=for-the-badge)](https://github.com/awesome-os/awesome-os/releases/tag/cas-v11-latest)
-[![Host Manager MDM](https://img.shields.io/badge/Fleet-Host_Manager-BC8CFF?style=for-the-badge)](https://b8g.dev/awesome-os/apps/host-manager.html)
-[![Live Oversight](https://img.shields.io/badge/Telemetry-60%2F60_Upstream_Libs-D29922?style=for-the-badge)](https://b8g.dev/awesome-os/apps/oversight.html)
+[![Host Manager MDM](https://img.shields.io/badge/Fleet-Host_Manager-BC8CFF?style=for-the-badge)](https://awesome-os.github.io/agent-platform/host-manager.html)
+[![Live Oversight](https://img.shields.io/badge/Telemetry-68_of_68_Upstream_Libs-D29922?style=for-the-badge)](https://awesome-os.github.io/holo-v11/oversight.html)
 [![Sovereign Agent Platform](https://img.shields.io/badge/Agent_Platform-Model_Research_%26_Studio-F778BA?style=for-the-badge)](https://github.com/awesome-os/agent-platform)
-[![Agent Platform Hub](https://img.shields.io/badge/Live-Agent_Platform_App-2EA043?style=for-the-badge)](https://b8g.dev/awesome-os/apps/agent-platform.html)
+[![Agent Platform Hub](https://img.shields.io/badge/Live-Agent_Platform_App-2EA043?style=for-the-badge)](https://awesome-os.github.io/agent-platform/)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/awesome-os/awesome-os/badge)](https://scorecard.dev/viewer/?uri=github.com/awesome-os/awesome-os)
 
 ---
 
@@ -16,10 +17,11 @@
 
 | Metric | Verified Measurement | How It Works |
 | :--- | ---: | :--- |
-| **Deduplicated `v11` Package Universe** | **`5,075` packages** | `0` duplicate vendor `.tar.*` tarballs — every package resolves through `cas://v11/` & `repository://` hardlinks |
-| **22 "Big Boys" Ecosystems Collapsed** | **`13,987 MB` → `1` CAS layer** | **19 / 22 at `100%` shared-lib coverage** (`dup_v8 = 0 B` across Chromium, Electron, Node, Deno, Bun, `lo`) |
-| **Physical SHA-512 Blobs Indexed** | **`413` assets (`402` unique blobs · `1,454 MB` raw)** | Ed25519-signed across `60` repos in [`awesome-os/holo-v11`](https://github.com/awesome-os/holo-v11) (Planetary Warm `v11` CAS, verified via [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows) across `23` active repos) + `8,311` local hardlinks |
-| **Live Upstream Libraries Tracked** | **`60/60` core C/C++/GPU libs (`0` drifted)** | Auto-tracked at ahead-of-Chrome max (`openssl 4.1.0`, `harfbuzz 15.2.0`, `zstd 1.6.0`, `mimalloc 3.7.1`, `vulkan 1.4.369`, `ROCm 7.14.0`) |
+| **Deduplicated `v11` Package Universe** | **`5,078` packages** | `0` duplicate vendor `.tar.*` tarballs — every package resolves through `cas://v11/` & `repository://` hardlinks |
+| **Flat Org & 22 "Big Boys" Ecosystems** | **`16` active / `129` archived · `13,987 MB` → `1` CAS** | **19 / 22 Big Boys at `100%` shared-lib coverage** (`dup_v8 = 0 B` across Chromium, Electron, Node, Deno, Bun, `lo`) across `16` active flat-org repos (`129` read-only archived) |
+| **Physical SHA-512 Blobs Indexed** | **`461` assets (`450` unique · `1,717.15 MB` raw)** | Ed25519-signed (`1,636.36 MB` unique · `80.79 MB` saved) across `61` repos in [`awesome-os/holo-v11`](https://github.com/awesome-os/holo-v11), verified via [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows) |
+| **Live Upstream Libraries Tracked** | **`68/68` tracked upstreams (`0` drifted)** | Honest compiled-vs-pin transparency: **`15/68` (`22.06%`) real compiled CAS binaries + `53/68` virtual pins** (`openssl 4.1.0`, `harfbuzz 15.2.0`, `zstd 1.6.0`, `mimalloc 3.7.1`, `vulkan 1.4.369`, `ROCm 7.14.0`) |
+| **Architectural Boundaries & Supply Chain** | **`12/12` `boundary-audit` `100/100`** | Enforced across all `12` core repos + GitHub Secret Scanning, Dependabot, and OpenSSF Scorecard |
 | **Dual Ring-0 Kernel Backends** | **`Holo-Linux 7.3.6` + `14.17 KB` Zig** | Full hardware Linux `7.3.6` (`b8g_abi.ko` + `scx_holo` BPF) **+** `14,512 B` freestanding RISC-V 64 Zig microkernel |
 | **Sovereign Browser Engines** | **`Sectium` + `Ladybird (18/18)` + `Firefox (24/24)`** | **Sectium** (Chromium `160` Canary BSD-3, `27/27` **100%**, `0` closed DLLs) **+** **Ladybird** (`18/18` Chrome parity probes, `HoloHotLoopJIT`, `Wasm SIMD128`, `uBlock MV3`) **+** **Firefox** (`24/24` **100%** shared `v11` CAS) |
 | **Legacy X11 / Xorg Bloat Shipped** | **`0` bytes (`-549` pkgs)** | Pure UEFI GOP 24-bit BMP splash → `SimpleDRM` → Wayland / WebGPU (with rootless `Xwayland` on demand) |
@@ -28,8 +30,8 @@
 
 ## Live Rolling Upstream Telemetry & Planetary Warm `v11` CAS
 
-> **Continuous Maintenance Proof — Live Dashboard:** [**`https://b8g.dev/awesome-os/apps/oversight.html`**](https://b8g.dev/awesome-os/apps/oversight.html)  
-> Automated GitHub Actions runners continuously poll **`60/60` upstream C/C++/Rust/GPU repositories (`0` drifted)**, Chromium Canary (`160.0.8184.0`), and **`23` active [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows) repositories** (with 7-ecosystem `holo-ci lock-compat`: `npm`, `cargo`, `uv`, `go`, `vcpkg`, `winget`, `apt`), bumping `max-version-lock.json` and pre-warming the planetary SHA-512 `v11` CAS index with **zero stale tarballs**.
+> **Continuous Maintenance Proof — Live Dashboard:** [**`https://awesome-os.github.io/holo-v11/oversight.html`**](https://awesome-os.github.io/holo-v11/oversight.html)  
+> Automated GitHub Actions runners continuously poll **`68/68` tracked upstream C/C++/Rust/GPU repositories (`0` drifted; `15/68` real compiled CAS binaries + `53/68` virtual pins)**, Chromium Canary (`160.0.8184.0`), and **`16` active [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows) repositories** (with 9-ecosystem `holo-ci lock-compat`: `npm`, `cargo`, `uv`, `go`, `vcpkg`, `winget`, `apt`, `composer`, `rubygems`), bumping `max-version-lock.json` and pre-warming the planetary SHA-512 `v11` CAS index with **zero stale tarballs**.
 
 | Upstream Subsystem | Live `v11` Pin | Upstream Source | Advantage Over Stock Distros / Browsers |
 | :--- | :--- | :--- | :--- |
@@ -43,7 +45,7 @@
 ### Warm Any Machine From the Planetary `v11` CAS in One Command
 ```bash
 # Stream-verify & warm ~/.b8g/cas/v11/files/00..ff/<sha512> directly from the global v11 index:
-curl -fsSL https://awesome-os.com/cas/v11/manifest.json | head -n 25
+curl -fsSL https://raw.githubusercontent.com/awesome-os/holo-v11/main/index/cas-v11-global-manifest.json | head -n 25
 ```
 
 ---
@@ -67,7 +69,7 @@ ChromeOS proved the cleanest operating-system design of the modern era — **Ver
 3. **`Holo` (`v11` CAS, Compiler & Zero-Copy FFI):**
    - **`holo-compiler` & `holo-pm` ([`compiler/`](compiler/)):** Sub-second (`< 1 s`, zero WSL) C11/C++23/Zig/WASI/TypeScript compiler and 0-byte hardlink package projector (`holo-ffi`) backed by [`registry/`](registry/).
 4. **`Sovereign AI` ([`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform)):**
-   - **Unified Agent Platform & Model Research ([`agent-platform.html`](https://b8g.dev/awesome-os/apps/agent-platform.html) · [`llm-studio.html`](https://b8g.dev/awesome-os/apps/llm-studio.html) · [`agent-host.html`](https://b8g.dev/awesome-os/apps/agent-host.html)):** Canonical home for **LLM & LoRA Studio**, the **Model Garden** (**Inkling 2 Mini**, **B8G Xenon 1B**, **LittleBit**, **Micro-MoE**, **SpinWave**), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** agentic protocols, bridged natively into OS runtimes via [`ai/`](ai/).
+   - **Unified Agent Platform & Model Research ([`agent-platform`](https://awesome-os.github.io/agent-platform/) · [`llm-studio.html`](https://awesome-os.github.io/agent-platform/llm-studio.html) · [`agent-host.html`](https://awesome-os.github.io/agent-platform/agent-host.html)):** Canonical home for **LLM & LoRA Studio**, the **Model Garden** (**Inkling 2 Mini**, **B8G Xenon 1B**, **LittleBit**, **Micro-MoE**, **SpinWave**), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** agentic protocols, bridged natively into OS runtimes via [`ai/`](ai/).
 
 ---
 
@@ -112,33 +114,33 @@ awesome-os/
 └── docs/                      # Mintlify documentation, security invariants, and LLM stack guides
 ```
 
-> **Sovereign AI Companion Repo — [`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform):** Unified home for **LLM & LoRA Studio**, the **Model Garden** (`Inkling 2 Mini`, `B8G Xenon 1B`, `LittleBit`, `Micro-MoE`, `SpinWave`), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** ([Live App](https://b8g.dev/awesome-os/apps/agent-platform.html)).
+> **Sovereign AI Companion Repo — [`awesome-os/agent-platform`](https://github.com/awesome-os/agent-platform):** Unified home for **LLM & LoRA Studio**, the **Model Garden** (`Inkling 2 Mini`, `B8G Xenon 1B`, `LittleBit`, `Micro-MoE`, `SpinWave`), **ZER0Q Substrate**, **AtlasKV**, **Brain RAG**, **Model Armor**, and **MCP / A2A / A2UI / x402** ([Live App](https://awesome-os.github.io/agent-platform/)).
 >
 > **Chromium & V8 Substrate Repo — [`awesome-os/chromium-baseline`](https://github.com/awesome-os/chromium-baseline):** Unified shared dynamic `libv8` (`components/libv8_monolith`), `just-js`/`lo` (`components/just-js/{lo,just-js}`), and `components/angrybird` substrates (`dup_v8 = 0 B`).
 >
 > **Unified DevTools Monorepo — [`awesome-os/devtools`](https://github.com/awesome-os/devtools):** Consolidates IDEs (`code-oss`, `theia`, `b8g-ide`), VS Code / Open VSX extensions, Game Engines, native C11 dynamic launchers, and 4DGS / Holonomic Game Engine research over **Holo v11 CAS**.
 >
-> **Zero-Dependency CI & Verification — [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows):** Centralized Node 24/26 erasable-TS verification, guard enforcement, 7-ecosystem `holo-ci lock-compat` (`npm`, `cargo`, `uv`, `go`, `vcpkg`, `winget`, `apt`), and `holo-ci.receipt.v1` telemetry via [`reusable-holo-ci.yml@v1`](https://github.com/awesome-os/maintenance-workflows/blob/v1/.github/workflows/reusable-holo-ci.yml) across `23` active repositories.
+> **Zero-Dependency CI & Verification — [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows):** Centralized Node 24/26 erasable-TS verification, guard enforcement, 9-ecosystem `holo-ci lock-compat` (`npm`, `cargo`, `uv`, `go`, `vcpkg`, `winget`, `apt`, `composer`, `rubygems`), and `holo-ci.receipt.v1` telemetry via [`reusable-holo-ci.yml@v1`](https://github.com/awesome-os/maintenance-workflows/blob/v1/.github/workflows/reusable-holo-ci.yml) across `16` active repositories.
 
 ---
 
 ## Install, Boot, or Verify in 10 Seconds
 
 ### 1. Zero-Download Browser OOBE or Live Shell
-- **Install to Any Local Folder or OPFS:** [https://awesome-os.com/install/](https://awesome-os.com/install/) *(drops `LAUNCH-AWESOMEOS.html` — boots on any clean laptop with zero Node.js required)*
-- **Boot Live AwesomeOS Desktop Shell:** [https://awesome-os.com/shell/](https://awesome-os.com/shell/)
+- **Install to Any Local Folder or OPFS:** [https://awesome-os.github.io/installer/opfs-installer.html](https://awesome-os.github.io/installer/opfs-installer.html) *(stages [`v11-bundle.json`](https://awesome-os.github.io/installer/v11-bundle.json) and drops `LAUNCH-AWESOMEOS.html` — boots on any clean laptop with zero Node.js required)*
+- **Boot Live AwesomeOS Desktop Shell:** [https://awesome-os.github.io/](https://awesome-os.github.io/)
 
 ### 2. One-Line CLI Bootstrap & One-Command Upgrade
 ```powershell
 # Windows 11 PowerShell
-irm https://awesome-os.com/install.ps1 | iex
+irm https://awesome-os.github.io/installer/install.ps1 | iex
 
 # One-command Ecosystem Upgrader (os/bootstrap/holo-upgrade.mts)
 .\bin\holo-upgrade --offline --json
 ```
 ```sh
 # Linux (x64 / ARM64 / RISC-V) & macOS (Apple Silicon)
-curl -fsSL https://awesome-os.com/install.sh | sh
+curl -fsSL https://awesome-os.github.io/installer/install.sh | sh
 ```
 See [`os/bootstrap/holo-upgrade.mts`](os/bootstrap/holo-upgrade.mts) for all 4 canonical upgrade phases (`bump-pins`, `align-monorepos`, `telemetry-and-dedup`, `rollout`).
 
