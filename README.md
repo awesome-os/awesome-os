@@ -118,7 +118,9 @@ awesome-os/
 >
 > **Chromium & V8 Substrate Repo — [`awesome-os/chromium-baseline`](https://github.com/awesome-os/chromium-baseline):** Unified shared dynamic `libv8` (`components/libv8_monolith`), `just-js`/`lo` (`components/just-js/{lo,just-js}`), and `components/angrybird` substrates (`dup_v8 = 0 B`).
 >
-> **Unified DevTools Monorepo — [`awesome-os/devtools`](https://github.com/awesome-os/devtools):** Consolidates IDEs (`code-oss`, `theia`, `b8g-ide`), VS Code / Open VSX extensions, Game Engines, native C11 dynamic launchers, and 4DGS / Holonomic Game Engine research over **Holo v11 CAS**.
+> **Unified DevTools Monorepo — [`awesome-os/devtools`](https://github.com/awesome-os/devtools):** Consolidates IDEs (`code-oss`, `theia`, `b8g-ide`), VS Code / Open VSX extensions, Game Engines (including the **Zero-Copy Next-Gen Graphics Engine (`b8g-graphics`)**), native C11 dynamic launchers, and 4DGS / Holonomic Game Engine research over **Holo v11 CAS**.
+>
+> **Zero-Copy Next-Gen Graphics Engine (`b8g-graphics`) — [`devtools/ide/game-engines/b8g-graphics`](https://github.com/awesome-os/devtools/blob/main/ide/game-engines/b8g-graphics/README.md) ([awesome-os#16](https://github.com/awesome-os/awesome-os/issues/16)):** 64-bit `atomicMin` CuRast Visibility Buffer (`B8G_ARENA_V1`) + Two-Pass HZB culling, Stateless ORCA + Multi-Layer ReSTIR GI, `7,060 B` Neural BRDF MLP + `16x16` Tiled 3DGS compositing, zero-header C11 `-O3` ABI (`B8G_GRAPHICS_ABI_MAGIC = 0x58464742`), and thin `three-compat.mts` WebGPU / Sectium Canvas adapter.
 >
 > **Zero-Dependency CI & Verification — [`holo-ci@v1`](https://github.com/awesome-os/maintenance-workflows):** Centralized Node 24/26 erasable-TS verification, guard enforcement, 9-ecosystem `holo-ci lock-compat` (`npm`, `cargo`, `uv`, `go`, `vcpkg`, `winget`, `apt`, `composer`, `rubygems`), and `holo-ci.receipt.v1` telemetry via [`reusable-holo-ci.yml@v1`](https://github.com/awesome-os/maintenance-workflows/blob/v1/.github/workflows/reusable-holo-ci.yml) across `16` active repositories.
 
