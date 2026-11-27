@@ -1,7 +1,7 @@
 # Sovereign LLM, Embeddings, Unsloth LoRA & Colab Mesh Stack
 
 > **Audience:** Both **End Users** (Hyperscaler Desktop, Sectium Shell, VS Code Workbench) and **Developers** (OpenAI/Ollama API clients, LoRA fine-tuning pipelines, GGUF/llama.cpp tooling, and `window.ai` web apps).  
-> **Primary Package:** [`intersections/b8g-llm-studio/`](../intersections/b8g-llm-studio/) (`.\bin\b8g-llm-studio`, default port `127.0.0.1:7497`)  
+> **Primary Package:** `intersections/b8g-llm-studio/` (`.\bin\b8g-llm-studio`, default port `127.0.0.1:7497`)  
 > **Related Guide:** [`PERSISTENT-HOST-AND-SECTIUM-SHELL-GUIDE.md`](./PERSISTENT-HOST-AND-SECTIUM-SHELL-GUIDE.md)
 
 ---
@@ -63,17 +63,17 @@ You can open **Sovereign LLM & LoRA Studio** from any of the three unified Aweso
 ### 3.3 Studio Control, LoRA, Unsloth & Colab Endpoints
 | Method | Endpoint | Source Module |
 | :--- | :--- | :--- |
-| `GET` | `/` | [`ui-html.mts`](../intersections/b8g-llm-studio/ui-html.mts) — 5-tab dark-glass UI (`B8G022` tagged `html\`...\``). |
-| `POST` | `/api/studio/lora/train` | [`lora-engine.mts`](../intersections/b8g-llm-studio/lora-engine.mts) — Runs InfoNCE LoRA step & updates adapter weights. |
-| `POST` | `/api/studio/lora/vram` | [`lora-engine.mts`](../intersections/b8g-llm-studio/lora-engine.mts) — Estimates NF4 / FP16 VRAM footprint. |
-| `GET` | `/api/studio/recipes` | [`unsloth-recipes.mts`](../intersections/b8g-llm-studio/unsloth-recipes.mts) — Lists all 7 Unsloth fine-tuning recipes. |
-| `POST` | `/api/studio/colab/register` | [`colab-node-bridge.mts`](../intersections/b8g-llm-studio/colab-node-bridge.mts) — Registers a Colab GPU/TPU node in `CloudDeviceMesh` and returns an `.ipynb`. |
+| `GET` | `/` | `intersections/b8g-llm-studio/ui-html.mts` — 5-tab dark-glass UI (`B8G022` tagged `html\`...\``). |
+| `POST` | `/api/studio/lora/train` | `intersections/b8g-llm-studio/lora-engine.mts` — Runs InfoNCE LoRA step & updates adapter weights. |
+| `POST` | `/api/studio/lora/vram` | `intersections/b8g-llm-studio/lora-engine.mts` — Estimates NF4 / FP16 VRAM footprint. |
+| `GET` | `/api/studio/recipes` | `intersections/b8g-llm-studio/unsloth-recipes.mts` — Lists all 7 Unsloth fine-tuning recipes. |
+| `POST` | `/api/studio/colab/register` | `intersections/b8g-llm-studio/colab-node-bridge.mts` — Registers a Colab GPU/TPU node in `CloudDeviceMesh` and returns an `.ipynb`. |
 
 ---
 
 ## 4. Sovereign `window.ai` & Autarkic Browser AI Layer
 
-Instead of relying on closed Google Chrome AI binaries, **Sectium** and **`b8g-electron`** inject the open-source **`SovereignAiHostBridge`** ([`intersections/b8g-electron/global-ai-shim.mts`](../intersections/b8g-electron/global-ai-shim.mts)):
+Instead of relying on closed Google Chrome AI binaries, **Sectium** and **`b8g-electron`** inject the open-source **`SovereignAiHostBridge`** (`intersections/b8g-electron/global-ai-shim.mts`):
 
 - Zero closed Google DLLs (`closedGoogleDlls: 0`).
 - Routes browser `window.ai` / `globalThis.ai` calls directly to your local **`b8g-llm-studio`** (`:7497`) or **`b8g-agent-host`** (`:7498`).

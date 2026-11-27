@@ -1,1 +1,11 @@
-﻿{"name":"awesome-os","version":"1.1.0","private":true,"type":"module","description":"Awesome-OS & Sectium — runnable zero-dependency slices","scripts":{"test":"node --test b8g-build/src/dag-executor.test.mts intersections/b8g-agent-host/agent-host.test.mts intersections/b8g-site-cms/cms-core.test.mts intersections/b8g-site-cms/wp-env-wasi.test.mts intersections/b8g-site-cms/server.test.mts site/publish-gh-pages.test.mts sections/b8g-web-components/b8g-web-components.test.mts"}}
+{
+  "name": "awesome-os",
+  "version": "1.1.0",
+  "license": "BSD-3-Clause",
+  "private": true,
+  "type": "module",
+  "description": "Awesome-OS & Sectium — runnable zero-dependency slices",
+  "scripts": {
+    "test": "node --test b8g-build/src/dag-executor.test.mts intersections/b8g-agent-host/agent-host.test.mts intersections/b8g-site-cms/cms-core.test.mts intersections/b8g-site-cms/wp-env-wasi.test.mts intersections/b8g-site-cms/server.test.mts site/publish-gh-pages.test.mts sections/b8g-web-components/b8g-web-components.test.mts"
+  }
+}

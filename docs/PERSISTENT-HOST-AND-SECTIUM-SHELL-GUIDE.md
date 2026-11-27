@@ -1,7 +1,7 @@
 # Persistent Host Stack & Unified Sectium Shell Guide
 
 > **Audience:** Both **End Users** (who want reload-proof, always-on agent sessions across VS Code, Sectium Browser, and Hyperscaler Desktop) and **Developers** (building thin UIs, extensions, or cross-project agent integrations).  
-> **Primary Packages:** [`intersections/b8g-agent-host/`](../intersections/b8g-agent-host/), [`intersections/sectium-browser/`](../intersections/sectium-browser/), [`intersections/b8g-vm-manager/`](../intersections/b8g-vm-manager/)  
+> **Primary Packages:** [`intersections/b8g-agent-host/`](../intersections/b8g-agent-host/), `intersections/sectium-browser/`, `intersections/b8g-vm-manager/`  
 > **Related Guide:** [`SOVEREIGN-LLM-STACK-GUIDE.md`](./SOVEREIGN-LLM-STACK-GUIDE.md)
 
 ---
@@ -57,7 +57,7 @@ Run `.\bin\sectium-browser` (with no URL, or `--shell`). It ensures `b8g-agent-h
 - **Bottom Bar + Quick Dock:** Status bar and expandable app launcher.
 
 ### B. VS Code / Antigravity Full UI-in-UI Extension
-Installed from [`intersections/sectium-browser/vscode-extension/`](../intersections/sectium-browser/vscode-extension/):
+Installed from `intersections/sectium-browser/vscode-extension/`:
 - Drag the **Sectium Browser** view into the Left Sidebar, Right Secondary Sidebar, or Bottom Panel — or open a full tab via `Ctrl+Shift+P` → **`Sectium: Open UI-in-UI Workbench Tab`**.
 - Click **`⚡ Persistent Agent Host`** to connect live to `:7498`, or click **`↗ Sectium`** to pop out protected/video sites (Twitch, YouTube) into native full-codec Sectium.
 
