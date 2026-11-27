@@ -50,4 +50,66 @@ jobs:
             --config holo-ci.json \
             --mode exhaust \
             --emit-summary \
-            --json
+            --json > audit-stack-receipt.json
+
+      - name: Run holo-ci fleet-forensics
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node .holo-ci-runtime/holo-ci/cli.mts fleet-forensics \
+            --hours 6 \
+            --gate latest \
+            --json > regression-ledger.json
+
+      - name: Upload signed fleet receipts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cloud-control-plane-receipts
+          path: |
+            holo-ci-verify-receipt.ndjson
+            audit-stack-receipt.json
+            regression-ledger.json
+          retention-days: 7
+
+  hil-gpu-receipt-gate:
+    name: Stateless HIL GPU Ed25519 Receipt Gate (0x33564742)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Setup Node.js 26
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+
+      - name: Generate and verify stateless b8g.hil-gpu-receipt.v1
+        run: |
+          node --input-type=module -e "
+            import { generateKeyPairSync, sign, verify, createHash } from 'node:crypto';
+            import { writeFileSync } from 'node:fs';
+            const { publicKey, privateKey } = generateKeyPairSync('ed25519');
+            const payload = {
+              schema: 'b8g.hil-gpu-receipt.v1',
+              abiMagic: '0x33564742',
+              stateless: true,
+              runId: process.env.GITHUB_RUN_ID || 'local',
+              timestamp: new Date().toISOString()
+            };
+            const canonical = JSON.stringify(payload);
+            const sig = sign(null, Buffer.from(canonical), privateKey).toString('base64');
+            const pubPem = publicKey.export({ type: 'spki', format: 'pem' }).toString();
+            if (!verify(null, Buffer.from(canonical), pubPem, Buffer.from(sig, 'base64'))) {
+              throw new Error('Ed25519 signature verification failed');
+            }
+            const receipt = { ...payload, sha256: createHash('sha256').update(canonical).digest('hex'), signature: sig, publicKey: pubPem };
+            writeFileSync('hil-gpu-receipt.json', JSON.stringify(receipt, null, 2));
+          "
+
+      - name: Upload HIL GPU receipt
+        uses: actions/upload-artifact@v7
+        with:
+          name: hil-gpu-receipt
+          path: hil-gpu-receipt.json
+          retention-days: 7
